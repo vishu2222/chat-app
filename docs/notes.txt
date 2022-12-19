@@ -1,0 +1,56 @@
+https://roadmap.sh/backend
+
+
+http:
+
+*   In http protocal when a client request is sent a tcp connection is made and a response is sent from the server.
+The connection closes after the response is recived.
+
+*   Every request makes a new connection.
+
+webSockets:
+
+*   webSockets use bidirectional communication without clossing the connection.
+Reference: https://www.youtube.com/watch?v=i5OVcTdt_OU
+
+//.........................................................................
+Http:
+
+*   Http is stateless i.e, after the initial request is done, the server client communication is lost.
+*   clients specify actions. GET, POST ..etc.
+*   Data sent with headders i.e, headers sent with request and response.
+
+websockets:
+*   suppose we have a real time updated data at server and a client need to send frequent GET requests in 
+    order to fetch and update the data at the client. This requires to start and close a TCP connections
+    on every request.
+*   In a group chat, if I send a message the server after receiving the message should send it to all clients
+    in the group that are connected. webSockets solves the problem of dual channel communication between
+    client and server in real time without having to make continious requests.
+*   The headers are only sent once in the initial http request which will be upgraded to sockets by switching 
+    protocols. Then only data is sent in the dual communication.
+*   webSockets is http upgrade uses the same TCP connection over ws:// or wss://
+*   helps Low latency real time communication
+
+Reference: https://www.youtube.com/watch?v=8ARodQ4Wlf4
+
+//.............................................................................
+
+wesocket events:
+*   Open [(onopen), initial handshake]
+*   message [(onmessage), sending data]
+*   close [(onclose), end of communication]
+*   Error [(onerror), mistake during communication, it is followed by termination of the connection]
+  
+webSocket actions:
+*   send()
+*   close()
+
+creating a webSocket connection:
+*   const socket = new WebSocket('ws://localhost:3000')
+*   This fires an opne event.
+*   socket.onopen(() => {console.log('connected')})
+
+
+
+Reference: https://www.tutorialspoint.com/websockets/websockets_events_actions.htm
