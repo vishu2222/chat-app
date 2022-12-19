@@ -1,5 +1,7 @@
+// server
 npm install socket.io --save
 npm install express --save
 
-
-npx create-react-app client/
+// client
+npx create-react-app client
+npm install socket.io-client
