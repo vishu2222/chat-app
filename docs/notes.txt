@@ -3,8 +3,8 @@ https://roadmap.sh/backend
 
 http:
 
-*   In http protocal when a client request is sent a tcp connection is made and a response is sent from the server.
-The connection closes after the response is recived.
+*   In http protocal when a client request is sent a tcp connection is made and a response is sent from 
+    the server. The connection closes after the response is recived.
 
 *   Every request makes a new connection.
 
@@ -24,12 +24,16 @@ websockets:
 *   suppose we have a real time updated data at server and a client need to send frequent GET requests in 
     order to fetch and update the data at the client. This requires to start and close a TCP connections
     on every request.
-*   In a group chat, if I send a message the server after receiving the message should send it to all clients
-    in the group that are connected. webSockets solves the problem of dual channel communication between
-    client and server in real time without having to make continious requests.
+
+*   In a group chat, if I send a message the server after receiving the message should automatically send it
+    to all clients in the group that are connected. webSockets solves the problem of dual channel 
+    communication between client and server in real time without having to make continious requests.
+
 *   The headers are only sent once in the initial http request which will be upgraded to sockets by switching 
     protocols. Then only data is sent in the dual communication.
+
 *   webSockets is http upgrade uses the same TCP connection over ws:// or wss://
+
 *   helps Low latency real time communication
 
 Reference: https://www.youtube.com/watch?v=8ARodQ4Wlf4
@@ -50,6 +54,27 @@ creating a webSocket connection:
 *   const socket = new WebSocket('ws://localhost:3000')
 *   This fires an opne event.
 *   socket.onopen(() => {console.log('connected')})
+
+// ....................................................................
+
+*   Socket.IO relies on Engine.IO, which is the implementation of the transport-based 
+    cross-browser/cross-device bi-directional communication layer.
+
+https://www.geeksforgeeks.org/introduction-to-sockets-io-in-node-js/
+
+
+
+//.....................................................................
+
+socket.io/ events:
+
+server:
+*   Connect, Message, Disconnect, Reconnect, Ping, Join and Leave.
+client:
+*   Connect, Connect_error, Connect_timeout, Reconnect, etc.
+
+
+
 
 
 
