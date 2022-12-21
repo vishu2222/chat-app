@@ -10,10 +10,10 @@ const io = new Server(httpServer, {
     }
 })
 
-let clientCount = 0
+let userCount = 0
 io.on('connection', (socket) => {
-    clientCount++
-    console.log('User Connected::', socket.id, 'TotalUsers:', clientCount)
+    userCount++
+    console.log('User Connected::', socket.id, 'TotalUsers:', userCount)
 
     socket.on('newMessage', (msg) => {
         socket.broadcast.emit('newBroadcast', msg) // io.emit('newBroadcast', msg)
@@ -21,8 +21,8 @@ io.on('connection', (socket) => {
     })
 
     socket.on('disconnect', (reason) => {
-        clientCount--
-        console.log('User:', socket.id, ' disconnected due to:', reason, ': Total connected clients:', clientCount)
+        userCount--
+        console.log('User:', socket.id, ' disconnected due to:', reason, ': Total connected clients:', userCount)
     })
 
     socket.on('connect_error', () => {
