@@ -1,9 +1,11 @@
 import './App.css';
 import { io } from 'socket.io-client'
 import { useState } from 'react'
+import { Message } from './components/Message.jsx';
 
 function App() {
   const [chatTxt, setChatTxt] = useState('')
+  const [messages, setMessages] = useState([])
   const socket = io('http://localhost:3000')
 
   socket.on('connect', () => {
@@ -12,6 +14,8 @@ function App() {
 
   socket.on('msgFromServer', (msg) => {
     console.log('recived from server:', msg)
+    const id = Math.max(messages.map(msg => msg.id)) + 1 || 0
+    setMessages([...messages, { id: id, msg: msg }])
   })
 
   function sendMessage() {
@@ -21,11 +25,13 @@ function App() {
 
   return (
     <div className="App" id='app-container'>
-      <div id='message-container'></div>
+      <div id='message-container'>
+        {messages.map(item => <Message msg={item.msg} key={item.id} />)}
+      </div>
       <div id='form-div'>
         <form id='from' onSubmit={(e) => e.preventDefault()}>
           <input id='input'
-            placeholder='...type here'
+            placeholder='...'
             value={chatTxt}
             onChange={(e) => setChatTxt(e.target.value)}>
           </input>
