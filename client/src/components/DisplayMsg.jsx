@@ -1,4 +1,4 @@
-export function Message({ msg }) {
+export function DisplayMsg({ msg }) {
   return (
     <div id="message-div">
       <h3>{msg}</h3>
