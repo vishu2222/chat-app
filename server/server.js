@@ -10,13 +10,22 @@ const io = new Server(httpServer, {
     }
 })
 
+let clientCount = 0
 io.on('connection', (socket) => {
-    console.log('client connected with ID:', socket.id)
+    clientCount++
+    console.log('client connected with ID:', socket.id, 'TotalClients:', clientCount)
+
     socket.on('message', (msg) => {
         io.emit('msgFromServer', msg)
         console.log(msg)
     })
+
+    socket.on('disconnect', () => {
+        clientCount--
+        console.log('client disconnected', 'TotalClients:', clientCount)
+    })
 })
+
 
 httpServer.listen(3000, () => {
     console.log('listening on localhost:3000')
