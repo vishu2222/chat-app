@@ -15,9 +15,9 @@ io.on('connection', (socket) => {
     clientCount++
     console.log('client connected with ID:', socket.id, 'TotalClients:', clientCount)
 
-    socket.on('message', (msg) => {
-        io.emit('msgFromServer', msg)
-        console.log(msg)
+    socket.on('newMessage', (msg) => {
+        io.emit('newBroadcast', msg)
+        console.log('server recieved message:', msg)
     })
 
     socket.on('disconnect', () => {
