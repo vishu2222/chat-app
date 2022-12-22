@@ -10,26 +10,28 @@ const io = new Server(httpServer, {
     }
 })
 
-let userCount = 0
+let usersCount = 0
 io.on('connection', (socket) => {
-    userCount++
-    console.log('User Connected::', socket.id, 'TotalUsers:', userCount)
+    usersCount++
+    console.log('socket connected with id', socket.id, 'userCount:', usersCount)
 
-    socket.on('newMessage', (msg) => {
-        socket.broadcast.emit('newBroadcast', msg) // io.emit('newBroadcast', msg)
-        console.log('server recieved message:', msg)
+    socket.on('disconnect', () => {
+        usersCount--
+        console.log('socket disconnected with id', socket.id, 'userCount:', usersCount)
     })
 
-    socket.on('disconnect', (reason) => {
-        userCount--
-        console.log('User:', socket.id, ' disconnected due to:', reason, ': Total connected clients:', userCount)
+    socket.on('joinRoom', (data) => { // check if the userName already exists first
+        socket.join(data.room) // socket.userName = data.userName
+        socket.emit('userJoined', data)
+        console.log('user:', data.userName, 'joined room:', data.room)
     })
 
-    socket.on('connect_error', () => {
-        console.log('unable to connect')
+    socket.on('newMessage', (data) => {
+        console.log('server recieved newMessage:', data)
+        socket.broadcast.to(data.room).emit('broadcastMsg', data)
     })
+
 })
-
 
 httpServer.listen(3000, () => {
     console.log('listening on localhost:3000')
