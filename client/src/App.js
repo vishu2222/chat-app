@@ -1,21 +1,21 @@
 import './App.css';
 import { io } from 'socket.io-client'
-// import { useState } from 'react';
+import { useState } from 'react';
 import { ChatBox } from './components/ChatBox';
-import { DisplayMsg } from "./components/DisplayMsg";
+import { JoinRoom } from './components/JoinRoom';
+// import { DisplayMsg } from "./components/DisplayMsg";
 
 const socket = io.connect('http://localhost:3000') // const socket = io('http://localhost:3000')
 
 function App() {
 
-  // const [userName, setUserName] = useState('')
-  // const [room, setRoom] = useState('')
+  const [userJoined, setUserJoined] = useState(false)
 
   socket.on('connect', () => {
     console.log('connected with id', socket.id)
   })
 
-  function sendMessage(newChatTxt) {
+  function sendNewMessage(newChatTxt) {
     socket.emit('newMessage', newChatTxt)
   }
 
@@ -23,10 +23,16 @@ function App() {
     console.log('BroadCast from server:', msg)
   })
 
+  function joinUser(userName, room) {
+    console.log(userName, room)
+    socket.emit('joinRoom', { userName: userName, room: room })
+    setUserJoined(true)
+  }
+
   return (
     <div className="App" id='app-container'>
-      <ChatBox msg={sendMessage} />
-      <DisplayMsg msg={newMsg} />
+      {!userJoined && <JoinRoom joinUser={joinUser} />}
+      {userJoined && <ChatBox sendNewMessage={sendNewMessage} />}
     </div>
   );
 }
