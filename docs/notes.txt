@@ -1,5 +1,7 @@
+Reference:
 https://roadmap.sh/backend
-
+https://www.tutorialspoint.com/websockets/websockets_events_actions.htm
+https://www.iitk.ac.in/esc101/05Aug/tutorial/networking/sockets/definition.html#:~:text=On%20the%20client%20side%2C%20if,to%20rendezvous%20with%20the%20server.
 
 http:
 
@@ -73,9 +75,34 @@ server:
 client:
 *   Connect, Connect_error, Connect_timeout, Reconnect, etc.
 
+//..............................................................
+
+name space:
+*   Each namespace has its own
+
+sockets:
+*   A Socket is basically an EventEmitter which sends events to — and receive events from — the server
+    over the network.
 
 
 
 
 
-Reference: https://www.tutorialspoint.com/websockets/websockets_events_actions.htm
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import 'bootstrap/dist/css/bootstrap.min.css'
+Upon creation, the Socket joins the room identified by its own id, which means you can use it for private messaging:
+
