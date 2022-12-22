@@ -1,25 +1,26 @@
 import { useState } from "react";
-// import { Message } from "./Message.jsx";
 
-export function ChatBox({ msg }) {
+export function ChatBox({ sendNewMessage }) {
   const [chatTxt, setChatTxt] = useState("");
 
   function sendMsg() {
-    msg(chatTxt);
+    sendNewMessage(chatTxt);
     setChatTxt("");
   }
 
   return (
-    <div id="chat-box">
-      <form onSubmit={(e) => e.preventDefault()}>
-        <input
-          type="text"
-          placeholder="..."
-          value={chatTxt}
-          onChange={(e) => setChatTxt(e.target.value)}
-        />
-        <button onClick={sendMsg}>send</button>
-      </form>
-    </div>
+    <>
+      <div id="txt-box">
+        <form onSubmit={(e) => e.preventDefault()}>
+          <input
+            type="text"
+            placeholder="...type here"
+            value={chatTxt}
+            onChange={(e) => setChatTxt(e.target.value)}
+          />
+          <button onClick={sendMsg}>send</button>
+        </form>
+      </div>
+    </>
   );
 }
