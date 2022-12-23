@@ -4,7 +4,14 @@
    justify-content: center;
 }
 
-#homeDiv {
-  
+#message-container {
+  background-color: #71C9CE;
 }
 
+.self-msg {
+  background-color: #E3FDFD;  
+}
+
+.user-msg {
+  background-color: #CBF1F5;  /* 3C4048   B2B2B2  EAEAEA 365a5c*/
+}
