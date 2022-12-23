@@ -21,7 +21,7 @@ io.on('connection', (socket) => {
     })
 
     socket.on('joinRoom', (data) => { // check if the userName already exists first
-        socket.join(data.room) // socket.userName = data.userName
+        socket.join(data.room)
         socket.emit('userJoined', data)
         console.log('user:', data.userName, 'joined room:', data.room)
     })
