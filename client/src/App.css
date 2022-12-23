@@ -4,14 +4,37 @@
    justify-content: center;
 }
 
+#messageBox {
+  /* background-color: aqua; */
+}
+/* 40514E */
 #message-container {
-  background-color: #71C9CE;
+  background-color: cadetblue;
+  /* border: solid cadetblue; */ 
+
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  height: 500px;
+  width: 600px;;
+}
+
+.self-msg-div {
+  display: flex;
+  justify-content: flex-end; 
+  padding-right: 5px;
+}
+
+.user-msg-div {
+  display: flex;
 }
 
 .self-msg {
-  background-color: #E3FDFD;  
+  background-color: aliceblue;
+  padding: 4px;
 }
 
 .user-msg {
-  background-color: #CBF1F5;  /* 3C4048   B2B2B2  EAEAEA 365a5c*/
+  background-color:aquamarine;
+  padding: 4px;
 }
