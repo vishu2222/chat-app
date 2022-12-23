@@ -35,6 +35,12 @@ export function MsgBox({ socket, userName, room }) {
     <div id="messageBox">
       <h2>You are inside Room: {room}</h2>
 
+      <div id="message-container">
+        {messageList.map((msg, index) => (
+          <MessageItem msg={msg} key={index} userName={userName} />
+        ))}
+      </div>
+
       <form onSubmit={(e) => e.preventDefault()}>
         <input
           type="text"
@@ -44,12 +50,6 @@ export function MsgBox({ socket, userName, room }) {
         />
         <button onClick={handleClick}>send</button>
       </form>
-
-      <div id="message-container">
-        {messageList.map((msg, index) => (
-          <MessageItem msg={msg} key={index} userName={userName} />
-        ))}
-      </div>
     </div>
   );
 }
