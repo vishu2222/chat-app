@@ -47,34 +47,33 @@ const users = `CREATE TABLE users(
 async function setUpDB() {
     const client = await pool.connect()
     // drop seq
-    client.query(dropMsgIdSeq, callBack);
-    client.query(dropRoomIdSeq, callBack);
-    client.query(dropUserIdSeq, callBack);
+    client.query(dropMsgIdSeq, responseHandler);
+    client.query(dropRoomIdSeq, responseHandler);
+    client.query(dropUserIdSeq, responseHandler);
     // drop tables
-    client.query(dropConversations, callBack);
-    client.query(dropUsers, callBack);
-    client.query(dropRooms, callBack);
+    client.query(dropConversations, responseHandler);
+    client.query(dropUsers, responseHandler);
+    client.query(dropRooms, responseHandler);
     // create seq
-    client.query(msgIdSeq, callBack);
-    client.query(roomIdSeq, callBack);
-    client.query(userIdSeq, callBack);
+    client.query(msgIdSeq, responseHandler);
+    client.query(roomIdSeq, responseHandler);
+    client.query(userIdSeq, responseHandler);
     // create tables
-    client.query(rooms, callBack);
-    client.query(users, callBack);
-    client.query(conversations, callBack);
+    client.query(rooms, responseHandler);
+    client.query(users, responseHandler);
+    client.query(conversations, responseHandler);
 
     client.release()
 }
 
-
-function callBack(err, res) {
+function responseHandler(err, res) {
     if (err) { console.log(err) }
 }
 
 setUpDB()
 
 
-// const usergroup = create table usergroup(id SERIAL PRIMARY KEY, room_id Integer, group_id Integer)
+// const LinkEntity = create table usergroup(id SERIAL PRIMARY KEY, room_id Integer, group_id Integer)
 
 // const client = await pool.connect()
 // console.log(client)
