@@ -3,14 +3,13 @@
 // client
 npx create-react-app client
 npm install socket.io-client
-
+npm install react-router-dom
 
 // server
 npm install socket.io --save
 npm install express --save
 npm i jsonwebtoken dotenv bcrypt
 npm install pg
-
 
 
 //
