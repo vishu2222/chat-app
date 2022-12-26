@@ -1,0 +1,19 @@
+https://jwt.io/
+npm i jsonwebtoken dotenv 
+
+
+Token form: xxxxx.yyyyy.zzzzz ( Header, Payload, Signature )
+
+Header: (JSON  Base64Url encoded) (algorithm-used, token-type)
+Payload: (Base64Url encoded ),  claims
+1) registered calims: (iss, exp, sub, aud...) (issuer, exporation, subject, audience,....)
+2) Public-claims:
+3) private-calims:
+Signature: 
+
+jwt working: https://stackoverflow.com/questions/31309759/what-is-secret-key-for-jwt-based-authentication-and-how-to-generate-it
+
+
+Generate token:
+node
+require('crypto').randomBytes(64).toString('hex')

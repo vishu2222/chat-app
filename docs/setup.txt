@@ -1,7 +1,15 @@
-// server
-npm install socket.io --save
-npm install express --save
+
 
 // client
 npx create-react-app client
 npm install socket.io-client
+
+
+// server
+npm install socket.io --save
+npm install express --save
+npm i jsonwebtoken dotenv bcrypt
+
+
+//
+requests.rest plugin in vscode

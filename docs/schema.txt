@@ -1,0 +1,16 @@
+//
+create database chatdb;
+create user vishu with password '12345';
+alter user vishu with superuser;
+
+// schema // https://stackoverflow.com/questions/39810106/storing-messages-of-different-chats-in-a-single-database-table
+conversations (msg_id , msg, timestamp, sender_id(F.K), room_id(F.K))
+Rooms (room_id, room-name)
+Users (user_id, user-name, password)
+group ( room_id, user_id )
+
+
+
+
+ref
+https://code.tutsplus.com/tutorials/how-to-create-a-simple-web-based-chat-application--net-5931
