@@ -1,23 +1,22 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react'
 
 export function Home({ socket, setUserStatus, assignUser }) {
-  const [userName, setUserName] = useState('');
-  const [room, setRoom] = useState('');
+  const [userName, setUserName] = useState('')
+  const [room, setRoom] = useState('')
 
   function handleClick() {
-    if (userName === '' || room === '') return;
-    socket.emit('joinRoom', { userName: userName, room: room });
-    assignUser(userName, room);
-    setUserStatus(true);
-    setUserName('');
-    setRoom('');
+    if (userName === '' || room === '') return
+    socket.emit('joinRoom', { userName, room })
+    // socket.join(room) ?
+    assignUser(userName, room)
+    setUserStatus(true)
   }
-
+  // custom hookes, react router, func names,
   useEffect(() => {
     socket.on('userJoined', (data) => {
-      console.log(data);
-    });
-  }, [socket]);
+      console.log(data)
+    })
+  }, [socket])
 
   // component return
   return (
@@ -44,5 +43,5 @@ export function Home({ socket, setUserStatus, assignUser }) {
         <button onClick={handleClick}>Join</button>
       </form>
     </div>
-  );
+  )
 }
