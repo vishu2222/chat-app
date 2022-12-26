@@ -4,6 +4,8 @@
     "semi": false,
     "singleQuote": true,
     "bracketSpacing": true,
-    "jsxBracketSameLine": true
+    "jsxBracketSameLine": true,
+    "parser":"babel",
+    "printWidth": 80
 }
 
