@@ -1,36 +1,18 @@
 import './App.css'
-import { io } from 'socket.io-client'
-import { useState, useEffect } from 'react'
-import { Home } from './components/Home'
-import { MsgBox } from './components/MsgBox'
-
-const socket = io.connect('http://localhost:3000')
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
+import { Home } from './pages/Login';
 
 function App() {
-
-  // state
-  const [userJoinStatus, setUserStatus] = useState(false)
-  const [userName, setUserName] = useState('')
-  const [room, setRoom] = useState('')
-
-  // methods
-  function assignUser(userName, room) {
-    setUserName(userName)
-    setRoom(room)
-  }
-
-  useEffect(() => {
-    socket.on('connect', () => {
-      console.log('new user connected with id:', socket.id)
-    })
-  }, [])
-
-  //  component return
   return (
-
     <div id='appContainer'>
-      {!userJoinStatus && <Home socket={socket} setUserStatus={setUserStatus} assignUser={assignUser} />}
-      {userJoinStatus && <MsgBox socket={socket} userName={userName} room={room} />}
+      <BrowserRouter>
+        <div id='nav'>
+          <Link to='/'>Home</Link>
+        </div>
+        <Routes>
+          <Route path='/' element={<Home />} />
+        </Routes>
+      </BrowserRouter>
     </div>)
 }
 
