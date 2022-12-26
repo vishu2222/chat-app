@@ -1,12 +1,13 @@
 import './App.css'
-import { io } from 'socket.io-client';
-import { useState, useEffect } from 'react';
-import { Home } from './components/Home';
-import { MsgBox } from './components/MsgBox';
+import { io } from 'socket.io-client'
+import { useState, useEffect } from 'react'
+import { Home } from './components/Home'
+import { MsgBox } from './components/MsgBox'
 
 const socket = io.connect('http://localhost:3000')
 
 function App() {
+
   // state
   const [userJoinStatus, setUserStatus] = useState(false)
   const [userName, setUserName] = useState('')
@@ -19,11 +20,14 @@ function App() {
   }
 
   useEffect(() => {
-    socket.on('connect', () => { console.log('new user connected with id:', socket.id) })
+    socket.on('connect', () => {
+      console.log('new user connected with id:', socket.id)
+    })
   }, [])
 
   //  component return
   return (
+
     <div id='appContainer'>
       {!userJoinStatus && <Home socket={socket} setUserStatus={setUserStatus} assignUser={assignUser} />}
       {userJoinStatus && <MsgBox socket={socket} userName={userName} room={room} />}
