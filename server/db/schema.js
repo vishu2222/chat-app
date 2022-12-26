@@ -1,7 +1,6 @@
 import pg from 'pg'
 
 const { Pool } = pg
-
 const pool = new Pool({
     user: 'vishu',
     host: 'localhost',
@@ -10,18 +9,22 @@ const pool = new Pool({
     port: 5432
 })
 
+// drop seq
 const dropMsgIdSeq = 'DROP SEQUENCE msg_id_seq;'
 const dropRoomIdSeq = 'DROP SEQUENCE room_id_seq;'
 const dropUserIdSeq = 'DROP SEQUENCE user_id_seq;'
 
+// drop tables
 const dropConversations = 'DROP TABLE conversations;'
 const dropUsers = 'DROP TABLE users;'
 const dropRooms = 'DROP TABLE rooms;'
 
+// create seq
 const msgIdSeq = 'CREATE SEQUENCE msg_id_seq;'
 const roomIdSeq = 'CREATE SEQUENCE room_id_seq;'
 const userIdSeq = 'CREATE SEQUENCE user_id_seq;'
 
+// create tables
 const conversations = `CREATE TABLE conversations(
     msg_id SERIAL PRIMARY KEY,
     msg_txt VARCHAR NOT NULL,
