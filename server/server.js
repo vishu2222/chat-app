@@ -1,6 +1,8 @@
 import { createServer } from "http";
 import express from "express";
 import { Server } from 'socket.io'
+import cors from 'cors'
+import { checkUserNameExists } from './db/queries.js'
 
 const app = express()
 const httpServer = createServer(app)
@@ -10,26 +12,19 @@ const io = new Server(httpServer, {
     }
 })
 
-let usersCount = 0
-io.on('connection', (socket) => {
-    usersCount++
-    console.log('socket connected with id', socket.id, 'userCount:', usersCount)
+app.use(cors({ origin: 'http://localhost:3001' }))
+app.use(express.json())
 
-    socket.on('disconnect', () => {
-        usersCount--
-        console.log('socket disconnected with id', socket.id, 'userCount:', usersCount)
-    })
+app.post('/checkUser', async (req, res) => {
+    try {
+        const data = await checkUserNameExists(req.body.userName)
+        res.json(data)
+    } catch (err) {
+        res.sendStatus(500)
+    }
+})
 
-    socket.on('joinRoom', (data) => { // check if the userName already exists first
-        socket.join(data.room)
-        socket.emit('userJoined', data)
-        console.log('user:', data.userName, 'joined room:', data.room)
-    })
-
-    socket.on('newMessage', (data) => {
-        console.log('server recieved newMessage:', data)
-        socket.broadcast.to(data.room).emit('broadcastMsg', data)
-    })
+app.post('/signUp', async (req, res) => {
 
 })
 
