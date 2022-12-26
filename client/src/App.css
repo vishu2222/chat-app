@@ -4,10 +4,6 @@
    justify-content: center;
 }
 
-#messageBox {
-  /* background-color: aqua; */
-}
-
 /* 40514E */
 #message-container {
   background-color: cadetblue;
@@ -46,4 +42,8 @@
   background-color:aquamarine;
   margin-left: 20px;
   padding: 4px;
+}
+
+.err-msg{
+  color: red;
 }
