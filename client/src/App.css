@@ -7,16 +7,23 @@
 #messageBox {
   /* background-color: aqua; */
 }
+
 /* 40514E */
 #message-container {
   background-color: cadetblue;
-  /* border: solid cadetblue; */ 
-
+  /* border: solid cadetblue;  */
   display: flex;
   flex-direction: column;
   justify-content: end;
   height: 500px;
-  width: 600px;;
+  width: 600px;
+  max-height: 500px;
+  overflow:auto;
+}
+
+#msg-form {
+  display: flex;
+  justify-content:center;
 }
 
 .self-msg-div {
@@ -31,10 +38,12 @@
 
 .self-msg {
   background-color: aliceblue;
+  margin-right: 20px;
   padding: 4px;
 }
 
 .user-msg {
   background-color:aquamarine;
+  margin-left: 20px;
   padding: 4px;
 }
