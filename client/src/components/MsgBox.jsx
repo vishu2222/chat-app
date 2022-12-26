@@ -1,10 +1,10 @@
-import { useEffect } from 'react';
-import { useState } from 'react';
-import { MessageItem } from './MessageItem';
+import { useEffect } from 'react'
+import { useState } from 'react'
+import { MessageItem } from './MessageItem'
 
 export function MsgBox({ socket, userName, room }) {
-  const [newMessage, setNewMessage] = useState('');
-  const [messageList, setMessageList] = useState([]);
+  const [newMessage, setNewMessage] = useState('')
+  const [messageList, setMessageList] = useState([])
 
   // methods
   function handleClick() {
@@ -13,22 +13,23 @@ export function MsgBox({ socket, userName, room }) {
       room: room,
       txt: newMessage,
       date: new Date()
-    };
-    setMessageList([...messageList, newMsg]);
-    socket.emit('newMessage', newMsg);
-    setNewMessage('');
+    }
+
+    setMessageList([...messageList, newMsg])
+    socket.emit('newMessage', newMsg)
+    setNewMessage('')
   }
 
   useEffect(() => {
     const callBack = (data) => {
-      console.log('broadCast', data.userName, data.txt);
-      setMessageList((currentList) => [...currentList, data]);
-    };
-    socket.on('broadcastMsg', callBack);
+      console.log('broadCast', data.userName, data.txt)
+      setMessageList((currentList) => [...currentList, data])
+    }
+    socket.on('broadcastMsg', callBack)
     return () => {
-      socket.off('broadcastMsg', callBack);
-    };
-  }, [socket]);
+      socket.off('broadcastMsg', callBack)
+    }
+  }, [socket])
 
   // component return
   return (
@@ -39,17 +40,20 @@ export function MsgBox({ socket, userName, room }) {
         {messageList.map((msg, index) => (
           <MessageItem msg={msg} key={index} userName={userName} />
         ))}
+        <form id="msg-form" onSubmit={(e) => e.preventDefault()}>
+          <input
+            type="text"
+            placeholder="...."
+            value={newMessage}
+            onChange={(e) => setNewMessage(e.target.value)}
+          />
+          <button onClick={handleClick}>send</button>
+        </form>
       </div>
-
-      <form onSubmit={(e) => e.preventDefault()}>
-        <input
-          type="text"
-          placeholder="...."
-          value={newMessage}
-          onChange={(e) => setNewMessage(e.target.value)}
-        />
-        <button onClick={handleClick}>send</button>
-      </form>
     </div>
-  );
+  )
 }
+
+// return () => {
+//   socket.off('broadcastMsg', callBack);
+// };
