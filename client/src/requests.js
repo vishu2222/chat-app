@@ -3,7 +3,7 @@ const url = 'http://localhost:3000/'
 
 export async function checkUserNameExists(userName) {
     const res = await fetch(url + 'checkUser', {
-        headers: { "Content-Type": "application/json" },
+        headers: { 'Content-Type': 'application/json' },
         method: "POST",
         body: JSON.stringify({ userName })
     });
@@ -11,5 +11,9 @@ export async function checkUserNameExists(userName) {
 }
 
 export async function signupUser(userName, password) {
-    const res = await fetch()
+    const res = await fetch(url + 'signUp', {
+        headers: { 'Content-Type': 'application/json' },
+        method: "POST",
+        body: JSON.stringify({ userName, password })
+    })
 }
