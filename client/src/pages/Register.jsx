@@ -23,7 +23,6 @@ export function Register() {
       setUserNameExitsErr(true)
       return
     }
-    // validate pwd
     // clear errors when typing
     // add error for passwordlength
     signupUser(userName, password)
@@ -53,7 +52,12 @@ export function Register() {
         <input
           type="password"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={(e) => {
+            if (pwdMismatchErr) {
+              setPwdMismatchErr(false)
+            }
+            setPassword(e.target.value)
+          }}
         />
         <label>
           <strong> Confirm Password: </strong>
@@ -61,7 +65,12 @@ export function Register() {
         <input
           type="password"
           value={confirmPwd}
-          onChange={(e) => setConfirmPwd(e.target.value)}
+          onChange={(e) => {
+            if (pwdMismatchErr) {
+              setPwdMismatchErr(false)
+            }
+            setConfirmPwd(e.target.value)
+          }}
         />
         <br />
         <br />
