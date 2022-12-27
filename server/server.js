@@ -18,8 +18,8 @@ app.use(express.json())
 
 app.post('/checkUser', async (req, res) => {
     try {
-        const data = await checkUserNameExists(req.body.userName)
-        res.json(data)
+        const userNameExists = await checkUserNameExists(req.body.userName)
+        res.json(userNameExists)
     } catch (err) {
         res.sendStatus(500)
     }
@@ -30,7 +30,7 @@ app.post('/signUp', async (req, res) => {
         const salt = await bcrypt.genSalt()
         const hashedPwd = await bcrypt.hash(req.body.password, salt)
         signUp(req.body.userName, hashedPwd)
-        res.json(true) // TODO 
+        res.sendStatus(200)
     } catch (err) {
         res.sendStatus(500)
     }
