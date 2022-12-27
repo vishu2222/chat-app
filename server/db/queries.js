@@ -23,12 +23,13 @@ export async function signUp(userName, password) {
     const client = await pool.connect()
     const res = await client.query(`INSERT INTO users(user_id, user_name, password) 
     VALUES (NEXTVAL('user_id_seq'), '${userName}', '${password}')`)
+    client.release()
     if (res.rowCount < 1) throw Error
-    return res.rowCount
 }
 
 export async function getPassword(userName) {
     const client = await pool.connect()
     const res = await client.query(`SELECT password FROM users where user_name = '${userName}'`)
+    client.release()
     return await res.rows[0].password
 }
