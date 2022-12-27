@@ -7,6 +7,7 @@ export async function checkUserNameExists(userName) {
         method: "POST",
         body: JSON.stringify({ userName })
     });
+    // console.log(await res.json())
     return await res.json()
 }
 
@@ -16,5 +17,15 @@ export async function signupUser(userName, password) {
         method: "POST",
         body: JSON.stringify({ userName, password })
     })
-    return await res.json()
+    return await res.json() // TODO
+}
+
+export async function userLogin(userName, password) {
+    const res = await fetch(url + 'signIn', {
+        headers: { 'Content-Type': 'application/json' },
+        method: "POST",
+        body: JSON.stringify({ userName, password })
+    })
+    const status = res.status
+    return status
 }
