@@ -19,5 +19,10 @@ export async function checkUserNameExists(userName) {
     return false
 }
 
+export async function signUp(userName, password) {
+    const client = await pool.connect()
+    const res = await client.query(`INSERT INTO users(user_id, user_name, password) 
+    VALUES (NEXTVAL('user_id_seq'), '${userName}', '${password}')`)
+    return res.rowCount
+}
 
-// checkUserNameExists('b').then(res => console.log(res))
