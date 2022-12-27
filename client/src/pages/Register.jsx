@@ -13,6 +13,8 @@ export function Register() {
   // methods
 
   async function registerUser() {
+    // set a generic validation err in state and print it through JSX
+    // if(signupUser()===true) redirect to login page
     if (userName === '' || password.length < 4) return
     if (password !== confirmPwd) {
       setPwdMismatchErr(true)
@@ -23,7 +25,6 @@ export function Register() {
       setUserNameExitsErr(true)
       return
     }
-    // clear errors when typing
     // add error for passwordlength
     signupUser(userName, password)
   }
