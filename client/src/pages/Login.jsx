@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { userLogin, checkUserNameExists } from '../requests.js'
 
@@ -7,6 +7,7 @@ export function Home() {
   const [password, setPassword] = useState('')
   const [displayErr, setDisplayErr] = useState(false)
   const [errMsg, setErrMsg] = useState('')
+  const navigate = useNavigate()
 
   async function login() {
     if (userName === '') return
@@ -29,7 +30,7 @@ export function Home() {
       setErrMsg('* Password invalid')
       return
     }
-    console.log(status)
+    navigate(`/chat/${userName}`)
   }
 
   return (
