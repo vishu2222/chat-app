@@ -27,9 +27,14 @@ app.post('/checkUser', async (req, res) => {
 
 
 app.post('/signUp', async (req, res) => {
-    const salt = await bcrypt.genSalt()
-    const hashedPwd = await bcrypt.hash(req.body.password, salt)
-    signUp(req.body.userName, hashedPwd)
+    try {
+        const salt = await bcrypt.genSalt()
+        const hashedPwd = await bcrypt.hash(req.body.password, salt)
+        signUp(req.body.userName, hashedPwd)
+        res.json(true)
+    } catch (err) {
+        res.sendStatus(500)
+    }
 })
 
 
