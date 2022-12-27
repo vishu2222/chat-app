@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { checkUserNameExists, signupUser } from '../requests.js'
 
 export function Register() {
@@ -13,12 +13,14 @@ export function Register() {
 
   const [pwdMismatchErr, setPwdMismatchErr] = useState(false)
   const [userNameExistsErr, setUserNameExitsErr] = useState(false)
+  const navigate = useNavigate()
 
   // methods
 
   async function registerUser() {
     //TODO set a generic validation err in state and print it through JSX
     // TODO if(signupUser()===true) redirect to login page else
+    // TODO add error for passwordlength
     if (userName === '' || password.length < 4) return
     if (password !== confirmPwd) {
       setPwdMismatchErr(true)
@@ -29,8 +31,11 @@ export function Register() {
       setUserNameExitsErr(true)
       return
     }
-    // add error for passwordlength
-    signupUser(userName, password)
+
+    const status = await signupUser(userName, password)
+    if (status === 200) {
+      navigate('/')
+    }
   }
 
   // component return
@@ -85,7 +90,7 @@ export function Register() {
         </h3>
         {pwdMismatchErr && <h3 className="err-msg">* passwords dont match</h3>}
         {userNameExistsErr && (
-          <h3 className="err-msg">* choose different userName</h3>
+          <h3 className="err-msg">*choose different userName</h3>
         )}
       </form>
     </div>
