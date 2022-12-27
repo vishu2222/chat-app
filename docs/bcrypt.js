@@ -25,3 +25,6 @@ app.post('/users/login', async (req, res) => {
 
     }
 })
+
+
+// https://openbase.com/js/bcrypt/documentation
