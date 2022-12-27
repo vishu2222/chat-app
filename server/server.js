@@ -2,7 +2,8 @@ import { createServer } from "http";
 import express from "express";
 import { Server } from 'socket.io'
 import cors from 'cors'
-import { checkUserNameExists } from './db/queries.js'
+import { checkUserNameExists, signUp } from './db/queries.js'
+import bcrypt from 'bcrypt'
 
 const app = express()
 const httpServer = createServer(app)
@@ -24,9 +25,13 @@ app.post('/checkUser', async (req, res) => {
     }
 })
 
-app.post('/signUp', async (req, res) => {
 
+app.post('/signUp', async (req, res) => {
+    const salt = await bcrypt.genSalt()
+    const hashedPwd = await bcrypt.hash(req.body.password, salt)
+    signUp(req.body.userName, hashedPwd)
 })
+
 
 httpServer.listen(3000, () => {
     console.log('listening on localhost:3000')
