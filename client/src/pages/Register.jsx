@@ -7,14 +7,18 @@ export function Register() {
   const [userName, setUserName] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPwd, setConfirmPwd] = useState('')
+
+  // const [displayErr, setDisplayErr] = useState(false)
+  // const [errMsg, setErrMsg] = useState('')
+
   const [pwdMismatchErr, setPwdMismatchErr] = useState(false)
   const [userNameExistsErr, setUserNameExitsErr] = useState(false)
 
   // methods
 
   async function registerUser() {
-    // set a generic validation err in state and print it through JSX
-    // if(signupUser()===true) redirect to login page
+    //TODO set a generic validation err in state and print it through JSX
+    // TODO if(signupUser()===true) redirect to login page else
     if (userName === '' || password.length < 4) return
     if (password !== confirmPwd) {
       setPwdMismatchErr(true)
