@@ -1,3 +1,7 @@
 export function Chat() {
-  return <h3>Chat Room</h3>
+  return (
+    <div id="chat-page">
+      <h3>Chat Room</h3>
+    </div>
+  )
 }
