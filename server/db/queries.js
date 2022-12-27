@@ -27,3 +27,8 @@ export async function signUp(userName, password) {
     return res.rowCount
 }
 
+export async function getPassword(userName) {
+    const client = await pool.connect()
+    const res = await client.query(`SELECT password FROM users where user_name = '${userName}'`)
+    return await res.rows[0].password
+}
