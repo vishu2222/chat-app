@@ -13,7 +13,7 @@ export function Register() {
   // methods
 
   async function registerUser() {
-    if (userName === '' || password === '') return
+    if (userName === '' || password.length < 4) return
     if (password !== confirmPwd) {
       setPwdMismatchErr(true)
       return
@@ -23,6 +23,9 @@ export function Register() {
       setUserNameExitsErr(true)
       return
     }
+    // validate pwd
+    // clear errors when typing
+    // add error for passwordlength
     signupUser(userName, password)
   }
 
