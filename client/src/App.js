@@ -12,7 +12,7 @@ function App() {
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/register' element={<Register />} />
-          <Route path='/chat' element={<Chat />} />
+          <Route path='/chat/:userName' element={<Chat />} />
           <Route path='*' element={<h1>Page not found</h1>} />
         </Routes>
       </BrowserRouter>
