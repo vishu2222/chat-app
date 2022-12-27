@@ -16,4 +16,5 @@ export async function signupUser(userName, password) {
         method: "POST",
         body: JSON.stringify({ userName, password })
     })
+    return await res.json()
 }
