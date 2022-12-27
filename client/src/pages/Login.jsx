@@ -1,6 +1,37 @@
 import { Link } from 'react-router-dom'
+import { useState } from 'react'
+import { userLogin, checkUserNameExists } from '../requests.js'
 
 export function Home() {
+  const [userName, setUserName] = useState('')
+  const [password, setPassword] = useState('')
+  const [displayErr, setDisplayErr] = useState(false)
+  const [errMsg, setErrMsg] = useState('')
+
+  async function login() {
+    if (userName === '') return
+    if (password.length < 4) {
+      displayErr(true)
+      setErrMsg('* password length should be greater than 4')
+      return
+    }
+
+    const userExists = await checkUserNameExists(userName)
+    if (!userExists) {
+      setDisplayErr(true)
+      setErrMsg('* User name doesnt exists')
+      return
+    }
+
+    const status = await userLogin(userName, password)
+    if (status === 401) {
+      setDisplayErr(true)
+      setErrMsg('* Password invalid')
+      return
+    }
+    console.log(status)
+  }
+
   return (
     <div id="login">
       <form onSubmit={(e) => e.preventDefault()}>
@@ -8,17 +39,31 @@ export function Home() {
         <label>
           <strong> User Name: </strong>
         </label>
-        <input type="text" />
+        <input
+          type="text"
+          onChange={(e) => {
+            setUserName(e.target.value)
+            setDisplayErr(false)
+          }}
+        />
         <label>
           <strong> Password: </strong>
         </label>
-        <input type="password" />
-        <button>Join</button>
+        <input
+          type="password"
+          onChange={(e) => {
+            setPassword(e.target.value)
+            setDisplayErr(false)
+          }}
+        />
+        <button onClick={login}>Join</button>
       </form>
       <br />
+
       <h3>
         New user? <Link to="/register">signup</Link>
       </h3>
+      {displayErr && <h3 className="err-msg">{errMsg}</h3>}
     </div>
   )
 }
