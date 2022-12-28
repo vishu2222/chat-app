@@ -18,21 +18,12 @@ export async function signupUser(userName, password) {
   return res.status
 }
 
-export async function getToken(userName) {
-  //   const res = await fetch(url + 'getToken', { credentials: 'include' }) // include: allow send or recieve cookies for cross-origin requists
-  //   const cookies = new Cookies()
-  //   console.log(cookies.get('token'))
-}
-
-// include: allow send or recieve cookies for cross-origin requists
-export async function authenticate(userName) {
-  const res = await fetch(url + 'authenticate', {
-    credentials: 'include',
-    headers: { 'Content-Type': 'application/json' },
-    method: 'POST',
-    body: JSON.stringify({ userName })
+export async function authenticateUser() {
+  const res = await fetch(url + 'authenticateUser', {
+    credentials: 'include'
   })
-  return await res.json()
+  if (res.status !== 200) return [res.status, '']
+  return [res.status, await res.json()]
 }
 
 export async function userLogin(userName, password) {
@@ -42,7 +33,16 @@ export async function userLogin(userName, password) {
     method: 'POST',
     body: JSON.stringify({ userName, password })
   })
-  const status = res.status
-  //   console.log(status)
-  return status
+  return res.status
 }
+
+// include: allow send or recieve cookies for cross-origin requists
+// export async function authenticate(userName) {
+//   const res = await fetch(url + 'authenticate', {
+//     credentials: 'include',
+//     headers: { 'Content-Type': 'application/json' },
+//     method: 'POST',
+//     body: JSON.stringify({ userName })
+//   })
+//   return await res.json()
+// }
