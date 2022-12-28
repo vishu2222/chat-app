@@ -1,2 +1,5 @@
 react router:
 https://www.freecodecamp.org/news/react-router-cheatsheet/
+
+res.cookie, res.setHeadder(set-cookie)
+https://stackoverflow.com/questions/71903698/what-is-the-difference-between-set-cookie-res-cookie-and-cooki-set-js-cookie
