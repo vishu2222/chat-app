@@ -55,3 +55,10 @@ app.listen(3000)
 // GET http://localhost:3000/posts
 // Authorization: Bearer
 // xxxxx.yyyyyy.zzzzzz
+
+// app.get('/getToken', async (req, res) => {
+//   const token = await signJwt({ user: req.body.userName }, secretKey)
+//   //   res.cookie('token', token, { httpOnly: true }).sendStatus(200)
+//   //   res.clearCookie('token', token, { httpOnly: true })
+//   res.sendStatus(200)
+// })
