@@ -19,13 +19,25 @@ export async function signupUser(userName, password) {
 }
 
 export async function getToken(userName) {
-  const res = await fetch(url + 'getToken', { credentials: 'include' }) // include: allow send or recieve cookies for cross-origin requists
+  //   const res = await fetch(url + 'getToken', { credentials: 'include' }) // include: allow send or recieve cookies for cross-origin requists
   //   const cookies = new Cookies()
   //   console.log(cookies.get('token'))
 }
 
+// include: allow send or recieve cookies for cross-origin requists
+export async function authenticate(userName) {
+  const res = await fetch(url + 'authenticate', {
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
+    method: 'POST',
+    body: JSON.stringify({ userName })
+  })
+  return await res.json()
+}
+
 export async function userLogin(userName, password) {
   const res = await fetch(url + 'login', {
+    credentials: 'include',
     headers: { 'Content-Type': 'application/json' },
     method: 'POST',
     body: JSON.stringify({ userName, password })
