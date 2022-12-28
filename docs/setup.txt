@@ -11,6 +11,7 @@ npm install express --save
 npm i jsonwebtoken dotenv bcrypt
 npm install pg
 npm i cors
+npm i cookie-parser
 
 
 //
