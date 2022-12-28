@@ -1,19 +1,19 @@
 import { createServer } from 'http'
-import express from 'express'
 import { Server } from 'socket.io'
+import cookieParser from 'cookie-parser'
+import express from 'express'
+import bcrypt from 'bcrypt'
 import cors from 'cors'
 import { checkUserNameExists, signUp, getPassword } from './db/queries.js'
-import bcrypt from 'bcrypt'
 import { signJwt } from './jwt.js'
-import cookieParser from 'cookie-parser'
 
 const app = express()
-// const httpServer = createServer(app)
-// const io = new Server(httpServer, {
-//   cors: {
-//     origin: ['http://localhost:3001']
-//   }
-// })
+const httpServer = createServer(app)
+const io = new Server(httpServer, {
+  cors: {
+    origin: ['http://localhost:3001']
+  }
+})
 
 app.use(cors({ origin: 'http://localhost:3001', credentials: true }))
 app.use(express.json())
@@ -29,6 +29,7 @@ app.post('/checkUser', async (req, res) => {
 })
 
 app.post('/signUp', async (req, res) => {
+  console.log('in signup')
   try {
     const salt = await bcrypt.genSalt()
     const hashedPwd = await bcrypt.hash(req.body.password, salt)
@@ -39,20 +40,32 @@ app.post('/signUp', async (req, res) => {
   }
 })
 
+app.post('/authenticate', async (req, res) => {
+  console.log(req.headers['authorization'])
+  const userName = req.body.userName
+  const token = req.cookies.token // if not undefined
+  //   console.log('userName: ', userName, 'token: ', token)
+  if (token === undefined) res.json(false)
+})
+// 403 forbidden
+
 app.get('/getToken', async (req, res) => {
-  console.log(req.cookies)
   const token = await signJwt({ user: req.body.userName }, 'tempSecretKey')
-  res.cookie('token', token, { httpOnly: true }).sendStatus(200)
+  //   res.cookie('token', token, { httpOnly: true }).sendStatus(200)
   //   res.clearCookie('token', token, { httpOnly: true })
+  res.sendStatus(200)
 })
 
 app.post('/login', async (req, res) => {
   try {
-    const savedPwd = await getPassword(req.body.userName)
-    if (await bcrypt.compare(req.body.password, savedPwd)) {
-      //   const token = await signJwt({ user: req.body.userName }, 'tempSecretKey')
-      //   res.cookie('token', token) //.json({ token })
-      res.sendStatus(200)
+    const dbPassword = await getPassword(req.body.userName)
+    if (await bcrypt.compare(req.body.password, dbPassword)) {
+      const token = await signJwt(
+        { user: req.body.userName },
+        'tempSecretKey',
+        { expiresIn: '15s' }
+      )
+      res.cookie('token', token, { httpOnly: true }).sendStatus(200)
     } else {
       res.sendStatus(401)
     }
@@ -61,10 +74,6 @@ app.post('/login', async (req, res) => {
   }
 })
 
-// httpServer.listen(3000, () => {
-//   console.log('listening on localhost:3000')
-// })
-
-app.listen(3000, () => {
+httpServer.listen(3000, () => {
   console.log('listening on localhost:3000')
 })
