@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
-import { userLogin, checkUserNameExists, getToken } from '../requests.js'
+import { userLogin, checkUserNameExists } from '../requests.js'
 
 export function Login() {
   const [userName, setUserName] = useState('')
@@ -16,22 +16,21 @@ export function Login() {
       setErrMsg('* password length should be greater than 4')
       return
     }
+
     const userExists = await checkUserNameExists(userName)
     if (!userExists) {
       setDisplayErr(true)
       setErrMsg('* User name doesnt exists')
       return
     }
-    const token = getToken(userName)
+
     const status = await userLogin(userName, password)
     if (status === 401) {
       setDisplayErr(true)
       setErrMsg('* Password invalid')
       return
     }
-    // else status === 200
-    window.localStorage.setItem('userName', JSON.stringify(userName))
-    // navigate(`/chat/${userName}`)
+    navigate(`/chat/${userName}`)
   }
 
   return (
