@@ -17,3 +17,11 @@ jwt working: https://stackoverflow.com/questions/31309759/what-is-secret-key-for
 Generate token:
 node
 require('crypto').randomBytes(64).toString('hex')
+
+
+
+
+Access-Control-Allow-Credentials:
+The Access-Control-Allow-Credentials response header tells browsers whether to expose the response to 
+the frontend JavaScript code when the request's credentials mode (Request.credentials) is include
+
