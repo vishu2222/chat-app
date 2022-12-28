@@ -11,3 +11,15 @@ export async function signJwt(data, key) {
     })
   })
 }
+
+export async function verifyJwt(token, secretKey) {
+  return new Promise((resolve, reject) => {
+    jwt.verify(token, secretKey, (err, user) => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(user)
+      }
+    })
+  })
+}
