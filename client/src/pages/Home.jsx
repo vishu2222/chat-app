@@ -1,25 +1,18 @@
-import { authenticate } from '../requests'
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
+import { authenticateUser } from '../requests'
 
 export function Home() {
   const navigate = useNavigate()
 
   useEffect(() => {
-    async function fun() {
-      const userName = JSON.parse(window.localStorage.getItem('userName'))
-      console.log('localStorage userName: ', userName)
-      if (userName === null) navigate('/login')
-      const status = await authenticate(userName)
-      console.log('authenticate-status: ', status)
-      //   if (status === false) navigate('/login')
+    async function authenticate() {
+      const [statusCode, userName] = await authenticateUser()
+      if (statusCode === 200) return navigate(`/chat/${userName}`)
+      navigate('/login')
     }
-    fun()
-  }, []) // TODO else go to chat room
-  return (
-    <div>
-      <h1>Welcome</h1>
-      <Link to="/login"></Link>
-    </div>
-  )
+    authenticate()
+  }, [])
+
+  return <></>
 }
