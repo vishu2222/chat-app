@@ -2,11 +2,11 @@ import pg from 'pg'
 
 const { Pool } = pg
 const pool = new Pool({
-    user: 'vishu',
-    host: 'localhost',
-    database: 'chatdb',
-    password: '12345',
-    port: 5432
+  user: 'vishu',
+  host: 'localhost',
+  database: 'chatdb',
+  password: '12345',
+  port: 5432
 })
 
 // drop seq
@@ -46,41 +46,42 @@ const users = `CREATE TABLE users(
     password VARCHAR NOT NULL
 );`
 
-
 async function setUpDB() {
-    const client = await pool.connect()
-    // drop seq
-    client.query(dropMsgIdSeq, responseHandler);
-    client.query(dropRoomIdSeq, responseHandler);
-    client.query(dropUserIdSeq, responseHandler);
-    // drop tables
-    client.query(dropConversations, responseHandler);
-    client.query(dropUsers, responseHandler);
-    client.query(dropRooms, responseHandler);
-    // create seq
-    client.query(msgIdSeq, responseHandler);
-    client.query(roomIdSeq, responseHandler);
-    client.query(userIdSeq, responseHandler);
-    // create tables
-    client.query(rooms, responseHandler);
-    client.query(users, responseHandler);
-    client.query(conversations, responseHandler);
+  const client = await pool.connect()
+  // drop seq
+  client.query(dropMsgIdSeq, responseHandler)
+  client.query(dropRoomIdSeq, responseHandler)
+  client.query(dropUserIdSeq, responseHandler)
+  // drop tables
+  client.query(dropConversations, responseHandler)
+  client.query(dropUsers, responseHandler)
+  client.query(dropRooms, responseHandler)
+  // create seq
+  client.query(msgIdSeq, responseHandler)
+  client.query(roomIdSeq, responseHandler)
+  client.query(userIdSeq, responseHandler)
+  // create tables
+  client.query(rooms, responseHandler)
+  client.query(users, responseHandler)
+  client.query(conversations, responseHandler)
 
-    client.release()
+  client.release()
 }
 
 function responseHandler(err, res) {
-    if (err) { console.log(err) }
+  if (err) {
+    console.log(err)
+  }
 }
 
 setUpDB()
 
-
 // const LinkEntity = create table usergroup(id SERIAL PRIMARY KEY, room_id Integer, group_id Integer)
+
+// INSERT INTO conversations(msg_id, msg_txt, msg_time, sender_id, room_id) VALUES ((nextval('msg_id_seq')),'hi',CURRENT_TIMESTAMP,19,1);
 
 // const client = await pool.connect()
 // console.log(client)
 // console.log(pool.query('SELECT * FROM abc;'))
-
 
 // const data = await client.query('SELECT NOW()')
