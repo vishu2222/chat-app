@@ -36,13 +36,11 @@ export async function userLogin(userName, password) {
   return res.status
 }
 
-// include: allow send or recieve cookies for cross-origin requists
-// export async function authenticate(userName) {
-//   const res = await fetch(url + 'authenticate', {
-//     credentials: 'include',
-//     headers: { 'Content-Type': 'application/json' },
-//     method: 'POST',
-//     body: JSON.stringify({ userName })
-//   })
-//   return await res.json()
-// }
+export async function getUserChatByRooms(userName) {
+  const res = await fetch(url + 'getUserChatByRooms', {
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
+    method: 'POST',
+    body: JSON.stringify({ userName })
+  })
+}
