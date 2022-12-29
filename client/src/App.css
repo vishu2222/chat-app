@@ -10,7 +10,7 @@
 
 /* 40514E */
 #message-container {
-  background-color: cadetblue;
+  background-color: #F8F4EA;
   /* border: solid cadetblue;  */
   display: flex;
   flex-direction: column;
@@ -37,13 +37,14 @@
 }
 
 .self-msg {
-  background-color: aliceblue;
+  
+  background-color: aquamarine;
   margin-right: 20px;
   padding: 4px;
 }
 
 .user-msg {
-  background-color:aquamarine;
+  background-color:aliceblue;
   margin-left: 20px;
   padding: 4px;
 }
