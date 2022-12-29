@@ -9,6 +9,7 @@ export function Login() {
   const [errMsg, setErrMsg] = useState('')
   const navigate = useNavigate()
 
+  // TODO add function credentialValidater
   async function login() {
     if (userName === '') return
     if (password.length < 4) {
