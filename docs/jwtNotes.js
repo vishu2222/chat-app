@@ -62,3 +62,9 @@ app.listen(3000)
 //   //   res.clearCookie('token', token, { httpOnly: true })
 //   res.sendStatus(200)
 // })
+
+{
+  /* <div id="nav-home-button">
+            <Link to="/">Home</Link>
+          </div> */
+}
