@@ -10,9 +10,6 @@ function App() {
     <>
       <div id="appContainer">
         <BrowserRouter>
-          <div id="nav-home-button">
-            <Link to="/">Home</Link>
-          </div>
           <div id="nav"></div>
           <Routes>
             <Route path="/" element={<Home />} />
