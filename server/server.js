@@ -66,8 +66,7 @@ app.post('/login', async (req, res) => {
         {
           user: req.body.userName
         },
-        'tempSecretKey',
-        { expiresIn: '30m' }
+        'tempSecretKey'
       )
       res.cookie('token', token, { httpOnly: true }).sendStatus(200)
     } else {
