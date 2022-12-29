@@ -39,4 +39,51 @@ export async function getPassword(userName) {
   return await res.rows[0].password
 }
 
+async function getUserRooms(userName) {
+  const client = await pool.connect()
+  const userRooms = `SELECT DISTINCT room 
+                     FROM 
+                        ( 
+                        SELECT room 
+                        FROM conversations, rooms, users 
+                        WHERE conversations.sender_id=users.user_id 
+                        AND conversations.room_id=rooms.room_id 
+                        AND users.user_name='${userName}'
+                        )  AS filteredTable; `
+  let res = await client.query(userRooms)
+  const roomsList = res.rows.map((item) => item.room)
+  client.release()
+  return roomsList
+}
+
+async function getRoomChat(room) {
+  const client = await pool.connect()
+  const roomChat = `SELECT user_name, room, msg_txt, msg_time 
+    FROM conversations, rooms, users
+    WHERE conversations.sender_id=users.user_id 
+    AND conversations.room_id=rooms.room_id 
+    AND rooms.room = '${room}'
+    ORDER BY msg_time desc LIMIT 10;`
+  const res = await client.query(roomChat)
+  client.release()
+  return res.rows
+}
+
+export async function getUserChatByRooms(userName) {
+  const userMsgsByRoom = {}
+  const roomsList = await getUserRooms(userName)
+  for (let room of roomsList) {
+    userMsgsByRoom[room] = await getRoomChat(room)
+  }
+  return userMsgsByRoom
+}
+
+// console.log(await getUserChatByRooms('aaaa'))
+
 // INSERT INTO rooms(room_id,room) VALUES ((nextval('room_id_seq')),'demo');
+
+// msgs
+// select user_name, room, msg_txt, msg_time from conversations, rooms, users where conversations.sender_id=users.user_id and conversations.room_id=rooms.room_id and users.user_name='aaaa';
+
+// distinct rooms
+// SELECT DISTINCT room from (SELECT user_name, room, msg_txt, msg_time FROM conversations, rooms, users WHERE conversations.sender_id=users.user_id AND conversations.room_id=rooms.room_id AND users.user_name='aaaa') AS filteredTable;
