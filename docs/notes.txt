@@ -91,6 +91,12 @@ sockets:
 
 
 
+  //   roomsList.forEach(async (room) => {
+  //     const chat = await getRoomChat(room)
+  //     userMsgsByRoom[room] = chat
+  //   })
+
+
 
 
 
