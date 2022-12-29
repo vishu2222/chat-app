@@ -4,7 +4,12 @@ import cookieParser from 'cookie-parser'
 import express from 'express'
 import bcrypt from 'bcrypt'
 import cors from 'cors'
-import { checkUserNameExists, signUp, getPassword } from './db/queries.js'
+import {
+  checkUserNameExists,
+  signUp,
+  getPassword,
+  getUserChatByRooms
+} from './db/queries.js'
 import { signJwt, verifyJwt } from './jwt.js'
 
 const app = express()
@@ -75,6 +80,12 @@ app.post('/login', async (req, res) => {
   } catch (err) {
     res.sendStatus(500)
   }
+})
+
+app.get('/getUserChatByRooms', authenticateToken, async (req, res) => {
+  const userChatByRoom = await getUserChatByRooms(req.body.userName)
+  console.log(userChatByRoom)
+  return userChatByRoom
 })
 
 httpServer.listen(3000, () => {
