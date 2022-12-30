@@ -43,4 +43,5 @@ export async function getUserChatByRooms(userName) {
     method: 'POST',
     body: JSON.stringify({ userName })
   })
+  return await res.json()
 }
