@@ -63,7 +63,7 @@ async function getRoomChat(room) {
     WHERE conversations.sender_id=users.user_id 
     AND conversations.room_id=rooms.room_id 
     AND rooms.room = '${room}'
-    ORDER BY msg_time desc LIMIT 10;`
+    ORDER BY msg_time ASC LIMIT 10;`
   const res = await client.query(roomChat)
   client.release()
   return res.rows
