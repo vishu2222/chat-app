@@ -7,34 +7,39 @@ export function Register() {
   const [userName, setUserName] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPwd, setConfirmPwd] = useState('')
+  const [displayErr, setDisplayErr] = useState(false)
+  const [errMsg, setErrMsg] = useState('')
 
-  // const [displayErr, setDisplayErr] = useState(false)
-  // const [errMsg, setErrMsg] = useState('')
-
-  const [pwdMismatchErr, setPwdMismatchErr] = useState(false)
-  const [userNameExistsErr, setUserNameExitsErr] = useState(false)
   const navigate = useNavigate()
 
   // methods
 
   async function registerUser() {
-    //TODO set a generic validation err in state and print it through JSX
-    // TODO if(signupUser()===true) redirect to login page else
-    // TODO add error for passwordlength
-    if (userName === '' || password.length < 4) return
+    if (userName === '') {
+      setDisplayErr(true)
+      setErrMsg('* enter user name')
+      return
+    }
+    if (password.length < 4) {
+      setDisplayErr(true)
+      setErrMsg('* password length should be greater than 4')
+      return
+    }
     if (password !== confirmPwd) {
-      setPwdMismatchErr(true)
+      setDisplayErr(true)
+      setErrMsg('* passwords donot match')
       return
     }
     const userExists = await checkUserNameExists(userName)
     if (userExists) {
-      setUserNameExitsErr(true)
+      setDisplayErr(true)
+      setErrMsg('* User exists, choose different userName')
       return
     }
 
     const status = await signupUser(userName, password)
     if (status === 200) {
-      navigate('/')
+      navigate('/login')
     }
   }
 
@@ -50,10 +55,8 @@ export function Register() {
           type="text"
           value={userName}
           onChange={(e) => {
+            setDisplayErr(false)
             setUserName(e.target.value)
-            if (userNameExistsErr) {
-              setUserNameExitsErr(false)
-            }
           }}
         />
         <label>
@@ -63,9 +66,7 @@ export function Register() {
           type="password"
           value={password}
           onChange={(e) => {
-            if (pwdMismatchErr) {
-              setPwdMismatchErr(false)
-            }
+            setDisplayErr(false)
             setPassword(e.target.value)
           }}
         />
@@ -76,9 +77,7 @@ export function Register() {
           type="password"
           value={confirmPwd}
           onChange={(e) => {
-            if (pwdMismatchErr) {
-              setPwdMismatchErr(false)
-            }
+            setDisplayErr(false)
             setConfirmPwd(e.target.value)
           }}
         />
@@ -88,10 +87,7 @@ export function Register() {
         <h3>
           Already registered? <Link to="/">Login</Link>
         </h3>
-        {pwdMismatchErr && <h3 className="err-msg">* passwords dont match</h3>}
-        {userNameExistsErr && (
-          <h3 className="err-msg">*choose different userName</h3>
-        )}
+        {displayErr && <h3 className="err-msg">{errMsg}</h3>}
       </form>
     </div>
   )
