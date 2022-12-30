@@ -8,7 +8,7 @@ export function MsgBox() {
   const [newMessage, setNewMessage] = useState('')
   const [roomMessages, setRoomMessages] = useState([])
 
-  function handleClick() {
+  function sendMessage() {
     // Todo
   }
 
@@ -27,7 +27,7 @@ export function MsgBox() {
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
           />
-          <button onClick={handleClick}>send</button>
+          <button onClick={sendMessage}>send</button>
         </form>
       </div>
     </div>
