@@ -1,34 +1,34 @@
-import { useEffect } from 'react'
+import { useEffect, useContext } from 'react'
 import { useState } from 'react'
+import { AppContext } from './Chat'
+import { DisplayMsg } from './DisplayMsg'
 
-export function MsgBox({ socket, userName, messages }) {
+export function MsgBox() {
+  const { messages, userName, socket, focusedRoom } = useContext(AppContext)
   const [newMessage, setNewMessage] = useState('')
-  const [rooms, setRooms] = useState([])
+  const [roomMessages, setRoomMessages] = useState([])
 
-  function handleClick() {}
+  function handleClick() {
+    // Todo
+  }
 
   useEffect(() => {
-    const fetchedRooms = Object.keys(messages)
-    setRooms((current) => [...current, ...fetchedRooms])
-  }, [messages])
+    setRoomMessages(() => messages[focusedRoom])
+  }, [focusedRoom])
 
   return (
-    <div id="messagePage">
-      <div id="rooms">
-        <h3>Rooms</h3>
-      </div>
-      <div id="messageBox">
-        <div id="message-container">
-          <form id="msg-form" onSubmit={(e) => e.preventDefault()}>
-            <input
-              type="text"
-              placeholder="...."
-              value={newMessage}
-              onChange={(e) => setNewMessage(e.target.value)}
-            />
-            <button onClick={handleClick}>send</button>
-          </form>
-        </div>
+    <div id="messageBox">
+      <div id="message-container">
+        <DisplayMsg roomMessages={roomMessages} />
+        <form id="msg-form" onSubmit={(e) => e.preventDefault()}>
+          <input
+            type="text"
+            placeholder="...."
+            value={newMessage}
+            onChange={(e) => setNewMessage(e.target.value)}
+          />
+          <button onClick={handleClick}>send</button>
+        </form>
       </div>
     </div>
   )
