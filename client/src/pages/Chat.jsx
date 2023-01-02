@@ -3,7 +3,7 @@ import { useState, useEffect, createContext } from 'react'
 import { MsgBox } from './MsgBox'
 import { Rooms } from './Rooms'
 import { useLocation } from 'react-router-dom'
-import { getUserChatByRooms } from '../requests'
+import { getUserChatByRoom } from '../requests'
 
 const socket = io.connect('http://localhost:3000')
 export const AppContext = createContext()
@@ -22,7 +22,7 @@ export function Chat() {
 
   useEffect(() => {
     const userChat = async () => {
-      const fetchedMessages = await getUserChatByRooms(userName)
+      const fetchedMessages = await getUserChatByRoom(userName)
       setMessages(() => fetchedMessages)
     }
     userChat()
