@@ -6,7 +6,8 @@ export async function checkUserNameExists(userName) {
     method: 'POST',
     body: JSON.stringify({ userName })
   })
-  return await res.json()
+  const response = await res.json()
+  return response.status
 }
 
 export async function signupUser(userName, password) {
@@ -36,8 +37,9 @@ export async function userLogin(userName, password) {
   return res.status
 }
 
-export async function getUserChatByRooms(userName) {
-  const res = await fetch(url + 'getUserChatByRooms', {
+// TODO use get
+export async function getUserChatByRoom(userName) {
+  const res = await fetch(url + 'getUsersChatByRoom', {
     credentials: 'include',
     headers: { 'Content-Type': 'application/json' },
     method: 'POST',
