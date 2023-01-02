@@ -1,0 +1,8 @@
+REF: https://stackoverflow.blog/2020/03/02/best-practices-for-rest-api-design/
+
+1) use JSON to exchange database, Set the Content-Type header in the response
+   to application/json; charset=utf-8.
+
+2) Use Nouns instead of verbs for api-endpoints.
+3) Use logical nesting on endpoints.
+4) use appropriate Error codes and messages
