@@ -17,14 +17,12 @@ export function Login() {
       return
     }
 
-    const userExists = await checkUserNameExists(userName)
-    if (!userExists) {
+    const status = await userLogin(userName, password)
+    if (status === 404) {
       setDisplayErr(true)
-      setErrMsg('* User name doesnt exists')
+      setErrMsg('* userName not found')
       return
     }
-
-    const status = await userLogin(userName, password)
     if (status === 401) {
       setDisplayErr(true)
       setErrMsg('* Password invalid')
@@ -57,7 +55,7 @@ export function Login() {
             setDisplayErr(false)
           }}
         />
-        <button onClick={login}>Join</button>
+        <button onClick={login}>Login</button>
       </form>
       <br />
 
