@@ -2,3 +2,4 @@ node_modules
 temp.js
 docs/examples
 bkp
+.env
