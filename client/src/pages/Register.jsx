@@ -30,8 +30,8 @@ export function Register() {
       setErrMsg('* passwords donot match')
       return
     }
-    const userExists = await checkUserNameExists(userName)
-    if (userExists) {
+    const userExistsStatus = await checkUserNameExists(userName)
+    if (userExistsStatus === 400) {
       setDisplayErr(true)
       setErrMsg('* User exists, choose different userName')
       return
