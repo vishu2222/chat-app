@@ -4,7 +4,8 @@ import { AppContext } from './Chat'
 import { DisplayMsg } from './DisplayMsg'
 
 export function MsgBox() {
-  const { messages, userName, socket, focusedRoom } = useContext(AppContext)
+  const { messages, setMessages, userName, socket, focusedRoomId } =
+    useContext(AppContext)
   const [newMessage, setNewMessage] = useState('')
   const [roomMessages, setRoomMessages] = useState([])
 
@@ -19,19 +20,24 @@ export function MsgBox() {
   }, [socket])
 
   function sendMessage() {
-    // Todo
-    socket.emit('newMessage', {
-      newMessage,
-      userName,
-      roomId: focusedRoom,
-      time: ''
-    })
+    const newMsg = {
+      msg_txt: newMessage,
+      msg_time: new Date(Date.now()).toISOString(),
+      user_name: userName,
+      roomId: focusedRoomId
+    }
+    socket.emit('newMessage', newMsg) // need to get confirmation from db
+
+    const tempMsgs = messages
+    tempMsgs[focusedRoomId].push(newMsg)
+    setMessages(tempMsgs) // prevent new msg's from dissappearing after room refocus
+    setRoomMessages((current) => [...current, newMsg]) // to trigger a render on current page
     setNewMessage('')
   }
 
   useEffect(() => {
-    setRoomMessages(() => messages[focusedRoom])
-  }, [focusedRoom])
+    setRoomMessages(() => messages[focusedRoomId])
+  }, [focusedRoomId])
 
   return (
     <div id="messageBox">
