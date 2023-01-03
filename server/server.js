@@ -23,15 +23,14 @@ const io = new Server(httpServer, {
 const secretKey = 'tempSecretKey'
 
 export async function authenticateToken(req, res, next) {
+  const token = req.cookies.token
+  if (token === undefined) return res.sendStatus(401)
   try {
-    const token = req.cookies.token
-    if (token === undefined) return res.sendStatus(401)
     const jwtPaylod = await verifyJwt(token, secretKey)
-    // if error 403
     res.userName = jwtPaylod.user
     next()
   } catch (err) {
-    return res.sendStatus(500) //
+    return res.sendStatus(403)
   }
 }
 
@@ -81,8 +80,8 @@ app.post('/login', async (req, res) => {
   }
 })
 
+// TODO change to get
 app.post('/getUsersChatByRoom', authenticateToken, async (req, res) => {
-  //
   try {
     const userChatByRoom = await getUsersChatByRoom(req.body.userName)
     if (userChatByRoom === 404) {
