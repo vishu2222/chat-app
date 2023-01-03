@@ -7,16 +7,34 @@ export function MsgBox() {
   const { messages, setMessages, userName, socket, focusedRoomId } = useContext(AppContext)
   const [newMessage, setNewMessage] = useState('')
   const [roomMessages, setRoomMessages] = useState([])
+  const [broadCast, setNewBroadcast] = useState({})
 
   useEffect(() => {
     socket.on('connect', () => {
       console.log('new user connected with id:', socket.id)
     })
-
-    socket.on('newBroadcast', (msg) => {
-      console.log('BroadCast recieved from server:', msg)
-    })
+    return () => {
+      socket.off('connect')
+    }
   }, [socket])
+
+  useEffect(() => {
+    socket.on('newBroadcast', (msg) => {
+      setNewBroadcast(() => msg)
+      return () => socket.off('newBroadcast') //
+    })
+  }, [])
+
+  useEffect(() => {
+    if (Object.keys(broadCast).length > 0) {
+      const tempMsgs = messages
+      console.log(tempMsgs)
+      tempMsgs[focusedRoomId].push(broadCast)
+      setMessages(tempMsgs)
+      setRoomMessages((current) => [...current, broadCast])
+      setNewMessage('')
+    }
+  }, [broadCast])
 
   function sendMessage() {
     const newMsg = {
@@ -43,7 +61,7 @@ export function MsgBox() {
       <div id='message-container'>
         <DisplayMsg roomMessages={roomMessages} />
         <form id='msg-form' onSubmit={(e) => e.preventDefault()}>
-          <input type='text' placeholder='....' value={newMessage} onChange={(e) => setNewMessage(e.target.value)} />
+          <input type='text' placeholder='message' value={newMessage} onChange={(e) => setNewMessage(e.target.value)} />
           <button onClick={sendMessage}>send</button>
         </form>
       </div>
@@ -51,6 +69,13 @@ export function MsgBox() {
   )
 }
 
-// return () => {
-//   socket.off('broadcastMsg', callBack);
-// };
+// useEffect(() => {
+//   const callBack = (data) => {
+//     console.log('broadCast', data.userName, data.txt);
+//     setMessageList((currentList) => [...currentList, data]);
+//   };
+//   socket.on('broadcastMsg', callBack);
+//   return () => {
+//     socket.off('broadcastMsg', callBack);
+//   };
+// }, [socket]);
