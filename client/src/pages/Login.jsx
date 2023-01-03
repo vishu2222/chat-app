@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
-import { userLogin, checkUserNameExists } from '../requests.js'
+import { userLogin } from '../requests.js'
 
 export function Login() {
   const [userName, setUserName] = useState('')
