@@ -13,23 +13,33 @@ export function Chat() {
   const location = useLocation()
   const [userName, setUserName] = useState(location.pathname.split('/')[2])
   const [messages, setMessages] = useState({})
-  const [focusedRoom, setFocusedRoom] = useState('')
+  const [focusedRoomId, setFocusedRoomId] = useState('')
 
   useEffect(() => {
     const userChat = async () => {
       const fetchedMessages = await getUserChatByRoom(userName)
-      console.log('fetchedMessages:', fetchedMessages)
       setMessages(() => fetchedMessages)
     }
     userChat()
   }, [userName])
+
+  // useEffect(() => {
+  //   console.log('focusedRoomId:', focusedRoomId)
+  // }, [focusedRoomId])
 
   return (
     <div id="chat-page">
       <h3>Chat here</h3>
       <div id="msgBox-rooms">
         <AppContext.Provider
-          value={{ messages, userName, socket, focusedRoom, setFocusedRoom }}>
+          value={{
+            messages,
+            setMessages,
+            userName,
+            socket,
+            focusedRoomId,
+            setFocusedRoomId
+          }}>
           <JoinRoom />
           <MsgBox />
           <Rooms />
