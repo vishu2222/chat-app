@@ -2,30 +2,42 @@ import { AppContext } from './Chat'
 import { useEffect, useState, useContext } from 'react'
 
 export function Rooms() {
-  const { messages, setFocusedRoom } = useContext(AppContext)
+  const { messages, setFocusedRoom, socket, userName } = useContext(AppContext)
   const [rooms, setRooms] = useState([])
-  //   const [focusedRoom, setFocusedRoom] = useState('')
 
   // methods
   useEffect(() => {
-    const fetchedRooms = Object.keys(messages)
+    const fetchedRoomIds = Object.keys(messages)
+    const fetchedRooms = []
+    fetchedRoomIds.forEach((roomId) =>
+      fetchedRooms.push({
+        roomId: roomId,
+        roomName: messages[roomId][0].room_name
+      })
+    )
     setRooms(() => [...fetchedRooms])
   }, [messages])
 
   const roomElements = rooms.map((room, index) => (
-    <div className="roomItem" key={index} onClick={() => focusRoom(room)}>
-      <h5>{room}</h5>
+    <div
+      className="roomItem"
+      key={index}
+      onClick={() => focusRoom(room.roomId)}>
+      <h4>
+        {room.roomId} {room.roomName}
+      </h4>
     </div>
   ))
 
   function focusRoom(room) {
     setFocusedRoom(() => room)
+    socket.emit('joinRoom', { userName, room })
   }
 
   // component return
   return (
     <div id="rooms">
-      <p>Rooms</p>
+      <h4>Rooms</h4>
       <ul>{roomElements}</ul>
     </div>
   )
