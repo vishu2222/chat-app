@@ -45,14 +45,14 @@ export function Register() {
 
   // component return
   return (
-    <div id="register">
+    <div id='register'>
       <form onSubmit={(e) => e.preventDefault()}>
         <h2> Register</h2>
         <label>
           <strong> User Name: </strong>
         </label>
         <input
-          type="text"
+          type='text'
           value={userName}
           onChange={(e) => {
             setDisplayErr(false)
@@ -63,7 +63,7 @@ export function Register() {
           <strong> Password: </strong>
         </label>
         <input
-          type="password"
+          type='password'
           value={password}
           onChange={(e) => {
             setDisplayErr(false)
@@ -74,7 +74,7 @@ export function Register() {
           <strong> Confirm Password: </strong>
         </label>
         <input
-          type="password"
+          type='password'
           value={confirmPwd}
           onChange={(e) => {
             setDisplayErr(false)
@@ -85,9 +85,9 @@ export function Register() {
         <br />
         <button onClick={registerUser}>Register</button>
         <h3>
-          Already registered? <Link to="/">Login</Link>
+          Already registered? <Link to='/'>Login</Link>
         </h3>
-        {displayErr && <h3 className="err-msg">{errMsg}</h3>}
+        {displayErr && <h3 className='err-msg'>{errMsg}</h3>}
       </form>
     </div>
   )

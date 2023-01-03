@@ -4,8 +4,7 @@ import { AppContext } from './Chat'
 import { DisplayMsg } from './DisplayMsg'
 
 export function MsgBox() {
-  const { messages, setMessages, userName, socket, focusedRoomId } =
-    useContext(AppContext)
+  const { messages, setMessages, userName, socket, focusedRoomId } = useContext(AppContext)
   const [newMessage, setNewMessage] = useState('')
   const [roomMessages, setRoomMessages] = useState([])
 
@@ -40,16 +39,11 @@ export function MsgBox() {
   }, [focusedRoomId])
 
   return (
-    <div id="messageBox">
-      <div id="message-container">
+    <div id='messageBox'>
+      <div id='message-container'>
         <DisplayMsg roomMessages={roomMessages} />
-        <form id="msg-form" onSubmit={(e) => e.preventDefault()}>
-          <input
-            type="text"
-            placeholder="...."
-            value={newMessage}
-            onChange={(e) => setNewMessage(e.target.value)}
-          />
+        <form id='msg-form' onSubmit={(e) => e.preventDefault()}>
+          <input type='text' placeholder='....' value={newMessage} onChange={(e) => setNewMessage(e.target.value)} />
           <button onClick={sendMessage}>send</button>
         </form>
       </div>

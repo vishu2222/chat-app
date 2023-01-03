@@ -3,8 +3,7 @@ import { useEffect, useState, useContext } from 'react'
 
 export function Rooms() {
   // context
-  const { messages, setFocusedRoomId, socket, userName, focusedRoomId } =
-    useContext(AppContext)
+  const { messages, setFocusedRoomId, socket, userName, focusedRoomId } = useContext(AppContext)
 
   // state
   const [userRooms, setUserRooms] = useState([])
@@ -28,10 +27,7 @@ export function Rooms() {
   }
 
   const roomElements = userRooms.map((room, index) => (
-    <div
-      className="roomItem"
-      key={index}
-      onClick={() => focusRoom(room.roomId)}>
+    <div className='roomItem' key={index} onClick={() => focusRoom(room.roomId)}>
       <h4>
         {room.roomId} {room.roomName}
       </h4>
@@ -40,7 +36,7 @@ export function Rooms() {
 
   // component return
   return (
-    <div id="rooms">
+    <div id='rooms'>
       <h4>Rooms</h4>
       <ul>{roomElements}</ul>
     </div>

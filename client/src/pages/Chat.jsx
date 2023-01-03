@@ -23,14 +23,10 @@ export function Chat() {
     userChat()
   }, [userName])
 
-  // useEffect(() => {
-  //   console.log('focusedRoomId:', focusedRoomId)
-  // }, [focusedRoomId])
-
   return (
-    <div id="chat-page">
+    <div id='chat-page'>
       <h3>Chat here</h3>
-      <div id="msgBox-rooms">
+      <div id='msgBox-rooms'>
         <AppContext.Provider
           value={{
             messages,

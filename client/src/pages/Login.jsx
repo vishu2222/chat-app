@@ -32,14 +32,14 @@ export function Login() {
   }
 
   return (
-    <div id="login">
+    <div id='login'>
       <form onSubmit={(e) => e.preventDefault()}>
         <h2> Login</h2>
         <label>
           <strong> User Name: </strong>
         </label>
         <input
-          type="text"
+          type='text'
           onChange={(e) => {
             setUserName(e.target.value)
             setDisplayErr(false)
@@ -49,7 +49,7 @@ export function Login() {
           <strong> Password: </strong>
         </label>
         <input
-          type="password"
+          type='password'
           onChange={(e) => {
             setPassword(e.target.value)
             setDisplayErr(false)
@@ -60,9 +60,9 @@ export function Login() {
       <br />
 
       <h3>
-        New user? <Link to="/register">signup</Link>
+        New user? <Link to='/register'>signup</Link>
       </h3>
-      {displayErr && <h3 className="err-msg">{errMsg}</h3>}
+      {displayErr && <h3 className='err-msg'>{errMsg}</h3>}
     </div>
   )
 }
