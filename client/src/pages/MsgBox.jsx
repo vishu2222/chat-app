@@ -8,8 +8,25 @@ export function MsgBox() {
   const [newMessage, setNewMessage] = useState('')
   const [roomMessages, setRoomMessages] = useState([])
 
+  useEffect(() => {
+    socket.on('connect', () => {
+      console.log('new user connected with id:', socket.id)
+    })
+
+    socket.on('newBroadcast', (msg) => {
+      console.log('BroadCast recieved from server:', msg)
+    })
+  }, [socket])
+
   function sendMessage() {
     // Todo
+    socket.emit('newMessage', {
+      newMessage,
+      userName,
+      roomId: focusedRoom,
+      time: ''
+    })
+    setNewMessage('')
   }
 
   useEffect(() => {
