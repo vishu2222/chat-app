@@ -4,6 +4,11 @@
     "semi": false,
     "singleQuote": true,
     "bracketSpacing": true,
-    "jsxBracketSameLine": true
+    "jsxBracketSameLine": true,
+    "printWidth": 200,
+    "bracketSameLine": true,
+    "jsxSingleQuote": true,
+    "singleAttributePerLine": false,
+    "useTabs": false
 }
 
