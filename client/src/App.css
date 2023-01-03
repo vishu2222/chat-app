@@ -10,7 +10,19 @@
   align-items:center;
 }
 
+#msgBox-rooms{
+  display: flex;
+  flex-direction:row-reverse;
+}
+
 #rooms{
+  background-color: rgb(154, 168, 168);
+  width: 180px;
+}
+
+
+
+#join-room{
   background-color: rgb(154, 168, 168);
 }
 
@@ -25,6 +37,8 @@
   max-height: 450;
   overflow:auto;
 }
+
+
 
 #msg-form {
   display: flex;
