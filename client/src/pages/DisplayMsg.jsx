@@ -11,10 +11,6 @@ export function DisplayMsg({ roomMessages }) {
     }
   }, [roomMessages])
 
-  useEffect(() => {
-    messages.forEach((item) => console.log(item))
-  }, [messages])
-
   return (
     <div>
       {messages.map((msg, index) => (
