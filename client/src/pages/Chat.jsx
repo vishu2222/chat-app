@@ -4,6 +4,7 @@ import { MsgBox } from './MsgBox'
 import { Rooms } from './Rooms'
 import { useLocation } from 'react-router-dom'
 import { getUserChatByRoom } from '../requests'
+import { JoinRoom } from './JoinRoom'
 
 const socket = io.connect('http://localhost:3000')
 export const AppContext = createContext()
@@ -15,14 +16,9 @@ export function Chat() {
   const [focusedRoom, setFocusedRoom] = useState('')
 
   useEffect(() => {
-    socket.on('connect', () => {
-      console.log('new user connected with id:', socket.id)
-    })
-  }, [])
-
-  useEffect(() => {
     const userChat = async () => {
       const fetchedMessages = await getUserChatByRoom(userName)
+      console.log('fetchedMessages:', fetchedMessages)
       setMessages(() => fetchedMessages)
     }
     userChat()
@@ -34,6 +30,7 @@ export function Chat() {
       <div id="msgBox-rooms">
         <AppContext.Provider
           value={{ messages, userName, socket, focusedRoom, setFocusedRoom }}>
+          <JoinRoom />
           <MsgBox />
           <Rooms />
         </AppContext.Provider>
