@@ -5,8 +5,8 @@ import express from 'express'
 import bcrypt from 'bcrypt'
 import cors from 'cors'
 import { signJwt, verifyJwt } from './jwt.js'
-import { checkUserNameExists, signUp } from './db/queries.js'
-import { getPassword, getUsersChatByRoom } from './db/queries.js'
+import { checkUserNameExists, signUp } from './models/queries.js'
+import { getPassword, getUsersChatByRoom } from './models/queries.js'
 
 const app = express()
 app.use(cors({ origin: 'http://localhost:3001', credentials: true })) //  res.header('Access-Control-Allow-Credentials', true) //  The Access-Control-Allow-Credentials response header tells browsers whether to expose the response to the frontend JavaScript code when the request's credentials mode (Request.credentials) is include.
@@ -20,7 +20,34 @@ const io = new Server(httpServer, {
   }
 })
 
+let userCount = 0
+io.on('connection', (socket) => {
+  userCount++
+  console.log('User Connected:', socket.id, 'TotalUsers:', userCount)
+
+  socket.on('joinRoom', (data) => {
+    console.log('user:', data.userName, ' joined room', data.room)
+    socket.join(data.room)
+  })
+
+  socket.on('newMessage', (msg) => {
+    socket.to(msg.roomId).emit('newBroadcast', msg.newMessage)
+    console.log('server recieved message:', msg)
+  })
+
+  socket.on('disconnect', (reason) => {
+    userCount--
+    console.log('User disconnected. Total connected users:', userCount)
+  })
+
+  socket.on('connect_error', () => {
+    console.log('unable to connect')
+  })
+})
+
 const secretKey = 'tempSecretKey'
+
+//
 
 export async function authenticateToken(req, res, next) {
   const token = req.cookies.token
