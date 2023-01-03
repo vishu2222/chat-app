@@ -1,4 +1,4 @@
-import { useEffect, useContext } from 'react'
+import { useContext } from 'react'
 import { AppContext } from './Chat'
 
 export function MessageItem({ msg }) {
@@ -14,9 +14,6 @@ export function MessageItem({ msg }) {
     msgClassName = 'user-msg'
   }
 
-  useEffect(() => {
-    console.log(msg)
-  })
   return (
     <div className={divClassName}>
       <p className={msgClassName}>{msg.user_name + ': ' + msg.msg_txt}</p>
