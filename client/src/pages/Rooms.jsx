@@ -2,8 +2,12 @@ import { AppContext } from './Chat'
 import { useEffect, useState, useContext } from 'react'
 
 export function Rooms() {
-  const { messages, setFocusedRoom, socket, userName } = useContext(AppContext)
-  const [rooms, setRooms] = useState([])
+  // context
+  const { messages, setFocusedRoomId, socket, userName, focusedRoomId } =
+    useContext(AppContext)
+
+  // state
+  const [userRooms, setUserRooms] = useState([])
 
   // methods
   useEffect(() => {
@@ -15,10 +19,15 @@ export function Rooms() {
         roomName: messages[roomId][0].room_name
       })
     )
-    setRooms(() => [...fetchedRooms])
+    setUserRooms(() => [...fetchedRooms])
   }, [messages])
 
-  const roomElements = rooms.map((room, index) => (
+  function focusRoom(roomId) {
+    socket.emit('joinRoom', { userName, roomId })
+    setFocusedRoomId(() => roomId)
+  }
+
+  const roomElements = userRooms.map((room, index) => (
     <div
       className="roomItem"
       key={index}
@@ -28,11 +37,6 @@ export function Rooms() {
       </h4>
     </div>
   ))
-
-  function focusRoom(room) {
-    setFocusedRoom(() => room)
-    socket.emit('joinRoom', { userName, room })
-  }
 
   // component return
   return (
@@ -44,7 +48,3 @@ export function Rooms() {
 }
 
 // TODO set key to room_id
-
-// useEffect(() => {
-//     console.log('rooms:', rooms)
-//   })
