@@ -26,12 +26,12 @@ io.on('connection', (socket) => {
   console.log('User Connected:', socket.id, 'TotalUsers:', userCount)
 
   socket.on('joinRoom', (data) => {
-    console.log('user:', data.userName, ' joined room', data.room)
-    socket.join(data.room)
-  })
+    console.log('user:', data.userName, ' joined roomId:', data.roomId)
+    socket.join(data.roomId)
+  }) // broadcast msg userJoined
 
   socket.on('newMessage', (msg) => {
-    socket.to(msg.roomId).emit('newBroadcast', msg.newMessage)
+    socket.to(msg.roomId).emit('newBroadcast', msg.msg_txt)
     console.log('server recieved message:', msg)
   })
 
