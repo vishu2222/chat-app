@@ -12,7 +12,7 @@ const pool = new Pool({
 export async function checkUserNameExists(userName) {
   const client = await pool.connect()
   const res = await client.query(
-    `SELECT user_name from users WHERE user_name ='${userName}';` // change the query
+    `SELECT user_name from users WHERE user_name ='${userName}';` // dont use template literals
   )
   client.release()
   if (res.rowCount === 1) return true
@@ -84,3 +84,18 @@ export async function getUsersChatByRoom(userName) {
   client.release()
   return userMsgsByRoom
 }
+
+export async function addMsg(msg) {
+  const client = await pool.connect()
+  const userId = await getUserId(msg.user_name)
+  client.query(
+    "INSERT INTO messages (msg_id, msg_txt, msg_time, sender_id, room_id) VALUES (nextval('msg_id_seq'), $1, $2, $3, $4)",
+    [msg.msg_txt, msg.msg_time, userId, msg.roomId]
+  )
+  client.release()
+}
+
+// const result = await client.query(
+//   'UPDATE users SET name = $1, email = $2 WHERE id = $3',
+//   [name, email, id]
+// );
