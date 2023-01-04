@@ -28,7 +28,6 @@ export function MsgBox() {
   useEffect(() => {
     if (Object.keys(broadCast).length > 0) {
       const tempMsgs = messages
-      console.log(tempMsgs)
       tempMsgs[focusedRoomId].push(broadCast)
       setMessages(tempMsgs)
       setRoomMessages((current) => [...current, broadCast])
