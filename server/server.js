@@ -5,7 +5,7 @@ import express from 'express'
 import bcrypt from 'bcrypt'
 import cors from 'cors'
 import { signJwt, verifyJwt } from './jwt.js'
-import { checkUserNameExists, signUp } from './models/queries.js'
+import { checkUserNameExists, signUp, addMsg } from './models/queries.js'
 import { getPassword, getUsersChatByRoom } from './models/queries.js'
 
 const app = express()
@@ -20,28 +20,29 @@ const io = new Server(httpServer, {
   }
 })
 
+//
 let userCount = 0
 io.on('connection', (socket) => {
   userCount++
   console.log('User Connected:', socket.id, 'TotalUsers:', userCount)
 
   socket.on('joinRoom', (data) => {
-    console.log('user:', data.userName, ' joined roomId:', data.roomId)
     socket.join(data.roomId)
     socket.to(data.roomId).emit('newBroadcast', {
-      msg_txt: `${data.userName} joined`,
+      msg_txt: ` joined`,
       msg_time: new Date(Date.now()).toISOString(),
-      user_name: '',
+      user_name: data.userName,
       roomId: data.roomId
     })
-  }) // broadcast msg userJoined // ensure saving to db
-
-  socket.on('newMessage', (msg) => {
-    socket.to(msg.roomId).emit('newBroadcast', msg)
-    // console.log('server recieved message:', msg)
   })
 
-  socket.on('disconnect', (reason) => {
+  socket.on('newMessage', (msg) => {
+    // console.log('recived', msg)
+    addMsg(msg)
+    socket.to(msg.roomId).emit('newBroadcast', msg)
+  })
+
+  socket.on('disconnect', () => {
     userCount--
     console.log('User disconnected. Total connected users:', userCount)
   })
@@ -51,9 +52,7 @@ io.on('connection', (socket) => {
   })
 })
 
-const secretKey = 'tempSecretKey'
-
-//
+const secretKey = 'tempSecretKey' // move to env and reset key
 
 export async function authenticateToken(req, res, next) {
   const token = req.cookies.token
@@ -74,7 +73,7 @@ app.post('/checkUser', async (req, res) => {
       return res.status(400).json({ err: 'user already exists', status: 400 })
     return res.status(200).json('success')
   } catch (err) {
-    res.sendStatus(500) // 400 for resourse not found
+    res.sendStatus(500)
   }
 })
 
@@ -113,10 +112,9 @@ app.post('/login', async (req, res) => {
   }
 })
 
-// TODO change to get
-app.post('/getUsersChatByRoom', authenticateToken, async (req, res) => {
+app.get('/getUsersChatByRoom/:user', authenticateToken, async (req, res) => {
   try {
-    const userChatByRoom = await getUsersChatByRoom(req.body.userName)
+    const userChatByRoom = await getUsersChatByRoom(req.params.user)
     if (userChatByRoom === 404) {
       res.status(404).json({ err: 'user doesnt exists', status: 404 })
     }
@@ -129,3 +127,19 @@ app.post('/getUsersChatByRoom', authenticateToken, async (req, res) => {
 httpServer.listen(3000, () => {
   console.log('listening on localhost:3000')
 })
+
+//
+//
+//
+//
+// app.post('/getUsersChatByRoom', authenticateToken, async (req, res) => {
+//   try {
+//     const userChatByRoom = await getUsersChatByRoom(req.body.userName)
+//     if (userChatByRoom === 404) {
+//       res.status(404).json({ err: 'user doesnt exists', status: 404 })
+//     }
+//     res.status(200).json(userChatByRoom)
+//   } catch (err) {
+//     res.sendStatus(500)
+//   }
+// })
