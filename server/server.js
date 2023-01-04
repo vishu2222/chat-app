@@ -7,6 +7,9 @@ import cors from 'cors'
 import { signJwt, verifyJwt } from './jwt.js'
 import { checkUserNameExists, signUp, addMsg } from './models/queries.js'
 import { getPassword, getUsersChatByRoom } from './models/queries.js'
+import * as dotenv from 'dotenv'
+
+dotenv.config()
 
 const app = express()
 app.use(cors({ origin: 'http://localhost:3001', credentials: true })) //  res.header('Access-Control-Allow-Credentials', true) //  The Access-Control-Allow-Credentials response header tells browsers whether to expose the response to the frontend JavaScript code when the request's credentials mode (Request.credentials) is include.
@@ -14,12 +17,14 @@ app.use(cors({ origin: 'http://localhost:3001', credentials: true })) //  res.he
 app.use(express.json())
 app.use(cookieParser())
 const httpServer = createServer(app)
+
 const io = new Server(httpServer, {
   cors: {
     origin: ['http://localhost:3001']
   }
 })
 
+let user_name = ''
 //
 let userCount = 0
 io.on('connection', (socket) => {
@@ -52,13 +57,14 @@ io.on('connection', (socket) => {
   })
 })
 
-const secretKey = 'tempSecretKey' // move to env and reset key
+const secretKey = process.env.SECRET_KEY
 
 export async function authenticateToken(req, res, next) {
   const token = req.cookies.token
   if (token === undefined) return res.sendStatus(401)
   try {
     const jwtPaylod = await verifyJwt(token, secretKey)
+    user_name = jwtPaylod.user
     res.userName = jwtPaylod.user
     next()
   } catch (err) {
@@ -99,7 +105,7 @@ app.post('/login', async (req, res) => {
     const validUserName = await checkUserNameExists(userName)
     if (validUserName === false)
       return res.status(404).json({ err: 'user doesnt exists', status: 404 })
-    const dbPassword = await getPassword(userName)
+    const dbPassword = await getPassword(userName) // remove extra query
     if (await bcrypt.compare(req.body.password, dbPassword)) {
       const claim = { user: userName }
       const token = await signJwt(claim, secretKey)
