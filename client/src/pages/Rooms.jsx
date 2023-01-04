@@ -22,8 +22,10 @@ export function Rooms() {
   }, [messages])
 
   function focusRoom(roomId) {
-    socket.emit('joinRoom', { userName, roomId })
-    setFocusedRoomId(() => roomId)
+    if (focusedRoomId !== roomId) {
+      socket.emit('joinRoom', { userName, roomId })
+      setFocusedRoomId(() => roomId)
+    }
   }
 
   const roomElements = userRooms.map((room, index) => (
