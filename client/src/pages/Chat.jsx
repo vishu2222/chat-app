@@ -7,6 +7,7 @@ import { getUserChatByRoom } from '../requests'
 import { JoinRoom } from './JoinRoom'
 
 const socket = io.connect('http://localhost:3000')
+
 export const AppContext = createContext()
 
 export function Chat() {
