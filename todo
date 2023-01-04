@@ -1,0 +1,3 @@
+1) confirm insert in server socket before broadcastMsg
+2) bug: double msg on user join
+3) bug: dobuble msg on first user msg
