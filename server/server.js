@@ -28,11 +28,17 @@ io.on('connection', (socket) => {
   socket.on('joinRoom', (data) => {
     console.log('user:', data.userName, ' joined roomId:', data.roomId)
     socket.join(data.roomId)
-  }) // broadcast msg userJoined
+    socket.to(data.roomId).emit('newBroadcast', {
+      msg_txt: `${data.userName} joined`,
+      msg_time: new Date(Date.now()).toISOString(),
+      user_name: '',
+      roomId: data.roomId
+    })
+  }) // broadcast msg userJoined // ensure saving to db
 
   socket.on('newMessage', (msg) => {
-    socket.to(msg.roomId).emit('newBroadcast', msg.msg_txt)
-    console.log('server recieved message:', msg)
+    socket.to(msg.roomId).emit('newBroadcast', msg)
+    // console.log('server recieved message:', msg)
   })
 
   socket.on('disconnect', (reason) => {
