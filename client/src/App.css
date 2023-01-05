@@ -20,7 +20,12 @@
   width: 180px;
 }
 
-
+#Nav-div{
+  display: flex;
+  justify-content: space-evenly;
+  height: 20px;
+  width: 200px;
+}
 
 #join-room{
   background-color: rgb(154, 168, 168);
