@@ -23,12 +23,15 @@ export function Login() {
       setErrMsg('* userName not found')
       return
     }
+
     if (status === 401) {
       setDisplayErr(true)
       setErrMsg('* Password invalid')
       return
     }
-    navigate(`/chat/${userName}`)
+
+    window.localStorage.setItem('userName', userName)
+    navigate(`/chat`)
   }
 
   return (
