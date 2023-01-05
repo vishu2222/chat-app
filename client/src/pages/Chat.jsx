@@ -6,20 +6,21 @@ import { useLocation } from 'react-router-dom'
 import { getUserChatByRoom } from '../requests'
 import { JoinRoom } from './JoinRoom'
 
-const socket = io.connect('http://localhost:3000')
-// const socket = io('http://localhost:3000', { autoConnect: false })
+const socket = io('http://localhost:3000', { autoConnect: false, transports: ['websocket'] }) // ?
+// socket.auth = { userName: window.localStorage.getItem('userName') }
+socket.connect()
 
 export const AppContext = createContext()
 
 export function Chat() {
   const location = useLocation()
-  const [userName, setUserName] = useState(location.pathname.split('/')[2])
+  const [userName, setUserName] = useState(window.localStorage.getItem('userName'))
   const [messages, setMessages] = useState({})
   const [focusedRoomId, setFocusedRoomId] = useState('')
 
   useEffect(() => {
     const userChat = async () => {
-      const fetchedMessages = await getUserChatByRoom(userName)
+      const fetchedMessages = await getUserChatByRoom(userName) // change to getChatByRoom
       setMessages(() => fetchedMessages)
     }
     userChat()
