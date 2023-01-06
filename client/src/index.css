@@ -1,4 +1,15 @@
-body {
-    background-color: rgb(164, 186, 176); /* 3C4048   B2B2B2  EAEAEA 365a5c AEE1E1 40514E*/
+html {
+    height: 100%;
 }
-/* F8EDE3  DFD3C3  D0B8A8  85586F */
+
+body {
+    display: flex;
+    justify-content: center;
+    background-color: rgb(164, 186, 176); 
+    min-height: 100vh;
+}
+
+
+.max-width {
+    flex-basis: 100%;
+}
