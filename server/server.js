@@ -45,7 +45,7 @@ io.on('connection', (socket) => {
     socket.join(data.roomId)
     socket.to(data.roomId).emit('newBroadcast', {
       msg_txt: ` joined`,
-      msg_time: new Date(Date.now()).toISOString(),
+      msg_time: Date.now(),
       user_name: data.userName,
       roomId: data.roomId
     })
@@ -110,7 +110,7 @@ app.post('/login', async (req, res) => {
       return res.status(404).json({ err: 'user doesnt exists', status: 404 })
     const dbPassword = await getPassword(userName) // remove extra query
     if (await bcrypt.compare(req.body.password, dbPassword)) {
-      const claim = { user: userName }
+      const claim = { user: userName } // id
       const token = await signJwt(claim, secretKey)
       res.cookie('token', token, { httpOnly: true }).sendStatus(200)
     } else {
