@@ -2,29 +2,35 @@ import { io } from 'socket.io-client'
 import { useState, useEffect, createContext } from 'react'
 import { MsgBox } from './MsgBox'
 import { Rooms } from './Rooms'
-import { useLocation } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { getUserChatByRoom } from '../requests'
 import { JoinRoom } from './JoinRoom'
 
-const socket = io('http://localhost:3000', { autoConnect: false, transports: ['websocket'] }) // ?
-// socket.auth = { userName: window.localStorage.getItem('userName') }
+const socket = io('http://localhost:3000', { autoConnect: false, transports: ['websocket'] }) // disables the HTTP long-polling transport
 socket.connect()
 
 export const AppContext = createContext()
 
 export function Chat() {
-  const location = useLocation()
   const [userName, setUserName] = useState(window.localStorage.getItem('userName'))
   const [messages, setMessages] = useState({})
   const [focusedRoomId, setFocusedRoomId] = useState('')
+  const navigate = useNavigate()
 
   useEffect(() => {
-    const userChat = async () => {
-      const fetchedMessages = await getUserChatByRoom(userName) // change to getChatByRoom
-      setMessages(() => fetchedMessages)
-    }
-    userChat()
-  }, [userName])
+    socket.on('connect', () => {
+      const userChat = async () => {
+        const fetchedMessages = await getUserChatByRoom(userName) // change to getChatByRoom
+        setMessages(() => fetchedMessages)
+      }
+      userChat()
+    })
+
+    socket.on('connect_err', (err) => {
+      console.log('socket failed to connect, err:', err) // redirect to login
+      // navigate(`/login`)
+    })
+  }, [])
 
   return (
     <div id='chat-page'>
