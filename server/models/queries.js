@@ -88,7 +88,10 @@ export async function getChatByRoom(userName) {
 export async function addMsg(msg) {
   const client = await pool.connect()
   const userId = await getUserId(msg.user_name)
-  client.query("INSERT INTO messages (msg_id, msg_txt, msg_time, sender_id, room_id) VALUES (nextval('msg_id_seq'), $1, $2, $3, $4)", [msg.msg_txt, msg.msg_time, userId, msg.roomId])
+  client.query(
+    "INSERT INTO messages (msg_id, msg_txt, msg_time, sender_id, room_id) VALUES (nextval('msg_id_seq'), $1, $2, $3, $4)",
+    [msg.msg_txt, msg.msg_time, userId, msg.roomId]
+  )
   client.release()
 }
 
