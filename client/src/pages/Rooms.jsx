@@ -11,11 +11,12 @@ export function Rooms() {
   // methods
   useEffect(() => {
     const fetchedRoomIds = Object.keys(messages)
+    console.log(messages)
     const fetchedRooms = []
     fetchedRoomIds.forEach((roomId) =>
       fetchedRooms.push({
         roomId: roomId,
-        roomName: messages[roomId][0].room_name
+        roomName: messages[roomId][0].room_name // will break if room the room has 0 messages
       })
     )
     setUserRooms(() => [...fetchedRooms])
@@ -30,19 +31,17 @@ export function Rooms() {
 
   const roomElements = userRooms.map((room, index) => (
     <div className='roomItem' key={index} onClick={() => focusRoom(room.roomId)}>
-      <h4>
-        {room.roomId} {room.roomName}
-      </h4>
+      <p>
+        {room.roomId}: {room.roomName}
+      </p>
     </div>
   ))
 
   // component return
   return (
     <div id='rooms'>
-      <h4>Rooms</h4>
-      <ul>{roomElements}</ul>
+      <h4 id='room-title'>Rooms</h4>
+      <div className='room-elements'>{roomElements}</div>
     </div>
   )
 }
-
-// TODO set key to room_id
