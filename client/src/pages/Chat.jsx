@@ -11,7 +11,7 @@ const socket = io('http://localhost:3000', { autoConnect: false, transports: ['w
 export const AppContext = createContext()
 
 export function Chat() {
-  const [userName, setUserName] = useState(window.localStorage.getItem('userName'))
+  const userName = useState(window.localStorage.getItem('userName'))[0]
   const [messages, setMessages] = useState({})
   const [focusedRoomId, setFocusedRoomId] = useState('')
   const navigate = useNavigate()
@@ -20,7 +20,7 @@ export function Chat() {
     socket.connect()
 
     socket.on('connect', () => {
-      const userChat = async () => {
+      async function userChat() {
         const fetchedMessages = await getChatByRoom()
         setMessages(() => fetchedMessages)
       }
@@ -42,6 +42,7 @@ export function Chat() {
     <div id='chat-page'>
       <div id='chat-title'>
         <h3>Welcone {userName}</h3>
+        <h3>you roomID {focusedRoomId}</h3>
       </div>
       <div id='msgBox-rooms'>
         <AppContext.Provider
