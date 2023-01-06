@@ -2,6 +2,10 @@
 2) bug: double msg on user join
 3) bug: dobuble msg on first user msg
 4) set key to room_id when rendering rooms
+5) code breaks if the user enters a room with 0 messages
+
+
+    
 
 flex
 padding margin
