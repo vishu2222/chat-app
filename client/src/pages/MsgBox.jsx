@@ -14,7 +14,7 @@ export function MsgBox() {
       setNewBroadcast(() => msg)
       return () => socket.off('newBroadcast') //
     })
-  }, [])
+  }, [socket])
 
   useEffect(() => {
     if (Object.keys(broadCast).length > 0) {
