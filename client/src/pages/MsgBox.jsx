@@ -10,15 +10,6 @@ export function MsgBox() {
   const [broadCast, setNewBroadcast] = useState({})
 
   useEffect(() => {
-    socket.on('connect', () => {
-      console.log('new user connected with id:', socket.id)
-    })
-    return () => {
-      socket.off('connect')
-    }
-  }, [socket])
-
-  useEffect(() => {
     socket.on('newBroadcast', (msg) => {
       setNewBroadcast(() => msg)
       return () => socket.off('newBroadcast') //
@@ -60,7 +51,7 @@ export function MsgBox() {
       <div id='message-container'>
         <DisplayMsg roomMessages={roomMessages} />
         <form id='msg-form' onSubmit={(e) => e.preventDefault()}>
-          <input type='text' placeholder='message' value={newMessage} onChange={(e) => setNewMessage(e.target.value)} />
+          <input id='msg-input' type='text' placeholder='message' value={newMessage} onChange={(e) => setNewMessage(e.target.value)} />
           <button onClick={sendMessage}>send</button>
         </form>
       </div>
