@@ -16,16 +16,14 @@ function App() {
             <Link to='/login'>login</Link>
             {/* <Link to='/logout'>logOut</Link> */}
           </div>
-          <div id='routes'>
-            <Routes>
-              <Route path='/' element={<Home />} />
-              <Route path='/login' element={<Login />} />
-              <Route path='/register' element={<Register />} />
-              <Route path='/chat' element={<Chat />} />
-              <Route path='/logout' element={Logout} />
-              <Route path='*' element={<h1>Page not found</h1>} />
-            </Routes>
-          </div>
+          <Routes>
+            <Route path='/' element={<Home />} />
+            <Route path='/login' element={<Login />} />
+            <Route path='/register' element={<Register />} />
+            <Route path='/chat' element={<Chat />} />
+            <Route path='/logout' element={Logout} />
+            <Route path='*' element={<h1>Page not found</h1>} />
+          </Routes>
         </BrowserRouter>
       </div>
     </>
