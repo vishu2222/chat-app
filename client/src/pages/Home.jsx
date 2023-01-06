@@ -7,8 +7,7 @@ export function Home() {
 
   useEffect(() => {
     async function authenticate() {
-      const [statusCode, userName] = await authenticateUser()
-      if (userName !== window.localStorage.getItem('userName')) return navigate('/login')
+      const statusCode = await authenticateUser()
       if (statusCode === 200) return navigate(`/chat`)
       navigate('/login')
     }
