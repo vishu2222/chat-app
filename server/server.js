@@ -106,7 +106,8 @@ app.post('/login', async (req, res) => {
   try {
     const userName = req.body.userName
     const validUserName = await checkUserNameExists(userName)
-    if (validUserName === false) return res.status(404).json({ err: 'user doesnt exists', status: 404 })
+    if (validUserName === false)
+      return res.status(404).json({ err: 'user doesnt exists', status: 404 })
     const dbPassword = await getPassword(userName) // remove extra query
     if (await bcrypt.compare(req.body.password, dbPassword)) {
       const claim = { user: userName }
