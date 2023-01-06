@@ -88,9 +88,13 @@ export async function getChatByRoom(userName) {
 export async function addMsg(msg) {
   const client = await pool.connect()
   const userId = await getUserId(msg.user_name)
+  // client.query(
+  //   "INSERT INTO messages (msg_id, msg_txt, msg_time, sender_id, room_id) VALUES (nextval('msg_id_seq'), $1, $2, $3, $4)",
+  //   [msg.msg_txt, msg.msg_time, userId, msg.roomId]
+  // )
   client.query(
-    "INSERT INTO messages (msg_id, msg_txt, msg_time, sender_id, room_id) VALUES (nextval('msg_id_seq'), $1, $2, $3, $4)",
-    [msg.msg_txt, msg.msg_time, userId, msg.roomId]
+    `INSERT INTO messages (msg_id, msg_txt, msg_time, sender_id, room_id)
+     VALUES (nextval('msg_id_seq'), '${msg.msg_txt}', to_timestamp(${msg.msg_time}), '${userId}', '${msg.roomId}' );`
   )
   client.release()
 }
@@ -99,3 +103,13 @@ export async function addMsg(msg) {
 //   'UPDATE users SET name = $1, email = $2 WHERE id = $3',
 //   [name, email, id]
 // );
+
+// INSERT INTO messages(msg_id, msg_txt, msg_time, sender_id, room_id) values (NEXTVAL('msg_id_seq'), 'hiA',to_timestamp(1672986759942),1,1);
+// const query =
+//   'INSERT INTO my_table (timestamp_column) VALUES (to_timestamp(' + currentTimestamp + '))'
+
+// "INSERT INTO messages (msg_id, msg_txt, msg_time, sender_id, room_id) VALUES (nextval('msg_id_seq'), to_timestamp(" +
+//   msg.msg_time +
+//   '))'
+
+// ((msg_id, msg_txt, msg_time, sender_id, room_id) VALUES (nextval(\'msg_id_seq\'), to_timestamp(' + msg.msg_time + '), $1, $2, $3'
