@@ -13,23 +13,33 @@ dotenv.config()
 
 const app = express()
 app.use(cors({ origin: 'http://localhost:3001', credentials: true })) //  res.header('Access-Control-Allow-Credentials', true) //  The Access-Control-Allow-Credentials response header tells browsers whether to expose the response to the frontend JavaScript code when the request's credentials mode (Request.credentials) is include.
-
 app.use(express.json())
 app.use(cookieParser())
-const httpServer = createServer(app)
 
+const httpServer = createServer(app)
 const io = new Server(httpServer, {
   cors: {
     origin: ['http://localhost:3001']
+  },
+  cookie: true,
+  httpOnly: true
+})
+
+io.use(async (socket, next) => {
+  try {
+    const token = socket.handshake.headers.cookie.split('=')[1] // if (token === undefined) return next(new Error('unauthorised'))
+    const jwtPaylod = await verifyJwt(token, secretKey)
+    socket.userName = jwtPaylod.user
+    next()
+  } catch (err) {
+    return next(new Error('unauthorised'))
   }
 })
 
-let user_name = ''
-//
 let userCount = 0
 io.on('connection', (socket) => {
   userCount++
-  console.log('User Connected:', socket.id, 'TotalUsers:', userCount)
+  console.log('User', socket.userName, ' Connected:', socket.id, 'TotalUsers:', userCount)
 
   socket.on('joinRoom', (data) => {
     socket.join(data.roomId)
@@ -42,7 +52,6 @@ io.on('connection', (socket) => {
   })
 
   socket.on('newMessage', (msg) => {
-    // console.log('recived', msg)
     addMsg(msg)
     socket.to(msg.roomId).emit('newBroadcast', msg)
   })
@@ -50,10 +59,6 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     userCount--
     console.log('User disconnected. Total connected users:', userCount)
-  })
-
-  socket.on('connect_error', () => {
-    console.log('unable to connect')
   })
 })
 
@@ -64,7 +69,6 @@ export async function authenticateToken(req, res, next) {
   if (token === undefined) return res.sendStatus(401)
   try {
     const jwtPaylod = await verifyJwt(token, secretKey)
-    user_name = jwtPaylod.user
     res.userName = jwtPaylod.user
     next()
   } catch (err) {
@@ -75,8 +79,7 @@ export async function authenticateToken(req, res, next) {
 app.post('/checkUser', async (req, res) => {
   try {
     const status = await checkUserNameExists(req.body.userName)
-    if (status === true)
-      return res.status(400).json({ err: 'user already exists', status: 400 })
+    if (status === true) return res.status(400).json({ err: 'user already exists', status: 400 })
     return res.status(200).json('success')
   } catch (err) {
     res.sendStatus(500)
@@ -84,8 +87,7 @@ app.post('/checkUser', async (req, res) => {
 })
 
 app.get('/authenticateUser', authenticateToken, (req, res) => {
-  const userName = res.userName
-  return res.json(userName)
+  return res.sendStatus(200)
 })
 
 app.post('/signUp', async (req, res) => {
@@ -103,8 +105,7 @@ app.post('/login', async (req, res) => {
   try {
     const userName = req.body.userName
     const validUserName = await checkUserNameExists(userName)
-    if (validUserName === false)
-      return res.status(404).json({ err: 'user doesnt exists', status: 404 })
+    if (validUserName === false) return res.status(404).json({ err: 'user doesnt exists', status: 404 })
     const dbPassword = await getPassword(userName) // remove extra query
     if (await bcrypt.compare(req.body.password, dbPassword)) {
       const claim = { user: userName }
@@ -118,6 +119,7 @@ app.post('/login', async (req, res) => {
   }
 })
 
+// change to getChatByRoom
 app.get('/getUsersChatByRoom/:user', authenticateToken, async (req, res) => {
   try {
     const userChatByRoom = await getUsersChatByRoom(req.params.user)
