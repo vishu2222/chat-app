@@ -1,8 +1,9 @@
-
 #appContainer {
    display: flex;
    flex-direction: column;
    align-items: center;
+   width: 100%;
+   height: 800px;
 }
 
 #messagePage{
@@ -11,25 +12,57 @@
   align-items:center;
 }
 
-#msgBox-rooms{
+#chat-page{
   display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+}
+
+#msgBox-rooms {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
   flex-direction:row-reverse;
 }
 
-#rooms{
+#rooms {
   background-color: rgb(154, 168, 168);
-  width: 180px;
+  width: 20%;
+  padding: 2em;
+}
+
+#roomItem {
+  display: flex;
 }
 
 #Nav-div{
   display: flex;
   justify-content: space-evenly;
-  height: 20px;
-  width: 200px;
+ 
 }
 
 #join-room{
   background-color: rgb(154, 168, 168);
+  width: 20%;
+}
+
+#messageBox{
+  width: 60%;
+  height: 100%;
+}
+
+#room-title {
+  margin: auto;
+  padding-left: 4rem;
+  font-size: x-large;
+}
+
+#msg-input {
+  width: 100%;
+  height: 2em;
 }
 
 /* 40514E */
@@ -38,13 +71,10 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  height: 500px;
-  width: 600px;
-  max-height: 450;
+  height: 100%;
+  width: 100%;
   overflow:auto;
 }
-
-
 
 #msg-form {
   display: flex;
