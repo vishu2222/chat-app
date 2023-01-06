@@ -2,9 +2,44 @@
 2) bug: double msg on user join
 3) bug: dobuble msg on first user msg
 4) set key to room_id when rendering rooms
-5) code breaks if the user enters a room with 0 messages
+5) bug: code breaks if the user enters a room with no messages
+6) bug: a new broadcast msg in a non-focused room is sometimes displayed only after a refresh
+7) bug: after login need to refresh to see rooms 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
     
 
 flex
