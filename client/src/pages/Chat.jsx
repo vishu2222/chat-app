@@ -3,11 +3,10 @@ import { useState, useEffect, createContext } from 'react'
 import { MsgBox } from './MsgBox'
 import { Rooms } from './Rooms'
 import { useNavigate } from 'react-router-dom'
-import { getUserChatByRoom } from '../requests'
+import { getChatByRoom } from '../requests'
 import { JoinRoom } from './JoinRoom'
 
 const socket = io('http://localhost:3000', { autoConnect: false, transports: ['websocket'] }) // disables the HTTP long-polling transport
-socket.connect()
 
 export const AppContext = createContext()
 
@@ -18,19 +17,20 @@ export function Chat() {
   const navigate = useNavigate()
 
   useEffect(() => {
+    socket.connect()
     socket.on('connect', () => {
       const userChat = async () => {
-        const fetchedMessages = await getUserChatByRoom(userName) // change to getChatByRoom
+        const fetchedMessages = await getChatByRoom()
         setMessages(() => fetchedMessages)
       }
       userChat()
     })
 
     socket.on('connect_err', (err) => {
-      console.log('socket failed to connect, err:', err) // redirect to login
-      // navigate(`/login`)
+      console.log('socket failed to connect, err:', err)
+      navigate(`/login`)
     })
-  }, [])
+  }, [navigate])
 
   return (
     <div id='chat-page'>

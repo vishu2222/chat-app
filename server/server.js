@@ -6,7 +6,7 @@ import bcrypt from 'bcrypt'
 import cors from 'cors'
 import { signJwt, verifyJwt } from './jwt.js'
 import { checkUserNameExists, signUp, addMsg } from './models/queries.js'
-import { getPassword, getUsersChatByRoom } from './models/queries.js'
+import { getPassword, getChatByRoom } from './models/queries.js'
 import * as dotenv from 'dotenv'
 
 dotenv.config()
@@ -87,6 +87,7 @@ app.post('/checkUser', async (req, res) => {
 })
 
 app.get('/authenticateUser', authenticateToken, (req, res) => {
+  console.log('in authUser')
   return res.sendStatus(200)
 })
 
@@ -119,14 +120,13 @@ app.post('/login', async (req, res) => {
   }
 })
 
-// change to getChatByRoom
-app.get('/getUsersChatByRoom/:user', authenticateToken, async (req, res) => {
+app.get('/getChatByRoom', authenticateToken, async (req, res) => {
   try {
-    const userChatByRoom = await getUsersChatByRoom(req.params.user)
-    if (userChatByRoom === 404) {
+    const chatByRoom = await getChatByRoom(res.userName)
+    if (chatByRoom === 404) {
       res.status(404).json({ err: 'user doesnt exists', status: 404 })
     }
-    res.status(200).json(userChatByRoom)
+    res.status(200).json(chatByRoom)
   } catch (err) {
     res.sendStatus(500)
   }
@@ -135,19 +135,3 @@ app.get('/getUsersChatByRoom/:user', authenticateToken, async (req, res) => {
 httpServer.listen(3000, () => {
   console.log('listening on localhost:3000')
 })
-
-//
-//
-//
-//
-// app.post('/getUsersChatByRoom', authenticateToken, async (req, res) => {
-//   try {
-//     const userChatByRoom = await getUsersChatByRoom(req.body.userName)
-//     if (userChatByRoom === 404) {
-//       res.status(404).json({ err: 'user doesnt exists', status: 404 })
-//     }
-//     res.status(200).json(userChatByRoom)
-//   } catch (err) {
-//     res.sendStatus(500)
-//   }
-// })

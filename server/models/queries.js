@@ -22,8 +22,7 @@ export async function checkUserNameExists(userName) {
 
 export async function signUp(userName, password) {
   const client = await pool.connect()
-  const res =
-    await client.query(`INSERT INTO users(user_id, user_name, password) 
+  const res = await client.query(`INSERT INTO users(user_id, user_name, password) 
     VALUES (NEXTVAL('user_id_seq'), '${userName}', '${password}')`) //
   client.release()
   if (res.rowCount < 1) throw Error //
@@ -71,7 +70,7 @@ async function getRoomChat(room_id) {
   return res.rows
 }
 
-export async function getUsersChatByRoom(userName) {
+export async function getChatByRoom(userName) {
   const client = await pool.connect()
   const id = await getUserId(userName)
 
@@ -89,10 +88,7 @@ export async function getUsersChatByRoom(userName) {
 export async function addMsg(msg) {
   const client = await pool.connect()
   const userId = await getUserId(msg.user_name)
-  client.query(
-    "INSERT INTO messages (msg_id, msg_txt, msg_time, sender_id, room_id) VALUES (nextval('msg_id_seq'), $1, $2, $3, $4)",
-    [msg.msg_txt, msg.msg_time, userId, msg.roomId]
-  )
+  client.query("INSERT INTO messages (msg_id, msg_txt, msg_time, sender_id, room_id) VALUES (nextval('msg_id_seq'), $1, $2, $3, $4)", [msg.msg_txt, msg.msg_time, userId, msg.roomId])
   client.release()
 }
 

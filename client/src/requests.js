@@ -36,8 +36,8 @@ export async function userLogin(userName, password) {
   return res.status
 }
 
-export async function getUserChatByRoom(user) {
-  const res = await fetch(url + 'getUsersChatByRoom/' + user, {
+export async function getChatByRoom() {
+  const res = await fetch(url + 'getChatByRoom', {
     credentials: 'include'
   })
   return await res.json()
