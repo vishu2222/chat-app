@@ -39,7 +39,7 @@ io.use(async (socket, next) => {
 let userCount = 0
 io.on('connection', (socket) => {
   userCount++
-  console.log('User', socket.userName, ' Connected:', socket.id, 'TotalUsers:', userCount)
+  console.log('User', socket.userName, ' Connected:', 'TotalUsers:', userCount)
 
   socket.on('joinRoom', (data) => {
     socket.join(data.roomId)
