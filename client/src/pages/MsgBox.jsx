@@ -17,23 +17,25 @@ export function MsgBox() {
   }, [socket])
 
   useEffect(() => {
+    console.log('broadCast msg', broadCast)
     if (Object.keys(broadCast).length > 0) {
       const tempMsgs = messages
+      console.log('tempMsgs', tempMsgs)
       tempMsgs[focusedRoomId].push(broadCast)
       setMessages(tempMsgs)
       setRoomMessages((current) => [...current, broadCast])
       setNewMessage('')
     }
-  }, [broadCast])
+  }, [broadCast, focusedRoomId, messages, setMessages])
 
   function sendMessage() {
     const newMsg = {
       msg_txt: newMessage,
-      msg_time: new Date(Date.now()).toISOString(),
+      msg_time: Date.now(),
       user_name: userName,
       roomId: focusedRoomId
     }
-    socket.emit('newMessage', newMsg) // need to get confirmation from db
+    socket.emit('newMessage', newMsg) // need to get confirmation from db first
 
     const tempMsgs = messages
     tempMsgs[focusedRoomId].push(newMsg)
@@ -44,7 +46,7 @@ export function MsgBox() {
 
   useEffect(() => {
     setRoomMessages(() => messages[focusedRoomId])
-  }, [focusedRoomId])
+  }, [focusedRoomId, messages])
 
   return (
     <div id='messageBox'>
@@ -58,14 +60,3 @@ export function MsgBox() {
     </div>
   )
 }
-
-// useEffect(() => {
-//   const callBack = (data) => {
-//     console.log('broadCast', data.userName, data.txt);
-//     setMessageList((currentList) => [...currentList, data]);
-//   };
-//   socket.on('broadcastMsg', callBack);
-//   return () => {
-//     socket.off('broadcastMsg', callBack);
-//   };
-// }, [socket]);
