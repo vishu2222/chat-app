@@ -13,17 +13,19 @@ function App() {
         <BrowserRouter>
           <div id='Nav-div'>
             <Link to='/'>Home</Link>
-            <Link to='/login'>Contact</Link>
-            <Link to='/logout'>logOut</Link>
+            <Link to='/login'>login</Link>
+            {/* <Link to='/logout'>logOut</Link> */}
           </div>
-          <Routes>
-            <Route path='/' element={<Home />} />
-            <Route path='/login' element={<Login />} />
-            <Route path='/register' element={<Register />} />
-            <Route path='/chat' element={<Chat />} />
-            <Route path='/logout' element={Logout} />
-            <Route path='*' element={<h1>Page not found</h1>} />
-          </Routes>
+          <div id='routes'>
+            <Routes>
+              <Route path='/' element={<Home />} />
+              <Route path='/login' element={<Login />} />
+              <Route path='/register' element={<Register />} />
+              <Route path='/chat' element={<Chat />} />
+              <Route path='/logout' element={Logout} />
+              <Route path='*' element={<h1>Page not found</h1>} />
+            </Routes>
+          </div>
         </BrowserRouter>
       </div>
     </>
