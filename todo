@@ -1,3 +1,11 @@
 1) confirm insert in server socket before broadcastMsg
 2) bug: double msg on user join
 3) bug: dobuble msg on first user msg
+4) set key to room_id when rendering rooms
+
+flex
+padding margin
+height width
+positioning 
+vh, vw, rem, em, px, %
+colors, fonts
