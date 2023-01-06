@@ -18,6 +18,7 @@ export function Chat() {
 
   useEffect(() => {
     socket.connect()
+
     socket.on('connect', () => {
       const userChat = async () => {
         const fetchedMessages = await getChatByRoom()
