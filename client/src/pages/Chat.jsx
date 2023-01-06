@@ -30,11 +30,18 @@ export function Chat() {
       console.log('socket failed to connect, err:', err)
       navigate(`/login`)
     })
+
+    return () => {
+      socket.off('connect')
+      socket.off('connect_err')
+    }
   }, [navigate])
 
   return (
     <div id='chat-page'>
-      <h3>Chat here</h3>
+      <div id='chat-title'>
+        <h3>Welcone {userName}</h3>
+      </div>
       <div id='msgBox-rooms'>
         <AppContext.Provider
           value={{
