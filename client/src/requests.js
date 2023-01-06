@@ -23,8 +23,7 @@ export async function authenticateUser() {
   const res = await fetch(url + 'authenticateUser', {
     credentials: 'include'
   })
-  if (res.status !== 200) return [res.status, '']
-  return [res.status, await res.json()]
+  return res.status
 }
 
 export async function userLogin(userName, password) {
