@@ -76,11 +76,12 @@ export async function authenticateToken(req, res, next) {
   }
 }
 
-app.post('/checkUser', async (req, res) => {
+app.post('/check-user-name', async (req, res) => {
   try {
     const status = await checkUserNameExists(req.body.userName)
-    if (status === true) return res.status(400).json({ err: 'user already exists', status: 400 })
-    return res.status(200).json('success')
+    if (status === true)
+      return res.status(400).json({ err: 'user name already taken', status: 400 })
+    return res.status(200).json('user name available')
   } catch (err) {
     res.sendStatus(500)
   }
