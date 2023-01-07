@@ -1,9 +1,0 @@
-// chat gpt
-Q: but isnt pool.connect() on every query resource intensive
-
-A: No, using pool.connect() on every query is not necessarily resource intensive. When you use a connection pool, the connect method actually retrieves a connection from the pool, rather than creating a new one.
-
-This means that you can reuse connections from the pool, rather than creating a new connection for every query. This can be more efficient, as it reduces the overhead of establishing new connections.
-
-Here is an example of how you might use the connect method of a connection pool to perform multiple queries in an Express application with a PostgreSQL database:
-
