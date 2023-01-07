@@ -1,12 +1,16 @@
 import pg from 'pg'
+import dotenv from 'dotenv'
+import path from 'path'
+
+dotenv.config({ path: path.join(process.cwd(), '.env') })
 
 const { Pool } = pg
 const pool = new Pool({
-  user: 'vishu',
-  host: 'localhost',
-  database: 'chatdb',
-  password: '12345',
-  port: 5432
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
+  database: process.env.DB_DATABASE,
+  password: process.env.DB_PASSWORD,
+  port: process.env.DB_PORT
 })
 
 // drop seq

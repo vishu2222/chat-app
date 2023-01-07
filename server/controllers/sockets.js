@@ -1,6 +1,11 @@
 import { Server } from 'socket.io'
 import { verifyJwt } from './jwt.js'
 import { addMsg } from '../models/queries.js'
+import dotenv from 'dotenv'
+import path from 'path'
+
+dotenv.config({ path: path.join(process.cwd(), '.env') })
+const secretKey = process.env.SECRET_KEY
 
 export function setupSockets(httpServer) {
   const io = new Server(httpServer, {
@@ -11,7 +16,6 @@ export function setupSockets(httpServer) {
     httpOnly: true
   })
 
-  const secretKey = 'tempSecretKey' // move to env
   // handle different stauses
   io.use(async (socket, next) => {
     try {
