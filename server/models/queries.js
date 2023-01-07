@@ -15,10 +15,13 @@ export async function checkUserNameExists(userName) {
   const res = await client.query(
     `SELECT user_name from users WHERE user_name ='${userName}';` // dont use template literals
   )
+
   client.release()
   if (res.rowCount === 1) return true
   return false
 }
+
+// ((msg_id, msg_txt, msg_time, sender_id, room_id) VALUES (nextval(\'msg_id_seq\'), to_timestamp(' + msg.msg_time + '), $1, $2, $3'
 
 export async function signUp(userName, password) {
   const client = await pool.connect()
