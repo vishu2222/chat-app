@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { checkUserNameExists, signupUser } from '../requests.js'
+import { checkUserNameAvailable, signupUser } from '../requests.js'
 
 export function Register() {
   // state
@@ -20,17 +20,20 @@ export function Register() {
       setErrMsg('* enter user name')
       return
     }
+
     if (password.length < 4) {
       setDisplayErr(true)
       setErrMsg('* password length should be greater than 4')
       return
     }
+
     if (password !== confirmPwd) {
       setDisplayErr(true)
       setErrMsg('* passwords donot match')
       return
     }
-    const userExistsStatus = await checkUserNameExists(userName)
+
+    const userExistsStatus = await checkUserNameAvailable(userName)
     if (userExistsStatus === 400) {
       setDisplayErr(true)
       setErrMsg('* User exists, choose different userName')

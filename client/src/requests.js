@@ -1,6 +1,6 @@
 const url = 'http://localhost:3000/'
 
-export async function checkUserNameExists(userName) {
+export async function checkUserNameAvailable(userName) {
   const res = await fetch(url + 'check-user-name', {
     headers: { 'Content-Type': 'application/json' },
     method: 'POST',
