@@ -1,34 +1,59 @@
-https://jwt.io/
-npm i jsonwebtoken dotenv 
+
+Ref: https://jwt.io/
+JWT working: https://stackoverflow.com/questions/31309759/what-is-secret-key-for-jwt-based-authentication-and-how-to-generate-it
 
 
-Token form: xxxxx.yyyyy.zzzzz ( Header, Payload, Signature )
 
-Header: (JSON  Base64Url encoded) (algorithm-used, token-type)
-Payload: (Base64Url encoded ),  claims
-1) registered calims: (iss, exp, sub, aud...) (issuer, exporation, subject, audience,....)
-2) Public-claims:
-3) private-calims:
-Signature: 
+JWT Token Form: ( Header, Payload, Signature )
 
-jwt working: https://stackoverflow.com/questions/31309759/what-is-secret-key-for-jwt-based-authentication-and-how-to-generate-it
+        xxxxx.yyyyy.zzzzz 
 
+* Header: (JSON  Base64Url encoded) (algorithm-used, token-type)
 
-Generate token:
-node
+* Payload: (Base64Url encoded ),  claims
+        1) registered calims: (iss, exp, sub, aud...) (issuer, exporation, subject, audience,....)
+        2) Public-claims:
+        3) private-calims:
+
+* Signature: unique value generated with secretkey and calims as input
+
+............................................................................
+Generate secret Key:
 require('crypto').randomBytes(64).toString('hex')
 
+.................................................................
+USAGE:
 
+app.post('/login', (req, res) => {
+  // authenticate
 
+  const userName = req.body.userName
+  const user = { user: userName }
 
-Access-Control-Allow-Credentials:
-The Access-Control-Allow-Credentials response header tells browsers whether to expose the response to 
-the frontend JavaScript code when the request's credentials mode (Request.credentials) is include
+  const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET)
+  res.json({ accessToken: accessToken })
+})
 
+function authenticateToken(req, res, next) {
+  const authHeadder = req.headders['authorization']
+  const token = authHeadder && authHeadder.split(' ')[1]
+  if (token === null) return res.sendStatus(401)
 
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+    if (err) res.sendStatus(403)
+    req.user = user
+    next()
+  })
+}
 
+...........................allowing cookie.....................................
 
-// include: allow send or recieve cookies for cross-origin requists
+* Access-Control-Allow-Credentials:
+   The Access-Control-Allow-Credentials response header tells browsers whether to expose the response to 
+   the frontend JavaScript code when the request's credentials mode (Request.credentials) is include
+
+* Example
+
 // export async function authenticate(userName) {
 //   const res = await fetch(url + 'authenticate', {
 //     credentials: 'include',
@@ -38,3 +63,5 @@ the frontend JavaScript code when the request's credentials mode (Request.creden
 //   })
 //   return await res.json()
 // }
+
+* include: allow send or recieve cookies for cross-origin requists
