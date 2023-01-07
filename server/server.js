@@ -1,5 +1,5 @@
 import { createServer } from 'http'
-import { Server } from 'socket.io'
+// import { Server } from 'socket.io'
 import cookieParser from 'cookie-parser'
 import express from 'express'
 import bcrypt from 'bcrypt'
@@ -8,8 +8,7 @@ import { signJwt, verifyJwt } from './jwt.js'
 import { checkUserNameExists, signUp, addMsg } from './models/queries.js'
 import { getPassword, getChatByRoom } from './models/queries.js'
 import * as dotenv from 'dotenv'
-
-dotenv.config()
+import { setupSockets } from './controllers/sockets.js'
 
 const app = express()
 app.use(cors({ origin: 'http://localhost:3001', credentials: true })) //  res.header('Access-Control-Allow-Credentials', true) //  The Access-Control-Allow-Credentials response header tells browsers whether to expose the response to the frontend JavaScript code when the request's credentials mode (Request.credentials) is include.
@@ -17,51 +16,9 @@ app.use(express.json())
 app.use(cookieParser())
 
 const httpServer = createServer(app)
-const io = new Server(httpServer, {
-  cors: {
-    origin: ['http://localhost:3001']
-  },
-  cookie: true,
-  httpOnly: true
-})
+setupSockets(httpServer)
 
-io.use(async (socket, next) => {
-  try {
-    const token = socket.handshake.headers.cookie.split('=')[1] // if (token === undefined) return next(new Error('unauthorised'))
-    const jwtPaylod = await verifyJwt(token, secretKey)
-    socket.userName = jwtPaylod.user
-    next()
-  } catch (err) {
-    return next(new Error('unauthorised'))
-  }
-})
-
-let userCount = 0
-io.on('connection', (socket) => {
-  userCount++
-  console.log('User', socket.userName, ' Connected:', 'TotalUsers:', userCount)
-
-  socket.on('joinRoom', (data) => {
-    socket.join(data.roomId)
-    socket.to(data.roomId).emit('newBroadcast', {
-      msg_txt: ` joined`,
-      msg_time: Date.now(),
-      user_name: data.userName,
-      roomId: data.roomId
-    })
-  })
-
-  socket.on('newMessage', (msg) => {
-    addMsg(msg)
-    socket.to(msg.roomId).emit('newBroadcast', msg)
-  })
-
-  socket.on('disconnect', () => {
-    userCount--
-    console.log('User disconnected. Total connected users:', userCount)
-  })
-})
-
+dotenv.config()
 const secretKey = process.env.SECRET_KEY
 
 export async function authenticateToken(req, res, next) {
