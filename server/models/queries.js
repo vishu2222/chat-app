@@ -22,7 +22,6 @@ export async function isUserNameAvailable(userName) {
   return false
 }
 
-// error.code === '23505' => Status(409)
 export async function signUp(userName, password) {
   const res = await client.query(
     "INSERT INTO users(user_id, user_name, password)  VALUES (NEXTVAL('user_id_seq'), $1, $2)",
@@ -37,14 +36,22 @@ export async function getUserInfo(userName) {
   return res.rows[0]
 }
 
-async function getRoomsList(user_id) {
-  const query = `SELECT room_id
-                 FROM userrooms
-                 WHERE user_id=${user_id};`
-  const res = await client.query(query)
-  if (res.rows.length === 0) return []
-  return res.rows.map((item) => item.room_id)
+export async function getRoomsList(user_id) {
+  const res = await client.query(
+    'SELECT rooms.room_id, rooms.room_name  FROM userrooms LEFT JOIN rooms ON rooms.room_id = userrooms.room_id WHERE user_id=$1',
+    [user_id]
+  )
+  return res.rows
 }
+
+// async function getRoomsList(user_id) {
+//   const query = `SELECT room_id
+//                  FROM userrooms
+//                  WHERE user_id=${user_id};`
+//   const res = await client.query(query)
+//   if (res.rows.length === 0) return []
+//   return res.rows.map((item) => item.room_id)
+// }
 
 // async function getRoomChat(room_id) {
 //   const roomChat = `SELECT  msg_txt, msg_time, user_name, room_name
