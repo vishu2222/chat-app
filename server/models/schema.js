@@ -2,9 +2,10 @@ import pg from 'pg'
 import dotenv from 'dotenv'
 import path from 'path'
 
-dotenv.config({ path: path.join(process.cwd(), '.env') })
+dotenv.config({ path: path.join(process.cwd().split('models')[0], '.env') })
 
 const { Pool } = pg
+
 const pool = new Pool({
   user: process.env.DB_USER,
   host: process.env.DB_HOST,
@@ -17,7 +18,6 @@ const pool = new Pool({
 const dropMsgIdSeq = 'DROP SEQUENCE msg_id_seq;'
 const dropRoomIdSeq = 'DROP SEQUENCE room_id_seq;'
 const dropUserIdSeq = 'DROP SEQUENCE user_id_seq;'
-const dropUserGroupIdSeq = 'DROP SEQUENCE userGroup_id_seq;'
 
 // drop tables
 const dropMessages = 'DROP TABLE messages CASCADE;'
@@ -29,7 +29,6 @@ const dropuserRooms = 'DROP TABLE userRooms CASCADE;'
 const msgIdSeq = 'CREATE SEQUENCE msg_id_seq;'
 const roomIdSeq = 'CREATE SEQUENCE room_id_seq;'
 const userIdSeq = 'CREATE SEQUENCE user_id_seq;'
-const userGroupIdSeq = 'CREATE SEQUENCE userGroup_id_seq;'
 
 // create tables
 const rooms = `CREATE TABLE rooms(
@@ -40,7 +39,8 @@ const rooms = `CREATE TABLE rooms(
 const users = `CREATE TABLE users(
   user_id SERIAL PRIMARY KEY,
   user_name VARCHAR NOT NULL,
-  password VARCHAR NOT NULL
+  password VARCHAR NOT NULL,
+  join_date TIMESTAMP
 );`
 
 const messages = `CREATE TABLE messages(
@@ -54,10 +54,10 @@ const messages = `CREATE TABLE messages(
 );`
 
 const userRooms = `CREATE TABLE userRooms(
-  id serial PRIMARY KEY,
   user_id INTEGER,
   room_id INTEGER,
   removed BOOLEAN,
+  PRIMARY KEY (user_id, room_id),
   CONSTRAINT fk2_user FOREIGN KEY(user_id) REFERENCES users(user_id),
   CONSTRAINT fk2_room FOREIGN KEY(room_id) REFERENCES rooms(room_id)
 );`
@@ -67,24 +67,39 @@ async function setUpDB() {
   const client = await pool.connect()
   // drop seq
   client.query(dropMsgIdSeq, responseHandler)
+  console.log('dropMsgIdSeq ')
   client.query(dropRoomIdSeq, responseHandler)
+  console.log('dropRoomIdSeq ')
   client.query(dropUserIdSeq, responseHandler)
-  client.query(dropUserGroupIdSeq, responseHandler)
+  console.log('dropUserIdSeq ')
+
   // drop tables
   client.query(dropMessages, responseHandler)
+  console.log('dropMessages ')
   client.query(dropUsers, responseHandler)
+  console.log(' dropUsers')
   client.query(dropRooms, responseHandler)
+  console.log(' dropRooms')
   client.query(dropuserRooms, responseHandler)
+  console.log(' dropuserRooms')
+
   // create seq
   client.query(msgIdSeq, responseHandler)
+  console.log(' msgIdSeq')
   client.query(roomIdSeq, responseHandler)
+  console.log('roomIdSeq ')
   client.query(userIdSeq, responseHandler)
-  client.query(userGroupIdSeq, responseHandler)
+  console.log('userIdSeq ')
+
   // create tables
   client.query(rooms, responseHandler)
+  console.log('rooms ')
   client.query(users, responseHandler)
+  console.log('users ')
   client.query(messages, responseHandler)
+  console.log('messages ')
   client.query(userRooms, responseHandler)
+  console.log(' userRooms')
 
   client.release()
 }
@@ -98,10 +113,10 @@ function responseHandler(err, res) {
 await setUpDB()
 
 // sample inserts
-const user1 = `INSERT INTO users (user_id, user_name, password) VALUES ((NEXTVAL('user_id_seq')), 'vish', '12345');`
+const user1 = `INSERT INTO users (user_id, user_name, password) VALUES ((NEXTVAL('user_id_seq')), 'user1', '12345');`
 const user2 = `INSERT INTO users (user_id, user_name, password) VALUES ((NEXTVAL('user_id_seq')), 'user2', '12345');`
 const user3 = `INSERT INTO users (user_id, user_name, password) VALUES ((NEXTVAL('user_id_seq')), 'user3', '12345');`
-const user4 = `INSERT INTO users (user_id, user_name, password) VALUES ((NEXTVAL('user_id_seq')), 'uuer4', '12345');`
+const user4 = `INSERT INTO users (user_id, user_name, password) VALUES ((NEXTVAL('user_id_seq')), 'user4', '12345');`
 
 const room1 = `INSERT INTO rooms (room_id, room_name) VALUES ((NEXTVAL('room_id_seq')), 'general');`
 const room2 = `INSERT INTO rooms (room_id, room_name) VALUES ((NEXTVAL('room_id_seq')), 'discussions');`
@@ -124,11 +139,11 @@ const msg5 = `INSERT INTO messages (msg_id, msg_txt, msg_time, sender_id, room_i
 const msg6 = `INSERT INTO messages (msg_id, msg_txt, msg_time, sender_id, room_id) VALUES
               ((NEXTVAL('msg_id_seq')), 'hi there?', CURRENT_TIMESTAMP,1,2);`
 
-const userRoom1 = `INSERT INTO userrooms (id, user_id, room_id) VALUES ((NEXTVAL('userGroup_id_seq')), 1,1);`
-const userRoom2 = `INSERT INTO userrooms (id, user_id, room_id) VALUES ((NEXTVAL('userGroup_id_seq')), 2,1);`
-const userRoom3 = `INSERT INTO userrooms (id, user_id, room_id) VALUES ((NEXTVAL('userGroup_id_seq')), 3,1);`
-const userRoom4 = `INSERT INTO userrooms (id, user_id, room_id) VALUES ((NEXTVAL('userGroup_id_seq')), 4,2);`
-const userRoom5 = `INSERT INTO userrooms (id, user_id, room_id) VALUES ((NEXTVAL('userGroup_id_seq')), 1,2);`
+const userRoom1 = `INSERT INTO userrooms ( user_id, room_id) VALUES ( 1,1);`
+const userRoom2 = `INSERT INTO userrooms ( user_id, room_id) VALUES ( 2,1);`
+const userRoom3 = `INSERT INTO userrooms ( user_id, room_id) VALUES ( 3,1);`
+const userRoom4 = `INSERT INTO userrooms ( user_id, room_id) VALUES ( 4,2);`
+const userRoom5 = `INSERT INTO userrooms ( user_id, room_id) VALUES ( 1,2);`
 
 async function sampleInserts() {
   const client = await pool.connect()
@@ -157,6 +172,7 @@ async function sampleInserts() {
 }
 
 await sampleInserts()
+
 // users
 // INSERT INTO users (user_id, user_name, password) VALUES ((NEXTVAL('user_id_seq')), 'vish', '12345');
 
