@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
-import { userLogin } from '../requests.js'
+import { signIn } from '../requests.js'
 
 export function Login() {
   const [userName, setUserName] = useState('')
@@ -10,14 +10,14 @@ export function Login() {
   const navigate = useNavigate()
 
   async function login() {
-    if (userName === '') return
+    if (userName === '' || userName.trim().length === 0) return
     if (password.length < 4) {
       displayErr(true)
       setErrMsg('* password length should be greater than 4')
       return
     }
 
-    const status = await userLogin(userName, password)
+    const status = await signIn(userName, password)
     if (status === 404) {
       setDisplayErr(true)
       setErrMsg('* userName not found')
@@ -31,7 +31,7 @@ export function Login() {
     }
 
     window.localStorage.setItem('userName', userName)
-    navigate(`/chat`)
+    navigate('/chatRooms')
   }
 
   return (
