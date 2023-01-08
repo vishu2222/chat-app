@@ -26,7 +26,7 @@ export async function authenticateUser() {
   return res.status
 }
 
-export async function userLogin(userName, password) {
+export async function signIn(userName, password) {
   const res = await fetch(url + 'login', {
     credentials: 'include',
     headers: { 'Content-Type': 'application/json' },
