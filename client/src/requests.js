@@ -32,6 +32,11 @@ export async function signIn(userName, password) {
   return res.status
 }
 
+export async function getRooms() {
+  const res = await fetch(url + 'rooms-list', { credentials: 'include' })
+  return await res.json()
+}
+
 // export async function getChatByRoom() {
 //   const res = await fetch(url + 'getChatByRoom', {
 //     credentials: 'include'
