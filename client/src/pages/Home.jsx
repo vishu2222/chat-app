@@ -5,13 +5,20 @@ import { authenticateUser } from '../requests'
 export function Home() {
   const navigate = useNavigate()
 
+  async function authenticate() {
+    const statusCode = await authenticateUser()
+    if (statusCode === 200) return navigate(`/chatRooms`)
+    navigate('/login')
+  }
+  authenticate()
+
   useEffect(() => {
-    async function authenticate() {
-      const statusCode = await authenticateUser()
-      if (statusCode === 200) return navigate(`/chat`)
-      navigate('/login')
-    }
-    authenticate()
+    // async function authenticate() {
+    //   const statusCode = await authenticateUser()
+    //   if (statusCode === 200) return navigate(`/chatRooms`)
+    //   navigate('/login')
+    // }
+    // authenticate()
   }, [navigate])
 
   return <></>
