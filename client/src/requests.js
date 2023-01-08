@@ -1,11 +1,7 @@
 const url = 'http://localhost:3000/'
 
 export async function checkUserNameAvailable(userName) {
-  const res = await fetch(url + 'check-user-name', {
-    headers: { 'Content-Type': 'application/json' },
-    method: 'POST',
-    body: JSON.stringify({ userName })
-  })
+  const res = await fetch(url + 'check-user-name/' + userName)
   const response = await res.json()
   return response.status
 }
@@ -36,9 +32,19 @@ export async function signIn(userName, password) {
   return res.status
 }
 
-export async function getChatByRoom() {
-  const res = await fetch(url + 'getChatByRoom', {
-    credentials: 'include'
-  })
-  return await res.json()
-}
+// export async function getChatByRoom() {
+//   const res = await fetch(url + 'getChatByRoom', {
+//     credentials: 'include'
+//   })
+//   return await res.json()
+// }
+
+// export async function checkUserNameAvailable(userName) {
+//   const res = await fetch(url + 'check-user-name', {
+//     headers: { 'Content-Type': 'application/json' },
+//     method: 'POST',
+//     body: JSON.stringify({ userName })
+//   })
+//   const response = await res.json()
+//   return response.status
+// }
