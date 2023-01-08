@@ -31,17 +31,6 @@ export async function signUp(userName, password) {
   if (res.rowCount < 1) throw Error
 }
 
-// export async function getPassword(userName) {
-//   const res = await client.query('SELECT password FROM users where user_name = $1', [userName])
-//   return await res.rows[0].password
-// }
-
-// async function getUserId(userName) {
-//   const res = await client.query('SELECT user_id FROM users WHERE user_name = $1', [userName])
-//   if (res.rows.length === 0) return null
-//   return res.rows[0].user_id
-// }
-
 export async function getUserInfo(userName) {
   const res = await client.query('SELECT * FROM users WHERE user_name=$1', [userName])
   if (res.rows.length === 0) return 404
@@ -123,3 +112,14 @@ export async function addMsg(msg) {
 // pool.on('release', (client) => {
 //   console.log('Client released from the pool due to idle timeout')
 // })
+
+// export async function getPassword(userName) {
+//   const res = await client.query('SELECT password FROM users where user_name = $1', [userName])
+//   return await res.rows[0].password
+// }
+
+// async function getUserId(userName) {
+//   const res = await client.query('SELECT user_id FROM users WHERE user_name = $1', [userName])
+//   if (res.rows.length === 0) return null
+//   return res.rows[0].user_id
+// }
