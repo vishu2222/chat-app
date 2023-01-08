@@ -5,7 +5,7 @@ import bcrypt from 'bcrypt'
 import cors from 'cors'
 import { signJwt, verifyJwt } from './controllers/jwt.js'
 import { isUserNameAvailable, signUp } from './models/queries.js'
-import { getUserInfo } from './models/queries.js'
+import { getUserInfo, getRoomsList } from './models/queries.js'
 import dotenv from 'dotenv'
 import { setupSockets } from './controllers/sockets.js'
 
@@ -31,6 +31,15 @@ export async function authenticateToken(req, res, next) {
     return res.sendStatus(403)
   }
 }
+
+app.get('/rooms-list', authenticateToken, async (req, res) => {
+  try {
+    const roomList = await getRoomsList(res.userId)
+    res.status(200).json(roomList)
+  } catch (err) {
+    res.sendStatus(500)
+  }
+})
 
 app.get('/check-user-name/:userName', async (req, res) => {
   try {
