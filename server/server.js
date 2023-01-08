@@ -4,9 +4,9 @@ import express from 'express'
 import bcrypt from 'bcrypt'
 import cors from 'cors'
 import { signJwt, verifyJwt } from './controllers/jwt.js'
-import { checkUserNameExists, signUp, addMsg } from './models/queries.js'
-import { getPassword, getChatByRoom } from './models/queries.js'
-import * as dotenv from 'dotenv'
+import { checkUserNameExists, signUp } from './models/queries.js'
+import { getChatByRoom, getUserInfo } from './models/queries.js'
+import dotenv from 'dotenv'
 import { setupSockets } from './controllers/sockets.js'
 
 const app = express()
@@ -25,7 +25,8 @@ export async function authenticateToken(req, res, next) {
   if (token === undefined) return res.sendStatus(401)
   try {
     const jwtPaylod = await verifyJwt(token, secretKey)
-    res.userName = jwtPaylod.user
+    console.log(jwtPaylod)
+    res.userId = jwtPaylod.user_id
     next()
   } catch (err) {
     return res.sendStatus(403)
@@ -44,7 +45,6 @@ app.post('/check-user-name', async (req, res) => {
 })
 
 app.get('/authenticateUser', authenticateToken, (req, res) => {
-  console.log('in authUser')
   return res.sendStatus(200)
 })
 
@@ -61,18 +61,19 @@ app.post('/signUp', async (req, res) => {
 
 app.post('/login', async (req, res) => {
   try {
-    const userName = req.body.userName
-    const validUserName = await checkUserNameExists(userName)
-    if (validUserName === false)
+    const response = await getUserInfo(req.body.userName)
+    if (response === 404) {
       return res.status(404).json({ err: 'user doesnt exists', status: 404 })
-    const dbPassword = await getPassword(userName) // remove extra query
-    if (await bcrypt.compare(req.body.password, dbPassword)) {
-      const claim = { user: userName } // id
-      const token = await signJwt(claim, secretKey)
-      res.cookie('token', token, { httpOnly: true }).sendStatus(200)
-    } else {
-      res.status(401).json({ err: 'invalid password', status: 401 })
     }
+
+    const { user_id, user_name: userName, password: dbPassword } = response
+
+    if (await bcrypt.compare(req.body.password, dbPassword)) {
+      const claim = { user_id } // id
+      const token = await signJwt(claim, secretKey)
+      return res.cookie('token', token, { httpOnly: true }).sendStatus(200)
+    }
+    return res.status(401).json({ err: 'invalid password', status: 401 })
   } catch (err) {
     res.sendStatus(500)
   }
