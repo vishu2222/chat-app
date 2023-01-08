@@ -1,3 +1,3 @@
 export function ChatRooms() {
-  return
+  return <div id='chatRooms'></div>
 }
