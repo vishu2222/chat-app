@@ -1,5 +1,4 @@
 import { useNavigate } from 'react-router-dom'
-import { useEffect } from 'react'
 import { authenticateUser } from '../requests'
 
 export function Home() {
@@ -10,16 +9,8 @@ export function Home() {
     if (statusCode === 200) return navigate(`/chatRooms`)
     navigate('/login')
   }
-  authenticate()
 
-  useEffect(() => {
-    // async function authenticate() {
-    //   const statusCode = await authenticateUser()
-    //   if (statusCode === 200) return navigate(`/chatRooms`)
-    //   navigate('/login')
-    // }
-    // authenticate()
-  }, [navigate])
+  authenticate()
 
   return <></>
 }
