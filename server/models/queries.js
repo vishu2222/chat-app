@@ -13,58 +13,52 @@ const pool = new Pool({
   port: process.env.DB_PORT
 })
 
-export async function checkUserNameExists(userName) {
-  const client = await pool.connect()
-  const res = await client.query(
-    `SELECT user_name from users WHERE user_name ='${userName}';` // dont use template literals
-  )
+const client = await pool.connect()
 
-  client.release()
+export async function checkUserNameExists(userName) {
+  const res = await client.query('SELECT user_name from users WHERE user_name = $1', [userName])
   if (res.rowCount === 1) return true
   return false
 }
 
-// ((msg_id, msg_txt, msg_time, sender_id, room_id) VALUES (nextval(\'msg_id_seq\'), to_timestamp(' + msg.msg_time + '), $1, $2, $3'
-
+// error.code === '23505' => Status(409)
 export async function signUp(userName, password) {
-  const client = await pool.connect()
-  const res = await client.query(`INSERT INTO users(user_id, user_name, password) 
-    VALUES (NEXTVAL('user_id_seq'), '${userName}', '${password}')`) //
-  client.release()
-  if (res.rowCount < 1) throw Error //
+  const res = await client.query(
+    "INSERT INTO users(user_id, user_name, password)  VALUES (NEXTVAL('user_id_seq'), $1, $2)",
+    [userName, password]
+  )
+  if (res.rowCount < 1) throw Error
 }
 
 export async function getPassword(userName) {
-  const client = await pool.connect()
-  const res = await client.query(
-    `SELECT password FROM users where user_name = '${userName}'` //
-  )
-  client.release()
+  const res = await client.query('SELECT password FROM users where user_name = $1', [userName])
   return await res.rows[0].password
 }
 
 async function getUserId(userName) {
-  const client = await pool.connect()
-  const query = `SELECT user_id FROM users WHERE user_name = '${userName}'`
-  const res = await client.query(query)
+  const res = await client.query('SELECT user_id FROM users WHERE user_name = $1', [userName])
   if (res.rows.length === 0) return null
-  client.release()
   return res.rows[0].user_id
 }
 
+export async function getUserInfo(userName) {
+  const res = await client.query('SELECT * FROM users WHERE user_name=$1', [userName])
+  if (res.rows.length === 0) return 404
+  return res.rows[0]
+}
+
+// console.log(await getUserInfo('userA'))
+
 async function getRoomsList(user_id) {
-  const client = await pool.connect()
   const query = `SELECT room_id
                  FROM userrooms
                  WHERE user_id=${user_id};`
   const res = await client.query(query)
   if (res.rows.length === 0) return []
-  client.release()
   return res.rows.map((item) => item.room_id)
 }
 
 async function getRoomChat(room_id) {
-  const client = await pool.connect()
   const roomChat = `SELECT  msg_txt, msg_time, user_name, room_name
                     FROM messages, users, rooms
                     WHERE messages.room_id = '${room_id}'
@@ -72,12 +66,10 @@ async function getRoomChat(room_id) {
                     AND rooms.room_id = messages.room_id
                     ORDER BY msg_time ASC LIMIT 10;`
   const res = await client.query(roomChat)
-  client.release()
   return res.rows
 }
 
 export async function getChatByRoom(userName) {
-  const client = await pool.connect()
   const id = await getUserId(userName)
 
   if (id === null) return 404
@@ -87,12 +79,10 @@ export async function getChatByRoom(userName) {
   for (const room_id of roomsList) {
     userMsgsByRoom[room_id] = await getRoomChat(room_id)
   }
-  client.release()
   return userMsgsByRoom
 }
 
 export async function addMsg(msg) {
-  const client = await pool.connect()
   const userId = await getUserId(msg.user_name)
   // client.query(
   //   "INSERT INTO messages (msg_id, msg_txt, msg_time, sender_id, room_id) VALUES (nextval('msg_id_seq'), $1, $2, $3, $4)",
@@ -102,8 +92,14 @@ export async function addMsg(msg) {
     `INSERT INTO messages (msg_id, msg_txt, msg_time, sender_id, room_id)
      VALUES (nextval('msg_id_seq'), '${msg.msg_txt}', to_timestamp(${msg.msg_time}), '${userId}', '${msg.roomId}' );`
   )
-  client.release()
 }
+
+// client.query(
+//   "INSERT INTO messages (msg_id, msg_txt, msg_time, sender_id, room_id) VALUES (nextval('msg_id_seq'), $1, $2, $3, $4)",
+//   [msg.msg_txt, msg.msg_time, userId, msg.roomId]
+// )
+
+// ((msg_id, msg_txt, msg_time, sender_id, room_id) VALUES (nextval(\'msg_id_seq\'), to_timestamp(' + msg.msg_time + '), $1, $2, $3'
 
 // const result = await client.query(
 //   'UPDATE users SET name = $1, email = $2 WHERE id = $3',
@@ -119,3 +115,12 @@ export async function addMsg(msg) {
 //   '))'
 
 // ((msg_id, msg_txt, msg_time, sender_id, room_id) VALUES (nextval(\'msg_id_seq\'), to_timestamp(' + msg.msg_time + '), $1, $2, $3'
+
+// setInterval(() => {
+//   console.log(`Idle count: ${pool.idleCount}`)
+//   pool.release(pool.idleCount);
+// }, 3000)
+
+// pool.on('release', (client) => {
+//   console.log('Client released from the pool due to idle timeout')
+// })
