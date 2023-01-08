@@ -16,12 +16,11 @@ export function setupSockets(httpServer) {
     httpOnly: true
   })
 
-  // handle different stauses
   io.use(async (socket, next) => {
     try {
       const token = socket.handshake.headers.cookie.split('=')[1] // if (token === undefined) return next(new Error('unauthorised'))
       const jwtPaylod = await verifyJwt(token, secretKey)
-      socket.userName = jwtPaylod.user // change to id
+      socket.userId = jwtPaylod.user_id
       next()
     } catch (err) {
       return next(new Error('unauthorised'))
