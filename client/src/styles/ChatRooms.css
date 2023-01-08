@@ -1,0 +1,13 @@
+#chatRooms{
+
+}
+
+#message-container {
+    background-color: rgb(206, 215, 211);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    height: 100%;
+    width: 100%;
+    overflow:auto;
+  }
