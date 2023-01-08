@@ -30,7 +30,7 @@ export function setupSockets(httpServer) {
   let userCount = 0
   io.on('connection', (socket) => {
     userCount++
-    console.log('User', socket.userName, ' Connected:', 'TotalUsers:', userCount)
+    console.log('User', socket.userId, ' Connected:', 'TotalUsers:', userCount)
 
     socket.on('joinRoom', (data) => {
       socket.join(data.roomId)
