@@ -13,8 +13,9 @@ const pool = new Pool({
   port: process.env.DB_PORT
 })
 
-const client = await pool.connect()
+const client = await pool.connect() // may not handle idle clients
 
+//  checkUserNameExists
 export async function checkUserNameExists(userName) {
   const res = await client.query('SELECT user_name from users WHERE user_name = $1', [userName])
   if (res.rowCount === 1) return true
@@ -30,24 +31,22 @@ export async function signUp(userName, password) {
   if (res.rowCount < 1) throw Error
 }
 
-export async function getPassword(userName) {
-  const res = await client.query('SELECT password FROM users where user_name = $1', [userName])
-  return await res.rows[0].password
-}
+// export async function getPassword(userName) {
+//   const res = await client.query('SELECT password FROM users where user_name = $1', [userName])
+//   return await res.rows[0].password
+// }
 
-async function getUserId(userName) {
-  const res = await client.query('SELECT user_id FROM users WHERE user_name = $1', [userName])
-  if (res.rows.length === 0) return null
-  return res.rows[0].user_id
-}
+// async function getUserId(userName) {
+//   const res = await client.query('SELECT user_id FROM users WHERE user_name = $1', [userName])
+//   if (res.rows.length === 0) return null
+//   return res.rows[0].user_id
+// }
 
 export async function getUserInfo(userName) {
   const res = await client.query('SELECT * FROM users WHERE user_name=$1', [userName])
   if (res.rows.length === 0) return 404
   return res.rows[0]
 }
-
-// console.log(await getUserInfo('userA'))
 
 async function getRoomsList(user_id) {
   const query = `SELECT room_id
