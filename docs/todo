@@ -1,50 +1,47 @@
-1) confirm insert in server socket before broadcastMsg
-2) bug: double msg on user join
-3) bug: dobuble msg on first user msg
-4) set key to room_id when rendering rooms
-5) bug: code breaks if the user enters a room with no messages
-6) bug: a new broadcast msg in a non-focused room is sometimes displayed only after a refresh
-7) bug: after login need to refresh to see rooms 
+TODO
 
+1. handle network errors
+2. replace Template literals
+3. Optimal queey
+4. Reduce multiple queries
+5. Store id in jwt
+6. Get data on room focus
+7. Date on server
+8. 10msgs
 
+TODO
 
+1. confirm insert in server socket before broadcastMsg
+2. bug: double msg on user join
+3. bug: dobuble msg on first user msg
+4. set key to room_id when rendering rooms
+5. bug: code breaks if the user enters a room with no messages
+6. bug: a new broadcast msg in a non-focused room is sometimes displayed only after a refresh
+7. bug: after login need to refresh to see rooms
+8. handle different stauses in sockets
 
+TODO
 
+1. fire event to check username valid after entering userName
 
+Note:
 
+-
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-    
-
+TODO learn:
 flex
 padding margin
 height width
-positioning 
+positioning
 vh, vw, rem, em, px, %
 colors, fonts
+
+const response = await getUserInfo(req.body.userName)
+if (response === 404) {
+return res.status(404).json({ err: 'user doesnt exists', status: 404 })
+}
+const user_id = response.user_id
+const dbPassword = response.password
+const userName = response.userName
+console.log(user_id, userName, dbPassword)
+// const { user_id, user_name: userName, password: dbPassword } = response
