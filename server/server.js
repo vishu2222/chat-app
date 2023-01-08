@@ -4,8 +4,8 @@ import express from 'express'
 import bcrypt from 'bcrypt'
 import cors from 'cors'
 import { signJwt, verifyJwt } from './controllers/jwt.js'
-import { checkUserNameExists, signUp } from './models/queries.js'
-import { getChatByRoom, getUserInfo } from './models/queries.js'
+import { isUserNameAvailable, signUp } from './models/queries.js'
+import { getUserInfo } from './models/queries.js'
 import dotenv from 'dotenv'
 import { setupSockets } from './controllers/sockets.js'
 
@@ -25,7 +25,6 @@ export async function authenticateToken(req, res, next) {
   if (token === undefined) return res.sendStatus(401)
   try {
     const jwtPaylod = await verifyJwt(token, secretKey)
-    console.log(jwtPaylod)
     res.userId = jwtPaylod.user_id
     next()
   } catch (err) {
@@ -33,11 +32,12 @@ export async function authenticateToken(req, res, next) {
   }
 }
 
-app.post('/check-user-name', async (req, res) => {
+app.get('/check-user-name/:userName', async (req, res) => {
   try {
-    const status = await checkUserNameExists(req.body.userName)
-    if (status === true)
+    const response = await isUserNameAvailable(req.params.userName)
+    if (response === true) {
       return res.status(400).json({ err: 'user name already taken', status: 400 })
+    }
     return res.status(200).json('user name available')
   } catch (err) {
     res.sendStatus(500)
@@ -62,35 +62,36 @@ app.post('/signUp', async (req, res) => {
 app.post('/login', async (req, res) => {
   try {
     const response = await getUserInfo(req.body.userName)
-    if (response === 404) {
-      return res.status(404).json({ err: 'user doesnt exists', status: 404 })
-    }
+    if (response === 404) return res.status(404).json({ err: 'user doesnt exists', status: 404 })
 
     const { user_id, user_name: userName, password: dbPassword } = response
 
     if (await bcrypt.compare(req.body.password, dbPassword)) {
-      const claim = { user_id } // id
+      const claim = { user_id }
       const token = await signJwt(claim, secretKey)
       return res.cookie('token', token, { httpOnly: true }).sendStatus(200)
     }
+
     return res.status(401).json({ err: 'invalid password', status: 401 })
   } catch (err) {
     res.sendStatus(500)
   }
 })
 
-app.get('/getChatByRoom', authenticateToken, async (req, res) => {
-  try {
-    const chatByRoom = await getChatByRoom(res.userName)
-    if (chatByRoom === 404) {
-      res.status(404).json({ err: 'user doesnt exists', status: 404 })
-    }
-    res.status(200).json(chatByRoom)
-  } catch (err) {
-    res.sendStatus(500)
-  }
-})
+// app.get('/generalRoomMessages', (req, res) => {})
 
 httpServer.listen(3000, () => {
   console.log('listening on localhost:3000')
 })
+
+// app.get('/getChatByRoom', authenticateToken, async (req, res) => {
+//   try {
+//     const chatByRoom = await getChatByRoom(res.userName) // userId
+//     if (chatByRoom === 404) {
+//       res.status(404).json({ err: 'user doesnt exists', status: 404 })
+//     }
+//     res.status(200).json(chatByRoom)
+//   } catch (err) {
+//     res.sendStatus(500)
+//   }
+// })
