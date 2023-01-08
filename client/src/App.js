@@ -11,7 +11,6 @@ function App() {
       <div id='appContainer'>
         <BrowserRouter>
           <div id='Nav-div'>
-            <Link to='/'>Home</Link>
             <Link to='/login'>login</Link>
             <Link to='/register'>register</Link>
           </div>
