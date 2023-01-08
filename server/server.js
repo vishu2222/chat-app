@@ -5,7 +5,7 @@ import bcrypt from 'bcrypt'
 import cors from 'cors'
 import { signJwt, verifyJwt } from './controllers/jwt.js'
 import { isUserNameAvailable, signUp } from './models/queries.js'
-import { getUserInfo, getRoomsList } from './models/queries.js'
+import { getUserInfo, getRoomsList, getGeneralRoomMsgs } from './models/queries.js'
 import dotenv from 'dotenv'
 import { setupSockets } from './controllers/sockets.js'
 
@@ -38,6 +38,15 @@ app.get('/rooms-list', authenticateToken, async (req, res) => {
     res.status(200).json(roomList)
   } catch (err) {
     res.sendStatus(500)
+  }
+})
+
+app.get('/general-room-msgs', authenticateToken, async (req, res) => {
+  try {
+    const msgs = await getGeneralRoomMsgs()
+    res.status(200).json(msgs)
+  } catch (err) {
+    res.statusCode(500)
   }
 })
 
