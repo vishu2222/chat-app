@@ -1,11 +1,17 @@
 import { AppContext } from './ChatRooms'
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
+import { getRoomMsgs } from '../requests.js'
 
 export function DisplayRooms() {
-  const { roomsList } = useContext(AppContext)
+  const [focusedRoomId, setFocusedRoomId] = useState(1)
+  const { roomsList, setMessages } = useContext(AppContext)
 
-  function focusRoom(roomId) {
-    console.log(roomId)
+  async function focusRoom(roomId) {
+    if (focusedRoomId !== roomId) {
+      const roomMsgs = await getRoomMsgs(roomId)
+      setMessages(() => roomMsgs)
+      setFocusedRoomId(() => roomId)
+    }
   }
 
   const roomElements = roomsList.map((room) => (
