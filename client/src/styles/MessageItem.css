@@ -1,0 +1,24 @@
+
+.self-msg-div {
+    display: flex;
+    justify-content: flex-end; 
+    padding-right: 5px;
+  } 
+  
+  .user-msg-div {
+    display: flex;
+  }
+  
+  .self-msg {
+    background-color: aquamarine;
+    margin-right: 20px;
+    padding: 4px;
+  }
+  
+  .user-msg {
+    background-color:aliceblue;
+    margin-left: 20px;
+    padding: 4px;
+  }
+  
+  
