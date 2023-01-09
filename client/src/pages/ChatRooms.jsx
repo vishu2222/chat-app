@@ -34,15 +34,22 @@ export function ChatRooms() {
 
     socket.on('connect', () => {
       console.log('socket connection established')
+      socket.emit('join', { roomId: 1 })
     })
 
     socket.on('connect_err', (err) => {
       console.log('socket failed to connect, err:', err)
+      if (err.message === 'unauthorised') console.log('unauthorized')
+    })
+
+    socket.on('broadcastMsg', (msg) => {
+      console.log(msg)
     })
 
     return () => {
       socket.off('connect')
       socket.off('connect_err')
+      socket.off('broadcastMsg')
     }
   }, [])
 
