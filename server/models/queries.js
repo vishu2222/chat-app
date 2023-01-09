@@ -45,7 +45,10 @@ export async function getRoomsList(user_id) {
 }
 
 export async function getGeneralRoomMsgs() {
-  const res = await client.query('SELECT * FROM messages WHERE room_id=$1', [1])
+  const res = await client.query(
+    'SELECT msg_id, msg_txt, msg_time, user_name FROM messages LEFT JOIN users ON messages.sender_id = users.user_id WHERE messages.room_id=$1',
+    [1]
+  )
   return res.rows
 }
 
