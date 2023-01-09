@@ -3,16 +3,18 @@ import { AppContext } from './ChatRooms'
 
 export function MsgForm() {
   const [newMsgTxt, setNewMsgTXT] = useState('')
-  const { socket } = useContext(AppContext)
+  const { socket, setMessages } = useContext(AppContext)
+
   function sendMsg() {
     if (newMsgTxt.trim() === '') return
     const newMsg = {
-      msg_txt: newMsgTxt
+      msg_txt: newMsgTxt,
+      user_name: localStorage.getItem('userName')
     }
 
-    console.log(newMsg)
     socket.emit('newMessage', newMsg)
     setNewMsgTXT(() => '')
+    setMessages((current) => [...current, newMsg])
   }
 
   return (
