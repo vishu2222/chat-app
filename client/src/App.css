@@ -1,27 +1,45 @@
 #appContainer {
-   display: flex;
-   flex-direction: column;
-   align-items: center;
-   width: 100%;
-   height: 800px;
+display: flex;
+flex-direction: column;
+align-items: stretch;
+   /* height: 800px; */
 }
 
+#Nav-div {
+  display: flex;
+  justify-content: space-between;
+}
+
+#title {
+
+}
+
+
+
+
+
+
+
+
+
+
+
 /* unused */
-#messagePage{
+/* #messagePage{
   display: flex;
   flex-direction: row;
   align-items:center;
-}
-
+} */
+/* 
 #chat-page{
   display: flex;
   width: 100%;
   flex-direction: column;
   align-items: center;
   height: 100%;
-}
+} */
 
-#msgBox-rooms {
+/* #msgBox-rooms {
   display: flex;
   width: 100%;
   height: 100%;
@@ -33,23 +51,19 @@
   background-color: rgb(154, 168, 168);
   width: 20%;
   padding: 2em;
-}
+} */
 
-#roomItem {
+/* #roomItem {
   display: flex;
 }
 
-#Nav-div{
-  display: flex;
-  justify-content: space-evenly;
- 
-}
+
 
 #join-room{
   background-color: rgb(154, 168, 168);
   width: 20%;
-}
-
+} */
+/* 
 #messageBox{
   width: 60%;
   height: 100%;
@@ -64,7 +78,7 @@
 #msg-input {
   width: 100%;
   height: 2em;
-}
+} */
 
 /* #message-container {
   background-color: rgb(206, 215, 211);
@@ -75,31 +89,12 @@
   width: 100%;
   overflow:auto;
 } */
-
+/* 
 #msg-form {
   display: flex;
   justify-content:center;
 }
 
-.self-msg-div {
-  display: flex;
-  justify-content: flex-end; 
-  padding-right: 5px;
-}
+ */
 
-.user-msg-div {
-  display: flex;
-}
-
-.self-msg {
-  background-color: aquamarine;
-  margin-right: 20px;
-  padding: 4px;
-}
-
-.user-msg {
-  background-color:aliceblue;
-  margin-left: 20px;
-  padding: 4px;
-}
 
