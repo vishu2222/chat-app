@@ -43,7 +43,7 @@ export function ChatRooms() {
     })
 
     socket.on('broadcastMsg', (msg) => {
-      console.log(msg)
+      setMessages((current) => [...current, msg])
     })
 
     return () => {
