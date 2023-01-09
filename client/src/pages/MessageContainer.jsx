@@ -19,14 +19,20 @@ export function MessageContainer() {
     return () => socket.off('dberror')
   }, [socket])
 
+  useEffect(() => {
+    console.log('messages', messages)
+  }, [messages])
+
   return (
-    <div id='message-container'>
-      <p>messge-container</p>
-      {messages.map((msg, index) => (
-        <MessageItem key={index} msg={msg} />
-      ))}
+    <div id='form-msg-container'>
+      <div id='message-container'>
+        <p>messge-container</p>
+        {messages.map((msg, index) => (
+          <MessageItem key={index} msg={msg} />
+        ))}
+        {displayErr && <h3 className='err-msg'>{errMsg}</h3>}
+      </div>
       <MsgForm />
-      {displayErr && <h3 className='err-msg'>{errMsg}</h3>}
     </div>
   )
 }
