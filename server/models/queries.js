@@ -60,6 +60,20 @@ export async function getRoomMsgs(room_id) {
   return res.rows
 }
 
+export async function getUserName(id) {
+  const res = await client.query('SELECT user_name  FROM users WHERE user_id = $1', [id])
+  if (res.rows.length === 0) return null
+  return res.rows[0].user_name
+}
+
+export async function addMsg(msg) {
+  const res = await client.query(
+    "INSERT INTO messages (msg_id, msg_txt, msg_time, sender_id, room_id) VALUES (nextval('msg_id_seq'), $1, to_timestamp($2/1000.0), $3, $4)",
+    [msg.msg_txt, msg.msg_time, msg.user_id, msg.room_id]
+  )
+  return res.rowCount
+}
+
 // async function getRoomsList(user_id) {
 //   const query = `SELECT room_id
 //                  FROM userrooms
@@ -92,18 +106,6 @@ export async function getRoomMsgs(room_id) {
 //   }
 //   return userMsgsByRoom
 // }
-
-export async function addMsg(msg) {
-  // const userId = await getUserId(msg.user_name)
-  // client.query(
-  //   "INSERT INTO messages (msg_id, msg_txt, msg_time, sender_id, room_id) VALUES (nextval('msg_id_seq'), $1, $2, $3, $4)",
-  //   [msg.msg_txt, msg.msg_time, userId, msg.roomId]
-  // )
-  // client.query(
-  //   `INSERT INTO messages (msg_id, msg_txt, msg_time, sender_id, room_id)
-  //    VALUES (nextval('msg_id_seq'), '${msg.msg_txt}', to_timestamp(${msg.msg_time}), '${userId}', '${msg.roomId}' );`
-  // )
-}
 
 // client.query(
 //   "INSERT INTO messages (msg_id, msg_txt, msg_time, sender_id, room_id) VALUES (nextval('msg_id_seq'), $1, $2, $3, $4)",
@@ -139,10 +141,4 @@ export async function addMsg(msg) {
 // export async function getPassword(userName) {
 //   const res = await client.query('SELECT password FROM users where user_name = $1', [userName])
 //   return await res.rows[0].password
-// }
-
-// async function getUserId(userName) {
-//   const res = await client.query('SELECT user_id FROM users WHERE user_name = $1', [userName])
-//   if (res.rows.length === 0) return null
-//   return res.rows[0].user_id
 // }
