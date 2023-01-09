@@ -1,11 +1,12 @@
 import { useState, useEffect, createContext } from 'react'
 import { getRooms, getGeneralRoomMsgs } from '../requests.js'
 import { io } from 'socket.io-client'
-import { DisplayRooms } from './DisplayRooms.jsx'
+import { RoomsContainer } from './RoomsContainer.jsx'
 import { MessageContainer } from './MessageContainer.jsx'
 import './../styles/ChatRooms.css'
 
 export const AppContext = createContext()
+const socket = io('http://localhost:3000', { autoConnect: false, transports: ['websocket'] }) // disables the HTTP long-polling transport
 
 export function ChatRooms() {
   const [roomsList, setRoomsList] = useState([])
@@ -29,7 +30,6 @@ export function ChatRooms() {
 
   // setting up sockets
   useEffect(() => {
-    const socket = io('http://localhost:3000', { autoConnect: false, transports: ['websocket'] }) // disables the HTTP long-polling transport
     socket.connect()
 
     socket.on('connect', () => {
@@ -38,7 +38,6 @@ export function ChatRooms() {
 
     socket.on('connect_err', (err) => {
       console.log('socket failed to connect, err:', err)
-      // navigate(`/login`)
     })
 
     return () => {
@@ -48,9 +47,9 @@ export function ChatRooms() {
   }, [])
 
   return (
-    <AppContext.Provider value={{ roomsList, messages, setMessages }}>
+    <AppContext.Provider value={{ roomsList, messages, setMessages, socket }}>
       <div id='div-chat-room'>
-        <DisplayRooms />
+        <RoomsContainer />
         <MessageContainer />
       </div>
     </AppContext.Provider>
