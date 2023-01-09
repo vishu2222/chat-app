@@ -1,8 +1,10 @@
-#chatRooms{
-
+#div-chat-room {
+ display: flex;
+ flex-direction: row;
+ width: 50rem;
 }
 
-#message-container {
+/* #message-container {
     background-color: rgb(206, 215, 211);
     display: flex;
     flex-direction: column;
@@ -10,4 +12,4 @@
     height: 100%;
     width: 100%;
     overflow:auto;
-  }
+  } */
