@@ -42,6 +42,11 @@ export async function getGeneralRoomMsgs() {
   return await res.json()
 }
 
+export async function getRoomMsgs(roomId) {
+  const res = await fetch(url + 'msgs/' + roomId, { credentials: 'include' })
+  return await res.json()
+}
+
 // export async function getChatByRoom() {
 //   const res = await fetch(url + 'getChatByRoom', {
 //     credentials: 'include'
