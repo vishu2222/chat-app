@@ -5,7 +5,7 @@ import bcrypt from 'bcrypt'
 import cors from 'cors'
 import { signJwt, verifyJwt } from './controllers/jwt.js'
 import { isUserNameAvailable, signUp } from './models/queries.js'
-import { getUserInfo, getRoomsList, getGeneralRoomMsgs } from './models/queries.js'
+import { getUserInfo, getRoomsList, getGeneralRoomMsgs, getRoomMsgs } from './models/queries.js'
 import dotenv from 'dotenv'
 import { setupSockets } from './controllers/sockets.js'
 
@@ -44,6 +44,16 @@ app.get('/rooms-list', authenticateToken, async (req, res) => {
 app.get('/general-room-msgs', authenticateToken, async (req, res) => {
   try {
     const msgs = await getGeneralRoomMsgs()
+    res.status(200).json(msgs)
+  } catch (err) {
+    res.statusCode(500)
+  }
+})
+
+app.get('/msgs/:roomId', authenticateToken, async (req, res) => {
+  try {
+    const room_id = req.params.roomId
+    const msgs = await getRoomMsgs(room_id)
     res.status(200).json(msgs)
   } catch (err) {
     res.statusCode(500)
@@ -95,8 +105,6 @@ app.post('/login', async (req, res) => {
     res.sendStatus(500)
   }
 })
-
-// app.get('/generalRoomMessages', (req, res) => {})
 
 httpServer.listen(3000, () => {
   console.log('listening on localhost:3000')
