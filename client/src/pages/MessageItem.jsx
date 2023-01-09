@@ -1,3 +1,5 @@
+import '../styles/MessageItem.css'
+
 export function MessageItem({ msg }) {
   const userName = localStorage.getItem('userName')
   console.log(msg)
