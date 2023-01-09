@@ -6,7 +6,9 @@ export function Home() {
 
   async function authenticate() {
     const statusCode = await authenticateUser()
-    if (statusCode === 200) return navigate(`/chatRooms`)
+    if (statusCode === 200) {
+      return navigate(`/chatRooms`)
+    }
     navigate('/login')
   }
 
