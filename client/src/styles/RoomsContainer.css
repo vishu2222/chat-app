@@ -1,0 +1,13 @@
+#rooms-container{
+    /* position: fixed; */
+   background-color:  #E0F2F1;
+   width: 30rem;
+}
+
+#rooms-title {
+    background-color:#0097A7;
+}
+
+.room-content {
+    background-color:  #B2DFDB;
+}
