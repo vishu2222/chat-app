@@ -14,6 +14,11 @@ function App() {
             <Link to='/login'>login</Link>
             <Link to='/register'>register</Link>
           </div>
+
+          <div id='title'>
+            <p>Welcome {localStorage.getItem('userName')}</p>
+          </div>
+
           <Routes>
             <Route path='/' element={<Home />} />
             <Route path='/login' element={<Login />} />
