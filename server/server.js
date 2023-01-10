@@ -107,31 +107,27 @@ app.post('/login', async (req, res) => {
 })
 
 app.post('/joinUser', authenticateToken, async (req, res) => {
-  const response = await joinUserToRoom(req.body.room, res.userId)
-  if (response === 404) return res.status(404).json('room doesnt exist')
-  if (response === 403) return res.status(403).json('you already are member of the room')
-  return res.status(200).json('user added to the room')
+  try {
+    const response = await joinUserToRoom(req.body.room, res.userId)
+    if (response === 404) return res.status(404).json('room doesnt exist')
+    if (response === 403) return res.status(403).json('you already are member of the room')
+    return res.status(200).json('user added to the room')
+  } catch (err) {
+    return res.sendStatus(500)
+  }
 })
 
 app.post('/create-room', authenticateToken, async (req, res) => {
-  const response = await createNewRoom(req.body.room, res.userId)
-  if (response === 403) return res.status(403).json('room name already exists')
-  if (response === 500) return res.status(500).json('internal error')
-  return res.status(200).json('new room created')
+  try {
+    const response = await createNewRoom(req.body.room, res.userId)
+    if (response === 403) return res.status(403).json('room name already exists')
+    if (response === 500) return res.status(500).json('internal error')
+    return res.status(200).json('new room created')
+  } catch (err) {
+    return res.sendStatus(500)
+  }
 })
 
 httpServer.listen(3000, () => {
   console.log('listening on localhost:3000')
 })
-
-// app.get('/getChatByRoom', authenticateToken, async (req, res) => {
-//   try {
-//     const chatByRoom = await getChatByRoom(res.userName) // userId
-//     if (chatByRoom === 404) {
-//       res.status(404).json({ err: 'user doesnt exists', status: 404 })
-//     }
-//     res.status(200).json(chatByRoom)
-//   } catch (err) {
-//     res.sendStatus(500)
-//   }
-// })
