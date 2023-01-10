@@ -4,7 +4,7 @@ import express from 'express'
 import bcrypt from 'bcrypt'
 import cors from 'cors'
 import { signJwt, verifyJwt } from './controllers/jwt.js'
-import { isUserNameAvailable, signUp } from './models/queries.js'
+import { isUserNameAvailable, signUp, joinUserToRoom, createNewRoom } from './models/queries.js'
 import { getUserInfo, getRoomsList, getGeneralRoomMsgs, getRoomMsgs } from './models/queries.js'
 import dotenv from 'dotenv'
 import { setupSockets } from './controllers/sockets.js'
@@ -104,6 +104,18 @@ app.post('/login', async (req, res) => {
   } catch (err) {
     res.sendStatus(500)
   }
+})
+
+app.post('/joinUser', authenticateToken, async (req, res) => {
+  const response = await joinUserToRoom(req.body.room, res.userId)
+  console.log('response', response)
+})
+
+app.post('/create-room', authenticateToken, async (req, res) => {
+  const response = await createNewRoom(req.body.room, res.userId)
+  if (response === 403) return res.status(403).json('room name already exists')
+  if (response === 500) return res.status(500).json('internal error')
+  return res.status(200).json('new room created')
 })
 
 httpServer.listen(3000, () => {
