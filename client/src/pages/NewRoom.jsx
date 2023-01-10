@@ -1,30 +1,47 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import '../styles/NewRoom.css'
 import { joinUser } from '../requests'
 import { createNewRoom } from '../requests'
+import { AppContext } from './ChatRooms'
+import { getRooms } from '../requests'
 
-export function NewRoom({ socket }) {
+export function NewRoom() {
+  const { setRoomsList } = useContext(AppContext)
   const [room, setRoom] = useState('')
   const [newRoom, setNewRoom] = useState('')
   const [displayErr, setDisplayErr] = useState(false)
   const [errMsg, setErrMsg] = useState('')
 
-  function joinRoom() {
-    joinUser(room)
+  async function joinRoom() {
+    const res = await joinUser(room)
+    console.log('res:', res)
+    if (res === 404) {
+      setErrMsg('* room doesnt exists')
+      setDisplayErr(true)
+    }
+    if (res === 403) {
+      setErrMsg('* you already are a member of the room')
+      setDisplayErr(true)
+    }
+
     setRoom('')
+    const rooms = await getRooms()
+    setRoomsList(() => rooms)
   }
 
   async function createRoom() {
     const res = await createNewRoom(newRoom)
     if (res === 403) {
-      setErrMsg('room name already exists')
+      setErrMsg('* room name already exists')
       setDisplayErr(true)
     }
     if (res === 500) {
-      setErrMsg('server error')
+      setErrMsg('* server error')
       setDisplayErr(true)
     }
     setNewRoom('')
+    const rooms = await getRooms()
+    setRoomsList(() => rooms)
   }
 
   return (
