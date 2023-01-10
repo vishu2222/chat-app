@@ -26,7 +26,6 @@ export function MessageContainer() {
   return (
     <div id='form-msg-container'>
       <div id='message-container'>
-        <p>messge-container</p>
         {messages.map((msg, index) => (
           <MessageItem key={index} msg={msg} />
         ))}
