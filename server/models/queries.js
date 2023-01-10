@@ -78,10 +78,10 @@ export async function joinUserToRoom(room, user_id) {
   if (res.rows.length === 0) return 404 // room doesnt exist
   const roomId = res.rows[0].room_id
   try {
-    res = await client.query('INSERT INTO userrooms (user_id, room_id) VALUES ($1 , $2)', [
-      user_id,
-      roomId
-    ])
+    res = await client.query(
+      'INSERT INTO userrooms (user_id, room_id, join_date) VALUES ($1 , $2, to_timestamp($3/1000.0))',
+      [user_id, roomId, Date.now()]
+    )
     return 200
   } catch (err) {
     return 403 // conflict user already a member of the room
@@ -102,10 +102,10 @@ export async function createNewRoom(room, userId) {
     let res = await client.query('SELECT room_id FROM rooms WHERE room_name=$1', [room])
     const roomId = res.rows[0].room_id
 
-    res = await client.query('INSERT INTO userrooms(user_id, room_id) VALUES($1, $2)', [
-      userId,
-      roomId
-    ])
+    res = await client.query(
+      'INSERT INTO userrooms(user_id, room_id, join_date) VALUES($1, $2, to_timestamp($3/1000.0))',
+      [userId, roomId, Date.now()]
+    )
     return 200
   } catch (err) {
     return 500
