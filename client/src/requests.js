@@ -47,19 +47,12 @@ export async function getRoomMsgs(roomId) {
   return await res.json()
 }
 
-// export async function getChatByRoom() {
-//   const res = await fetch(url + 'getChatByRoom', {
-//     credentials: 'include'
-//   })
-//   return await res.json()
-// }
-
-// export async function checkUserNameAvailable(userName) {
-//   const res = await fetch(url + 'check-user-name', {
-//     headers: { 'Content-Type': 'application/json' },
-//     method: 'POST',
-//     body: JSON.stringify({ userName })
-//   })
-//   const response = await res.json()
-//   return response.status
-// }
+export async function joinUser(room) {
+  const res = await fetch(url + 'joinUser', {
+    credentials: 'include',
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ room })
+  })
+  console.log(res)
+}
