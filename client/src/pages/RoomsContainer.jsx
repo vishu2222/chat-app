@@ -24,8 +24,8 @@ export function RoomsContainer() {
 
   return (
     <div id='rooms-container'>
-      <div id='rooms-title'>
-        <p>Rooms</p>
+      <div id='rooms-title-div'>
+        <p id='rooms-title'>Rooms</p>
       </div>
       <div className='room-items'>{roomElements}</div>
     </div>
