@@ -1,0 +1,7 @@
+
+*  percentages are wrt parent div
+*  vw, vh (view width, view height) are wrt the entire visible screen and not based on the parents width or height
+*  50vw = 50% of the screen width
+*  30vh = 30% of the screen height
+*  rem is font-size relative to the room.
+*  em is font-size relative to the parent 
