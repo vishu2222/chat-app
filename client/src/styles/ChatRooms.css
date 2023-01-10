@@ -1,15 +1,7 @@
 #div-chat-room {
  display: flex;
  flex-direction: row;
- width: 50rem;
+ width: 70rem;
+ height: 40rem;
 }
 
-/* #message-container {
-    background-color: rgb(206, 215, 211);
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    height: 100%;
-    width: 100%;
-    overflow:auto;
-  } */
