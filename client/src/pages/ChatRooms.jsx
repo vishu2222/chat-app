@@ -3,6 +3,7 @@ import { getRooms, getGeneralRoomMsgs } from '../requests.js'
 import { io } from 'socket.io-client'
 import { RoomsContainer } from './RoomsContainer.jsx'
 import { MessageContainer } from './MessageContainer.jsx'
+import { NewRoom } from './NewRoom.jsx'
 import './../styles/ChatRooms.css'
 
 export const AppContext = createContext()
@@ -58,6 +59,7 @@ export function ChatRooms() {
       <div id='div-chat-room'>
         <RoomsContainer />
         <MessageContainer />
+        <NewRoom />
       </div>
     </AppContext.Provider>
   )
