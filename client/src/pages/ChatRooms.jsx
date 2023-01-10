@@ -55,7 +55,7 @@ export function ChatRooms() {
   }, [])
 
   return (
-    <AppContext.Provider value={{ roomsList, messages, setMessages, socket }}>
+    <AppContext.Provider value={{ roomsList, setRoomsList, messages, setMessages, socket }}>
       <div id='div-chat-room'>
         <RoomsContainer />
         <MessageContainer />
