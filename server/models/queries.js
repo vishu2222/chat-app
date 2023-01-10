@@ -15,7 +15,6 @@ const pool = new Pool({
 
 const client = await pool.connect() // may not handle idle clients
 
-//  checkUserNameExists
 export async function isUserNameAvailable(userName) {
   const res = await client.query('SELECT user_name from users WHERE user_name = $1', [userName])
   if (res.rowCount === 1) return true
@@ -74,61 +73,53 @@ export async function addMsg(msg) {
   return res.rowCount
 }
 
-// async function getRoomsList(user_id) {
-//   const query = `SELECT room_id
-//                  FROM userrooms
-//                  WHERE user_id=${user_id};`
-//   const res = await client.query(query)
-//   if (res.rows.length === 0) return []
-//   return res.rows.map((item) => item.room_id)
-// }
+export async function joinUserToRoom(room, user_id) {
+  let res = await client.query('SELECT room_id FROM rooms WHERE room_name = $1', [room])
+  if (res.rows.length === 0) return 404 // room doesnt exist
+  const roomId = res.rows[0].room_id
+  try {
+    res = await client.query('INSERT INTO userrooms (user_id, room_id) VALUES ($1 , $2)', [
+      user_id,
+      roomId
+    ])
+    return 200
+  } catch (err) {
+    return 403 // conflict user already a member of the room
+  }
+}
 
-// async function getRoomChat(room_id) {
-//   const roomChat = `SELECT  msg_txt, msg_time, user_name, room_name
-//                     FROM messages, users, rooms
-//                     WHERE messages.room_id = '${room_id}'
-//                     AND messages.sender_id = users.user_id
-//                     AND rooms.room_id = messages.room_id
-//                     ORDER BY msg_time ASC LIMIT 10;`
-//   const res = await client.query(roomChat)
-//   return res.rows
-// }
+export async function createNewRoom(room, userId) {
+  try {
+    const res = await client.query(
+      "INSERT INTO rooms (room_id, room_name) VALUES (NEXTVAL('room_id_seq'), $1)",
+      [room]
+    )
+  } catch (err) {
+    return 403 //  room already exists
+  }
 
-// export async function getChatByRoom(userName) {
-//   const id = await getUserId(userName)
+  try {
+    let res = await client.query('SELECT room_id FROM rooms WHERE room_name=$1', [room])
+    const roomId = res.rows[0].room_id
 
-//   if (id === null) return 404
-//   const roomsList = await getRoomsList(id)
+    res = await client.query('INSERT INTO userrooms(user_id, room_id) VALUES($1, $2)', [
+      userId,
+      roomId
+    ])
+    return 200
+  } catch (err) {
+    return 500
+  }
+}
 
-//   const userMsgsByRoom = {}
-//   for (const room_id of roomsList) {
-//     userMsgsByRoom[room_id] = await getRoomChat(room_id)
-//   }
-//   return userMsgsByRoom
-// }
-
-// client.query(
-//   "INSERT INTO messages (msg_id, msg_txt, msg_time, sender_id, room_id) VALUES (nextval('msg_id_seq'), $1, $2, $3, $4)",
-//   [msg.msg_txt, msg.msg_time, userId, msg.roomId]
-// )
-
-// ((msg_id, msg_txt, msg_time, sender_id, room_id) VALUES (nextval(\'msg_id_seq\'), to_timestamp(' + msg.msg_time + '), $1, $2, $3'
-
-// const result = await client.query(
-//   'UPDATE users SET name = $1, email = $2 WHERE id = $3',
-//   [name, email, id]
-// );
-
-// INSERT INTO messages(msg_id, msg_txt, msg_time, sender_id, room_id) values (NEXTVAL('msg_id_seq'), 'hiA',to_timestamp(1672986759942),1,1);
-// const query =
-//   'INSERT INTO my_table (timestamp_column) VALUES (to_timestamp(' + currentTimestamp + '))'
-
-// "INSERT INTO messages (msg_id, msg_txt, msg_time, sender_id, room_id) VALUES (nextval('msg_id_seq'), to_timestamp(" +
-//   msg.msg_time +
-//   '))'
-
-// ((msg_id, msg_txt, msg_time, sender_id, room_id) VALUES (nextval(\'msg_id_seq\'), to_timestamp(' + msg.msg_time + '), $1, $2, $3'
-
+//
+//
+//
+//
+//
+//
+//
+//
 // setInterval(() => {
 //   console.log(`Idle count: ${pool.idleCount}`)
 //   pool.release(pool.idleCount);
@@ -137,8 +128,3 @@ export async function addMsg(msg) {
 // pool.on('release', (client) => {
 //   console.log('Client released from the pool due to idle timeout')
 // })
-
-// export async function getPassword(userName) {
-//   const res = await client.query('SELECT password FROM users where user_name = $1', [userName])
-//   return await res.rows[0].password
-// }
