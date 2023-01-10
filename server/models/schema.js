@@ -58,6 +58,7 @@ const userRooms = `CREATE TABLE userRooms(
   room_id INTEGER,
   removed BOOLEAN,
   PRIMARY KEY (user_id, room_id),
+  join_date TIMESTAMP,
   CONSTRAINT fk2_user FOREIGN KEY(user_id) REFERENCES users(user_id),
   CONSTRAINT fk2_room FOREIGN KEY(room_id) REFERENCES rooms(room_id)
 );`
