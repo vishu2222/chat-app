@@ -54,5 +54,15 @@ export async function joinUser(room) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ room })
   })
-  console.log(res)
+  console.log(res) //
+}
+
+export async function createNewRoom(room) {
+  const res = await fetch(url + 'create-room', {
+    credentials: 'include',
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ room })
+  })
+  return res.status
 }
