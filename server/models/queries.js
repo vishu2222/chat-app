@@ -45,7 +45,7 @@ export async function getRoomsList(user_id) {
 
 export async function getGeneralRoomMsgs() {
   const res = await client.query(
-    'SELECT msg_id, msg_txt, msg_time, user_name FROM messages LEFT JOIN users ON messages.sender_id = users.user_id WHERE messages.room_id=$1',
+    'SELECT msg_id, msg_txt, msg_time, user_name FROM messages LEFT JOIN users ON messages.sender_id = users.user_id WHERE messages.room_id=$1 order by msg_time',
     [1]
   )
   return res.rows
@@ -53,7 +53,7 @@ export async function getGeneralRoomMsgs() {
 
 export async function getRoomMsgs(room_id) {
   const res = await client.query(
-    'SELECT msg_id, msg_txt, msg_time, user_name FROM messages LEFT JOIN users ON messages.sender_id = users.user_id WHERE messages.room_id=$1',
+    'SELECT msg_id, msg_txt, msg_time, user_name FROM messages LEFT JOIN users ON messages.sender_id = users.user_id WHERE messages.room_id=$1 order by msg_time',
     [room_id]
   )
   return res.rows
@@ -63,6 +63,11 @@ export async function getUserName(id) {
   const res = await client.query('SELECT user_name  FROM users WHERE user_id = $1', [id])
   if (res.rows.length === 0) return null
   return res.rows[0].user_name
+}
+
+export async function getUserId(userName) {
+  const res = await client.query('SELECT user_id  FROM users WHERE user_name = $1', [userName])
+  return res.rows[0].user_id
 }
 
 export async function addMsg(msg) {
