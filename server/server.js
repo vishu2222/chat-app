@@ -108,7 +108,9 @@ app.post('/login', async (req, res) => {
 
 app.post('/joinUser', authenticateToken, async (req, res) => {
   const response = await joinUserToRoom(req.body.room, res.userId)
-  console.log('response', response)
+  if (response === 404) return res.status(404).json('room doesnt exist')
+  if (response === 403) return res.status(403).json('you already are member of the room')
+  return res.status(200).json('user added to the room')
 })
 
 app.post('/create-room', authenticateToken, async (req, res) => {
