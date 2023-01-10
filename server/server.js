@@ -6,6 +6,7 @@ import cors from 'cors'
 import { signJwt, verifyJwt } from './controllers/jwt.js'
 import { isUserNameAvailable, signUp, joinUserToRoom, createNewRoom } from './models/queries.js'
 import { getUserInfo, getRoomsList, getGeneralRoomMsgs, getRoomMsgs } from './models/queries.js'
+import { getUserId } from './models/queries.js'
 import dotenv from 'dotenv'
 import { setupSockets } from './controllers/sockets.js'
 
@@ -81,6 +82,8 @@ app.post('/signUp', async (req, res) => {
     const salt = await bcrypt.genSalt()
     const hashedPwd = await bcrypt.hash(req.body.password, salt)
     await signUp(req.body.userName, hashedPwd)
+    const userId = await getUserId(req.body.userName)
+    await joinUserToRoom('general', userId) //..............................................getUserId
     res.sendStatus(200) // 201
   } catch (err) {
     res.sendStatus(500)
