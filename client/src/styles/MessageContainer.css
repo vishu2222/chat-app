@@ -1,4 +1,12 @@
+#form-msg-container{
+    display: flex;
+    flex-direction: column;
+    height: 40rem;
+}
+
 #message-container {
     background-color: rgb(121, 121, 92);
-    width: 100rem;
+    width: 50rem;
+    overflow: auto;
+    scroll-behavior:smooth;
 }
