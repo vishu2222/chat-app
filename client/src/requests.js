@@ -54,7 +54,8 @@ export async function joinUser(room) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ room })
   })
-  console.log(res) //
+
+  return res.status
 }
 
 export async function createNewRoom(room) {
