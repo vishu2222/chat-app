@@ -33,6 +33,8 @@ export function ChatRooms() {
   useEffect(() => {
     socket.connect()
 
+    socket.emit('join-room', 1)
+
     socket.on('connect', () => {
       console.log('socket connection established')
       socket.emit('join', { roomId: 1 })
