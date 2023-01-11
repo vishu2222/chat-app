@@ -1,13 +1,13 @@
 const url = 'http://localhost:3000/'
 
 export async function checkUserNameAvailable(userName) {
-  const res = await fetch(url + 'check-user-name/' + userName)
+  const res = await fetch(url + 'is-available/' + userName)
   const response = await res.json()
   return response.status
 }
 
 export async function signupUser(userName, password) {
-  const res = await fetch(url + 'signUp', {
+  const res = await fetch(url + 'sign-up', {
     headers: { 'Content-Type': 'application/json' },
     method: 'POST',
     body: JSON.stringify({ userName, password })
@@ -16,7 +16,7 @@ export async function signupUser(userName, password) {
 }
 
 export async function authenticateUser() {
-  const res = await fetch(url + 'authenticateUser', {
+  const res = await fetch(url + 'authenticate-user', {
     credentials: 'include'
   })
   return res.status
@@ -47,7 +47,7 @@ export async function getRooms() {
 }
 
 export async function getGeneralRoomMsgs() {
-  const res = await fetch(url + 'general-room-msgs', { credentials: 'include' })
+  const res = await fetch(url + 'default-room-msgs', { credentials: 'include' })
   return await res.json()
 }
 
@@ -57,7 +57,7 @@ export async function getRoomMsgs(roomId) {
 }
 
 export async function joinUser(room) {
-  const res = await fetch(url + 'joinUser', {
+  const res = await fetch(url + 'join-room', {
     credentials: 'include',
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
