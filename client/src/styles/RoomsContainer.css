@@ -27,8 +27,12 @@
 
 .roomItem {
     display: flex;
-    /* justify-content: center; */
     width: 100%;   
+}
+
+/* need to change the sudo class to room_item */
+.room-content:hover {
+    background-color:  #429d95;
 }
 
 .room-content {
