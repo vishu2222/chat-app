@@ -75,7 +75,9 @@ export async function addMsg(msg) {
     "INSERT INTO messages (msg_id, msg_txt, msg_time, sender_id, room_id) VALUES (nextval('msg_id_seq'), $1, to_timestamp($2/1000.0), $3, $4)",
     [msg.msg_txt, msg.msg_time, msg.user_id, msg.room_id]
   )
-  return res.rowCount
+
+  if (res.rowCount !== 1) return 500
+  return 201
 }
 
 export async function joinUserToRoom(room, user_id) {
@@ -89,7 +91,7 @@ export async function joinUserToRoom(room, user_id) {
     )
     return 200
   } catch (err) {
-    return 403 // conflict user already a member of the room
+    return 409 // conflict user already a member of the room
   }
 }
 
