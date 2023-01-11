@@ -33,5 +33,7 @@
   
   .room-msg {
     background-color: white;
+    font-size: 0.75rem;
+    height: 100%;
   }
   
