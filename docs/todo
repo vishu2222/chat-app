@@ -1,32 +1,13 @@
 TODO
 
-1. handle network errors
-2. replace Template literals
-3. Optimal queey
-4. Reduce multiple queries
-5. Store id in jwt
-6. Get data on room focus
-7. Date on server
-8. 10msgs
-
-TODO
-
 1. confirm insert in server socket before broadcastMsg
-
 2. handle different stauses in sockets
-3. broad cast on userJoin
-4. add scroll to bottom on message type.
-5. fix width of msg container
-6. Add a wrapper function to queries.
-7. add logout
-
-TODO
-
-1. fire event to check username valid after entering userName
-2. Add error.code === '23505' => Status(409) in signUp in queries
-   Note:
-
--
+3. broad cast on userJoin a room.
+5. Add a wrapper function to queries.
+7. handle network errors
+8. fire event to check username valid after entering userName
+9. Add error.code === '23505' => Status(409) in signUp in queries
+10. get msgs after joindate
 
 TODO learn:
 // flex
@@ -35,5 +16,3 @@ TODO learn:
 // positioning
 // vh, vw, rem, em, px, %
 // colors, fonts
-
-// const { user_id, user_name: userName, password: dbPassword } = response
