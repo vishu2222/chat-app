@@ -25,4 +25,13 @@
     border-radius: 15px;
   }
   
+  .room-msg-div{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .room-msg {
+    background-color: white;
+  }
   
