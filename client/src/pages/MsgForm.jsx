@@ -1,5 +1,6 @@
 import { useState, useContext } from 'react'
 import { AppContext } from './ChatRooms'
+import '../styles/MsgForm.css'
 
 export function MsgForm() {
   const [newMsgTxt, setNewMsgTXT] = useState('')
@@ -19,9 +20,11 @@ export function MsgForm() {
 
   return (
     <div id='message-type-div'>
-      <form onSubmit={(e) => e.preventDefault()}>
-        <input type='text' placeholder='message' value={newMsgTxt} onChange={(e) => setNewMsgTXT(e.target.value)} />
-        <button onClick={sendMsg}>send</button>
+      <form id='msg-form' onSubmit={(e) => e.preventDefault()}>
+        <input id='msg-input' type='text' placeholder='message' value={newMsgTxt} onChange={(e) => setNewMsgTXT(e.target.value)} />
+        <button id='msg-button' onClick={sendMsg}>
+          send
+        </button>
       </form>
     </div>
   )
