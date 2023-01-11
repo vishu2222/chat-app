@@ -47,10 +47,22 @@ export function ChatRooms() {
       setMessages((current) => [...current, msg])
     })
 
+    socket.on('userJoined', (msg) => {
+      msg.roomMsg = true
+      setMessages((current) => [...current, msg])
+    })
+
+    socket.on('userLeft', (msg) => {
+      msg.roomMsg = true
+      setMessages((current) => [...current, msg])
+    })
+
     return () => {
       socket.off('connect')
       socket.off('connect_err')
       socket.off('broadcastMsg')
+      socket.off('userJoined')
+      socket.off('userLeft')
     }
   }, [])
 
