@@ -3,21 +3,11 @@ import { AppContext } from './ChatRooms'
 import { useContext } from 'react'
 import { MessageItem } from './MessageItem'
 import { MsgForm } from './MsgForm'
-import { useState, useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 
 export function MessageContainer() {
-  const { messages, socket } = useContext(AppContext)
-  const [errMsg, setErrorMsg] = useState('')
-  const [displayErr, setDisplayErr] = useState(false)
+  const { messages } = useContext(AppContext)
   const msgContainerElement = useRef()
-
-  useEffect(() => {
-    socket.on('dberror', () => {
-      setDisplayErr(true)
-      setErrorMsg('failed to send Message')
-    })
-    return () => socket.off('dberror')
-  }, [socket])
 
   useEffect(() => {
     msgContainerElement.current.scrollTop = msgContainerElement.current.scrollHeight // set verticall scroll length = total height of div content including overflow
@@ -29,7 +19,6 @@ export function MessageContainer() {
         {messages.map((msg, index) => (
           <MessageItem key={index} msg={msg} />
         ))}
-        {displayErr && <h3 className='err-msg'>{errMsg}</h3>}
       </div>
       <MsgForm />
     </div>
