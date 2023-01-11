@@ -10,14 +10,12 @@ export function RoomsContainer({ updateRoomId }) {
   useEffect(() => {
     socket.on('user-joined', (msg) => {
       if (msg.room_id === focusedRoomId) {
-        msg.roomMsg = true
         setMessages((current) => [...current, msg])
       }
     })
 
     socket.on('user-left', (msg) => {
       if (msg.room_id === focusedRoomId) {
-        msg.roomMsg = true
         setMessages((current) => [...current, msg])
       }
     })
