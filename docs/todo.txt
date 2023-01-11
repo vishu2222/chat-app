@@ -8,6 +8,7 @@ TODO
 8. fire event to check username valid after entering userName
 9. Add error.code === '23505' => Status(409) in signUp in queries
 10. get msgs after joindate
+11. change psuddo class in RoomsContainer.css
 
 TODO learn:
 // flex
