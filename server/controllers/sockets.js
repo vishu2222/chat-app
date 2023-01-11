@@ -56,21 +56,23 @@ export function setupSockets(httpServer) {
       socket.roomId = room.roomId
 
       const LeaveMsg = {
+        msg_txt: 'left',
+        msg_time: Date.now(),
+        user_name: socket.userName,
+        user_id: socket.userId,
+        room_id: oldRoomId
+      }
+      // await addMsg(newMsg)
+      socket.to(oldRoomId).emit('userLeft', LeaveMsg)
+
+      const joinMsg = {
         msg_txt: 'joined',
         msg_time: Date.now(),
         user_name: socket.userName,
         user_id: socket.userId,
         room_id: socket.roomId
       }
-      socket.to(oldRoomId).emit('userLeft', LeaveMsg)
-
-      const joinMsg = {
-        msg_txt: 'left',
-        msg_time: Date.now(),
-        user_name: socket.userName,
-        user_id: socket.userId,
-        room_id: socket.roomId
-      }
+      // await addMsg(newMsg)
       socket.to(socket.roomId).emit('userJoined', joinMsg)
     })
 
