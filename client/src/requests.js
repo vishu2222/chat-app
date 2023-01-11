@@ -32,6 +32,15 @@ export async function signIn(userName, password) {
   return res.status
 }
 
+export async function signOut() {
+  const res = await fetch(url + 'logout', {
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
+    method: 'POST'
+  })
+  return res.status
+}
+
 export async function getRooms() {
   const res = await fetch(url + 'rooms-list', { credentials: 'include' })
   return await res.json()
