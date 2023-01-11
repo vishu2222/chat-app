@@ -18,7 +18,7 @@ export function setupSockets(httpServer) {
 
   io.use(async (socket, next) => {
     try {
-      const token = socket.handshake.headers.cookie.split('=')[1] // if (token === undefined) return next(new Error('unauthorised'))
+      const token = socket.handshake.headers.cookie.split('=')[1]
       const jwtPaylod = await verifyJwt(token, secretKey)
 
       socket.userId = jwtPaylod.user_id
@@ -44,22 +44,34 @@ export function setupSockets(httpServer) {
         room_id: socket.roomId
       }
 
-      const insertedRowsCount = await addMsg(newMsg)
+      const response = await addMsg(newMsg)
 
-      if (insertedRowsCount !== 1) return socket.emit('dberror', 'failed to send message')
+      if (response === 500) return socket.emit('dberror', 'failed to send message')
       socket.to(socket.roomId).emit('broadcastMsg', newMsg)
     })
 
-    socket.on('join', (room) => {
+    socket.on('join', async (room) => {
       socket.join(room.roomId)
+      const oldRoomId = socket.roomId
       socket.roomId = room.roomId
 
-      // socket.to(room.roomId).emit('newBroadcast', {
-      //   msg_txt: ` joined`,
-      //   msg_time: Date.now(),
-      //   user_name: room.userName,
-      //   roomId: room.roomId
-      // })
+      const LeaveMsg = {
+        msg_txt: 'joined',
+        msg_time: Date.now(),
+        user_name: socket.userName,
+        user_id: socket.userId,
+        room_id: socket.roomId
+      }
+      socket.to(oldRoomId).emit('userLeft', LeaveMsg)
+
+      const joinMsg = {
+        msg_txt: 'left',
+        msg_time: Date.now(),
+        user_name: socket.userName,
+        user_id: socket.userId,
+        room_id: socket.roomId
+      }
+      socket.to(socket.roomId).emit('userJoined', joinMsg)
     })
 
     socket.on('disconnect', () => {
