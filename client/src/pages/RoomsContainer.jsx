@@ -5,13 +5,14 @@ import '../styles/RoomsContainer.css'
 
 export function RoomsContainer() {
   const [focusedRoomId, setFocusedRoomId] = useState(1)
-  const { roomsList, setMessages, socket } = useContext(AppContext)
+  const { roomsList, setMessages, setCurrentRoomID, socket } = useContext(AppContext)
 
   async function focusRoom(roomId) {
     if (focusedRoomId !== roomId) {
       const roomMsgs = await getRoomMsgs(roomId)
       setMessages(() => roomMsgs)
       setFocusedRoomId(() => roomId)
+      setCurrentRoomID(() => roomId)
       socket.emit('join', { roomId })
     }
   }
