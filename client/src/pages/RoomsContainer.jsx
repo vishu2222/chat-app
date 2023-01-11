@@ -35,10 +35,6 @@ export function RoomsContainer({ updateRoomId }) {
     }
   }
 
-  // useEffect(() => {
-  //   setCurrentRoomID(() => focusedRoomId)
-  // }, [focusedRoomId])
-
   const roomElements = roomsList.map((room) => (
     <div className='roomItem' key={room.room_id} onClick={() => focusRoom(room.room_id)}>
       <p className='room-content'>{room.room_name}</p>
