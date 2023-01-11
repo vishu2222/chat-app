@@ -2,11 +2,13 @@ import '../styles/MessageItem.css'
 
 export function MessageItem({ msg }) {
   const userName = localStorage.getItem('userName')
-  console.log(msg)
   let divClassName = ''
   let msgClassName = ''
 
-  if (msg.user_name === userName) {
+  if (msg.roomMsg) {
+    divClassName = 'room-msg-div'
+    msgClassName = 'room-msg'
+  } else if (msg.user_name === userName) {
     divClassName = 'self-msg-div'
     msgClassName = 'self-msg'
   } else {
