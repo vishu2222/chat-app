@@ -35,6 +35,8 @@ export function setupSockets(httpServer) {
     userCount++
     console.log('User id:', socket.userId, ' Connected:', 'TotalUsers:', userCount)
 
+    // socket.join(1)
+
     socket.on('newMessage', async (msg) => {
       const newMsg = {
         msg_txt: msg.msg_txt,
@@ -51,31 +53,46 @@ export function setupSockets(httpServer) {
     })
 
     socket.on('leave-room', async (roomId) => {
-      const LeaveMsg = {
+      const leaveMsg = {
         msg_txt: 'left',
         msg_time: Date.now(),
         user_name: socket.userName,
         user_id: socket.userId,
-        room_id: roomId
+        room_id: roomId,
+        roomMsg: true
       }
-      socket.to(roomId).emit('user-left', LeaveMsg)
+      socket.to(roomId).emit('user-left', leaveMsg)
       socket.leave(roomId)
     })
 
     socket.on('join-room', async (roomId) => {
       socket.join(roomId)
+      console.log('roomId', socket.roomId)
+      socket.roomId = roomId
 
       const joinMsg = {
         msg_txt: 'joined',
         msg_time: Date.now(),
         user_name: socket.userName,
         user_id: socket.userId,
-        room_id: roomId
+        room_id: roomId,
+        roomMsg: true
       }
       socket.to(roomId).emit('user-joined', joinMsg)
     })
 
+    // disconnect
     socket.on('disconnect', () => {
+      const disconnectMsg = {
+        msg_txt: 'disconnected',
+        msg_time: Date.now(),
+        user_name: socket.userName,
+        user_id: socket.userId,
+        room_id: socket.roomId,
+        roomMsg: true
+      }
+      socket.to(socket.roomId).emit('user-left', disconnectMsg)
+
       userCount--
       console.log('User disconnected. Total connected users:', userCount)
     })
