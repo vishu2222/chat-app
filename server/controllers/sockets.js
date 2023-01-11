@@ -23,7 +23,6 @@ export function setupSockets(httpServer) {
 
       socket.userId = jwtPaylod.user_id
       socket.userName = await getUserName(jwtPaylod.user_id)
-      // socket.roomId = 1
       next()
     } catch (err) {
       return next(new Error('unauthorised'))
@@ -33,11 +32,11 @@ export function setupSockets(httpServer) {
   let userCount = 0
   io.on('connection', (socket) => {
     userCount++
-    console.log('User id:', socket.userId, ' Connected:', 'TotalUsers:', userCount)
+    console.log('User Connected, TotalUsers:', userCount)
 
     // socket.join(1)
-
-    socket.on('newMessage', async (msg) => {
+    // new-message
+    socket.on('new-message', async (msg) => {
       const newMsg = {
         msg_txt: msg.msg_txt,
         msg_time: Date.now(),
@@ -47,11 +46,11 @@ export function setupSockets(httpServer) {
       }
 
       const response = await addMsg(newMsg)
-
-      if (response === 500) return socket.emit('dberror', 'failed to send message')
+      if (response === 500) return socket.emit('error', 'failed to send message')
       socket.to(socket.roomId).emit('broadcastMsg', newMsg)
     })
 
+    // leave-room
     socket.on('leave-room', async (roomId) => {
       const leaveMsg = {
         msg_txt: 'left',
@@ -65,9 +64,9 @@ export function setupSockets(httpServer) {
       socket.leave(roomId)
     })
 
+    // join-room
     socket.on('join-room', async (roomId) => {
       socket.join(roomId)
-      console.log('roomId', socket.roomId)
       socket.roomId = roomId
 
       const joinMsg = {
@@ -94,7 +93,7 @@ export function setupSockets(httpServer) {
       socket.to(socket.roomId).emit('user-left', disconnectMsg)
 
       userCount--
-      console.log('User disconnected. Total connected users:', userCount)
+      console.log('User disconnected, Total users:', userCount)
     })
     //
   })
