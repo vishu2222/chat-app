@@ -29,20 +29,20 @@ export async function authenticateToken(req, res, next) {
     res.userId = jwtPaylod.user_id
     next()
   } catch (err) {
-    return res.sendStatus(403)
+    return res.sendStatus(401)
   }
 }
 
 app.get('/rooms-list', authenticateToken, async (req, res) => {
   try {
-    const roomList = await getRoomsList(res.userId)
-    res.status(200).json(roomList)
+    const roomsList = await getRoomsList(res.userId)
+    res.status(200).json(roomsList)
   } catch (err) {
     res.sendStatus(500)
   }
 })
 
-app.get('/general-room-msgs', authenticateToken, async (req, res) => {
+app.get('/default-room-msgs', authenticateToken, async (req, res) => {
   try {
     const msgs = await getGeneralRoomMsgs()
     res.status(200).json(msgs)
@@ -61,11 +61,11 @@ app.get('/msgs/:roomId', authenticateToken, async (req, res) => {
   }
 })
 
-app.get('/check-user-name/:userName', async (req, res) => {
+app.get('/is-available/:userName', async (req, res) => {
   try {
     const response = await isUserNameAvailable(req.params.userName)
     if (response === true) {
-      return res.status(400).json({ err: 'user name already taken', status: 400 })
+      return res.status(409).json({ err: 'user name already taken', status: 409 })
     }
     return res.status(200).json('user name available')
   } catch (err) {
@@ -73,18 +73,19 @@ app.get('/check-user-name/:userName', async (req, res) => {
   }
 })
 
-app.get('/authenticateUser', authenticateToken, (req, res) => {
+app.get('/authenticate-user', authenticateToken, (req, res) => {
   return res.sendStatus(200)
 })
 
-app.post('/signUp', async (req, res) => {
+app.post('/sign-up', async (req, res) => {
   try {
     const salt = await bcrypt.genSalt()
     const hashedPwd = await bcrypt.hash(req.body.password, salt)
     await signUp(req.body.userName, hashedPwd)
+
     const userId = await getUserId(req.body.userName)
-    await joinUserToRoom('general', userId) //..............................................getUserId
-    res.sendStatus(200) // 201
+    await joinUserToRoom('general', userId)
+    res.sendStatus(201)
   } catch (err) {
     res.sendStatus(500)
   }
@@ -109,11 +110,16 @@ app.post('/login', async (req, res) => {
   }
 })
 
-app.post('/joinUser', authenticateToken, async (req, res) => {
+app.post('/logout', authenticateToken, (req, res) => {
+  res.clearCookie('token')
+  res.sendStatus(200)
+})
+
+app.post('/join-room', authenticateToken, async (req, res) => {
   try {
     const response = await joinUserToRoom(req.body.room, res.userId)
     if (response === 404) return res.status(404).json('room doesnt exist')
-    if (response === 403) return res.status(403).json('you already are member of the room')
+    if (response === 409) return res.status(409).json('you already are member of the room')
     return res.status(200).json('user added to the room')
   } catch (err) {
     return res.sendStatus(500)
@@ -127,7 +133,7 @@ app.post('/create-room', authenticateToken, async (req, res) => {
     if (response === 500) return res.status(500).json('internal error')
     return res.status(200).json('new room created')
   } catch (err) {
-    return res.sendStatus(500)
+    return res.status(500).json('internal error')
   }
 })
 
