@@ -1,0 +1,5 @@
+// reset to previous commit
+
+git log                         // shows previous logs and commit-id's
+git reset --hard commitId      // to roll back to previous commit-id
+git push -f                    // forces a push and update the local repository. This deletes all later commits
