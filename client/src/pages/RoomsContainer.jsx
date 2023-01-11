@@ -1,21 +1,45 @@
 import { AppContext } from './ChatRooms'
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { getRoomMsgs } from '../requests.js'
 import '../styles/RoomsContainer.css'
 
-export function RoomsContainer() {
+export function RoomsContainer({ updateRoomId }) {
   const [focusedRoomId, setFocusedRoomId] = useState(1)
-  const { roomsList, setMessages, setCurrentRoomID, socket } = useContext(AppContext)
+  const { roomsList, setMessages, socket } = useContext(AppContext)
+
+  useEffect(() => {
+    socket.on('user-joined', (msg) => {
+      if (msg.room_id === focusedRoomId) {
+        msg.roomMsg = true
+        setMessages((current) => [...current, msg])
+      }
+    })
+
+    socket.on('user-left', (msg) => {
+      if (msg.room_id === focusedRoomId) {
+        msg.roomMsg = true
+        setMessages((current) => [...current, msg])
+      }
+    })
+    return () => {
+      socket.off('user-joined')
+      socket.off('user-left')
+    }
+  }, [socket, focusedRoomId])
 
   async function focusRoom(roomId) {
     if (focusedRoomId !== roomId) {
+      socket.emit('leave-room', focusedRoomId)
+      socket.emit('join-room', roomId)
       const roomMsgs = await getRoomMsgs(roomId)
       setMessages(() => roomMsgs)
       setFocusedRoomId(() => roomId)
-      setCurrentRoomID(() => roomId)
-      socket.emit('join', { roomId })
     }
   }
+
+  // useEffect(() => {
+  //   setCurrentRoomID(() => focusedRoomId)
+  // }, [focusedRoomId])
 
   const roomElements = roomsList.map((room) => (
     <div className='roomItem' key={room.room_id} onClick={() => focusRoom(room.room_id)}>
