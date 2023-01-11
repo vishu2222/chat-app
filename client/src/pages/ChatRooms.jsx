@@ -12,11 +12,6 @@ const socket = io('http://localhost:3000', { autoConnect: false, transports: ['w
 export function ChatRooms() {
   const [roomsList, setRoomsList] = useState([])
   const [messages, setMessages] = useState([])
-  const [currentRoomId, setCurrentRoomID] = useState(1)
-
-  // function getFocusedRoomId() {
-
-  // }
 
   // fetching rooms and messages
   useEffect(() => {
@@ -52,31 +47,15 @@ export function ChatRooms() {
       setMessages((current) => [...current, msg])
     })
 
-    socket.on('userJoined', (msg) => {
-      if (msg.room_id === currentRoomId) {
-        msg.roomMsg = true
-        setMessages((current) => [...current, msg])
-      }
-    })
-
-    socket.on('userLeft', (msg) => {
-      if (msg.room_id === currentRoomId) {
-        msg.roomMsg = true
-        setMessages((current) => [...current, msg])
-      }
-    })
-
     return () => {
       socket.off('connect')
       socket.off('connect_err')
       socket.off('broadcastMsg')
-      socket.off('userJoined')
-      socket.off('userLeft')
     }
   }, [])
 
   return (
-    <AppContext.Provider value={{ roomsList, setRoomsList, messages, setMessages, socket, setCurrentRoomID }}>
+    <AppContext.Provider value={{ roomsList, setRoomsList, messages, setMessages, socket }}>
       <div id='div-chat-room'>
         <RoomsContainer />
         <MessageContainer />
