@@ -12,6 +12,8 @@ const socket = io('http://localhost:3000', { autoConnect: false, transports: ['w
 export function ChatRooms() {
   const [roomsList, setRoomsList] = useState([])
   const [messages, setMessages] = useState([])
+  const [displayErr, setDisplayErr] = useState(false)
+  const [errMsg, setErrMsg] = useState('')
 
   // fetching rooms and messages
   useEffect(() => {
@@ -32,17 +34,28 @@ export function ChatRooms() {
   // setting up sockets
   useEffect(() => {
     socket.connect()
-
     socket.emit('join-room', 1)
 
     socket.on('connect', () => {
+      setDisplayErr(false)
       console.log('socket connection established')
       socket.emit('join', { roomId: 1 })
     })
 
     socket.on('connect_err', (err) => {
-      console.log('socket failed to connect, err:', err)
-      if (err.message === 'unauthorised') console.log('unauthorized')
+      setDisplayErr(true)
+      setErrMsg(err.message)
+    })
+
+    socket.on('error', (err) => {
+      setDisplayErr(true)
+      setErrMsg(err.message)
+    })
+
+    socket.on('disconnect', () => {
+      console.log('disconnected')
+      setDisplayErr(true)
+      setErrMsg('server disconnected')
     })
 
     socket.on('broadcastMsg', (msg) => {
@@ -53,16 +66,21 @@ export function ChatRooms() {
       socket.off('connect')
       socket.off('connect_err')
       socket.off('broadcastMsg')
+      socket.off('disconnect')
+      socket.off('error')
     }
   }, [])
 
   return (
     <AppContext.Provider value={{ roomsList, setRoomsList, messages, setMessages, socket }}>
-      <div id='div-chat-room'>
-        <RoomsContainer />
-        <MessageContainer />
-        <NewRoom />
-      </div>
+      <>
+        {displayErr && <h3 className='err-msg'>{errMsg}</h3>}
+        <div id='div-chat-room'>
+          <RoomsContainer />
+          <MessageContainer />
+          <NewRoom />
+        </div>
+      </>
     </AppContext.Provider>
   )
 }
