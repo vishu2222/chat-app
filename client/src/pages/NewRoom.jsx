@@ -19,7 +19,7 @@ export function NewRoom() {
       setErrMsg('* room doesnt exists')
       setDisplayErr(true)
     }
-    if (res === 403) {
+    if (res === 409) {
       setErrMsg('* you already are a member of the room')
       setDisplayErr(true)
     }
