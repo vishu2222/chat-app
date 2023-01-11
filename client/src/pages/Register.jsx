@@ -34,14 +34,14 @@ export function Register() {
     }
 
     const nameAvailable = await checkUserNameAvailable(userName)
-    if (nameAvailable === 400) {
+    if (nameAvailable === 409) {
       setDisplayErr(true)
       setErrMsg('* User name unavailable, choose different userName')
       return
     }
 
     const status = await signupUser(userName, password)
-    if (status === 200) {
+    if (status === 201) {
       navigate('/login')
     }
   }
