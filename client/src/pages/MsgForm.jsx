@@ -13,7 +13,7 @@ export function MsgForm() {
       user_name: localStorage.getItem('userName')
     }
 
-    socket.emit('newMessage', newMsg)
+    socket.emit('new-message', newMsg)
     setNewMsgTXT(() => '')
     setMessages((current) => [...current, newMsg])
   }
