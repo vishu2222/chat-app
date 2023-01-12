@@ -10,6 +10,7 @@ function App() {
   async function logout() {
     await signOut()
   }
+
   return (
     <>
       <div id='appContainer'>
@@ -26,18 +27,11 @@ function App() {
             </Link>
           </div>
 
-          {/* <div id='title'>
-            <p>
-              <strong>Welcome {localStorage.getItem('userName')}</strong>
-            </p>
-          </div> */}
-
           <Routes>
             <Route path='/' element={<Home />} />
             <Route path='/login' element={<Login />} />
             <Route path='/register' element={<Register />} />
             <Route path='/chatRooms' element={<ChatRooms />} />
-            {/* <Route path='/logout' element={<Logout />} /> */}
             <Route path='*' element={<h1>Page not found</h1>} />
           </Routes>
         </BrowserRouter>
@@ -47,3 +41,11 @@ function App() {
 }
 
 export default App
+
+//{
+/* <div id='title'>
+<p>
+  <strong>Welcome {localStorage.getItem('userName')}</strong>
+</p>
+</div> */
+//}
