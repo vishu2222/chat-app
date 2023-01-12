@@ -26,21 +26,37 @@
 }
 
 .roomItem {
+    /* display: flex;
+    width: 100%;    */
     display: flex;
-    width: 100%;   
+    width: 100%;
+    align-items: center;
+    height: 3rem;
+    background-color: #E0F2F1;
+    flex-direction: column;
+/* align-content: center; */
+    justify-content: flex-start;
+    border-bottom:groove;
+    margin-top: 0.2rem;
 }
 
 /* need to change the sudo class to room_item */
-.room-content:hover {
-    background-color:  #429d95;
+.roomItem:hover {
+    background-color:  #dcdee3;
 }
 
+
+
 .room-content {
+    /* align-items: center;
+    justify-content: center;
     background-color:  #B2DFDB;
-    font-family: sans-serif;
-    width: 80%;
-    border-radius: 10px;
-    height: 80%;
+    
+    width: 80%; */
+    /* border-radius: 10px; */
+    /* height: 80%;
     padding-left: 35%;
-    padding-top: 2%;
+    padding-top: 2%; */
+    font-family: sans-serif;
 } 
+
