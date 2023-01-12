@@ -1,14 +1,19 @@
 TODO
 
-1. confirm insert in server socket before broadcastMsg
-2. handle different stauses in sockets
-3. broad cast on userJoin a room.
+1. confirm insert in server socket before broadcastMsg //
+2. handle different stauses in sockets //
+3. broad cast on userJoin a room. //
 5. Add a wrapper function to queries.
-7. handle network errors
+7. handle network errors //
 8. fire event to check username valid after entering userName
 9. Add error.code === '23505' => Status(409) in signUp in queries
-10. get msgs after joindate
+10. get msgs after joindate //
 11. change psuddo class in RoomsContainer.css
+12. show msg time.
+13. socket emit on typying
+14. private messages
+15. list active users
+
 
 TODO learn:
 // flex
