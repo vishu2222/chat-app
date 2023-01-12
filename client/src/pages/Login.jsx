@@ -11,9 +11,10 @@ export function Login() {
   const navigate = useNavigate()
 
   async function login() {
-    if (userName === '' || userName.trim().length === 0) return
+    console.log(userName, password)
+    if (userName.trim().length === 0) return
     if (password.length < 4) {
-      displayErr(true)
+      setDisplayErr(true)
       setErrMsg('* password length should be greater than 4')
       return
     }
