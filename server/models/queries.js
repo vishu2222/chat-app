@@ -13,7 +13,7 @@ const pool = new Pool({
   port: process.env.DB_PORT
 })
 
-const client = await pool.connect() // may not handle idle clients
+const client = await pool.connect()
 
 export async function isUserNameAvailable(userName) {
   const res = await client.query('SELECT user_name from users WHERE user_name = $1', [userName])
@@ -51,10 +51,16 @@ export async function getGeneralRoomMsgs() {
   return res.rows
 }
 
-export async function getRoomMsgs(room_id) {
+export async function getRoomMsgs(room_id, userId) {
+  let joinDate = await client.query(
+    'SELECT join_date FROM userrooms WHERE user_id=$1 AND room_id=$2',
+    [userId, room_id]
+  )
+  joinDate = joinDate.rows[0].join_date
+
   const res = await client.query(
-    'SELECT msg_id, msg_txt, msg_time, user_name FROM messages LEFT JOIN users ON messages.sender_id = users.user_id WHERE messages.room_id=$1 order by msg_time',
-    [room_id]
+    'SELECT msg_id, msg_txt, msg_time, user_name FROM messages LEFT JOIN users ON messages.sender_id = users.user_id WHERE messages.room_id=$1 AND msg_time > $2 order by msg_time',
+    [room_id, joinDate]
   )
   return res.rows
 }
