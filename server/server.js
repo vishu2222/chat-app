@@ -47,17 +47,17 @@ app.get('/default-room-msgs', authenticateToken, async (req, res) => {
     const msgs = await getGeneralRoomMsgs()
     res.status(200).json(msgs)
   } catch (err) {
-    res.statusCode(500)
+    res.sendStatus(500)
   }
 })
 
 app.get('/msgs/:roomId', authenticateToken, async (req, res) => {
   try {
     const room_id = req.params.roomId
-    const msgs = await getRoomMsgs(room_id)
+    const msgs = await getRoomMsgs(room_id, res.userId)
     res.status(200).json(msgs)
   } catch (err) {
-    res.statusCode(500)
+    res.sendStatus(500)
   }
 })
 
