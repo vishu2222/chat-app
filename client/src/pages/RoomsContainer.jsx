@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from 'react'
 import { getRoomMsgs } from '../requests.js'
 import '../styles/RoomsContainer.css'
 
-export function RoomsContainer({ updateRoomId }) {
+export function RoomsContainer() {
   const [focusedRoomId, setFocusedRoomId] = useState(1)
   const { roomsList, setMessages, socket } = useContext(AppContext)
 
