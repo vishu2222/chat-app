@@ -16,6 +16,7 @@ export function MessageContainer() {
   return (
     <div id='form-msg-container'>
       <div id='message-container' ref={msgContainerElement}>
+        <div id='msg-container-title'>Welcome {localStorage.getItem('userName')}</div>
         {messages.map((msg, index) => (
           <MessageItem key={index} msg={msg} />
         ))}
