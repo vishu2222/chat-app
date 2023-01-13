@@ -6,7 +6,7 @@ import { MsgForm } from './MsgForm'
 import { useEffect, useRef } from 'react'
 
 export function MessageContainer() {
-  const { messages } = useContext(AppContext)
+  const { messages, focusedRoomName } = useContext(AppContext)
   const msgContainerElement = useRef()
 
   useEffect(() => {
@@ -16,7 +16,11 @@ export function MessageContainer() {
   return (
     <div id='form-msg-container'>
       <div id='message-container' ref={msgContainerElement}>
-        <div id='msg-container-title'>Welcome {localStorage.getItem('userName')}</div>
+        <div id='msg-container-title'>
+          <div id='title-room'>
+            <strong>{focusedRoomName}</strong>
+          </div>
+        </div>
         {messages.map((msg, index) => (
           <MessageItem key={index} msg={msg} />
         ))}
