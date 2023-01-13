@@ -60,7 +60,9 @@ export function Login() {
             setDisplayErr(false)
           }}
         />
-        <button onClick={login}>Login</button>
+        <button className='button' onClick={login}>
+          Login
+        </button>
       </form>
       <br />
 
