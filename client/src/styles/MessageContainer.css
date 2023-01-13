@@ -27,7 +27,14 @@
     width: 100%;
     position:sticky;
     top: 0px;
-    font-size: 1.75rem;
-    padding: 1rem;
+    font-size: 1.5rem;
+    padding: 0.9rem;
     background-color: #0097A7;
+    /* background-color: black; */
+    color: rgb(239, 242, 245);
+    font-family: 'Times New Roman';
+    display:flex ;
+    align-items: center;
 }
+
+/* #b7a8c2 */
