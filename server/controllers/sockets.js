@@ -41,7 +41,8 @@ export function setupSockets(httpServer) {
         msg_time: Date.now(),
         user_name: socket.userName,
         user_id: socket.userId,
-        room_id: socket.roomId || 1
+        room_id: socket.roomId || 1,
+        roomMsg: false
       }
 
       const response = await addMsg(newMsg)
@@ -59,6 +60,7 @@ export function setupSockets(httpServer) {
         room_id: roomId,
         roomMsg: true
       }
+      // await addMsg(leaveMsg)
       socket.to(roomId).emit('user-left', leaveMsg)
       socket.leave(roomId)
     })
@@ -76,6 +78,7 @@ export function setupSockets(httpServer) {
         room_id: roomId,
         roomMsg: true
       }
+      // await addMsg(joinMsg)
       socket.to(roomId).emit('user-joined', joinMsg)
     })
 
