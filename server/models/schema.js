@@ -49,6 +49,7 @@ const messages = `CREATE TABLE messages(
     msg_time TIMESTAMP NOT NULL,
     sender_id INTEGER,
     room_id INTEGER,
+    room_msg BOOLEAN DEFAULT false,
     CONSTRAINT fk_user FOREIGN KEY(sender_id) REFERENCES users(user_id),
     CONSTRAINT fk_room FOREIGN KEY(room_id) REFERENCES rooms(room_id)
 );`
