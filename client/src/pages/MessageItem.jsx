@@ -5,7 +5,7 @@ export function MessageItem({ msg }) {
   let divClassName = ''
   let msgClassName = ''
 
-  if (msg.roomMsg) {
+  if (msg.roomMsg === true) {
     divClassName = 'room-msg-div'
     msgClassName = 'room-msg'
   } else if (msg.user_name === userName) {
