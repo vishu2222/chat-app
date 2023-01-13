@@ -5,8 +5,8 @@ import bcrypt from 'bcrypt'
 import cors from 'cors'
 import { signJwt, verifyJwt } from './controllers/jwt.js'
 import { isUserNameAvailable, signUp, joinUserToRoom, createNewRoom } from './models/queries.js'
-import { getUserInfo, getRoomsList, getGeneralRoomMsgs, getRoomMsgs } from './models/queries.js'
-import { getUserId } from './models/queries.js'
+import { getRoomsList, getGeneralRoomMsgs, getRoomMsgs } from './models/queries.js'
+import { getUserId, getUserCredentials } from './models/queries.js'
 import dotenv from 'dotenv'
 import { setupSockets } from './controllers/sockets.js'
 
@@ -93,7 +93,7 @@ app.post('/sign-up', async (req, res) => {
 
 app.post('/login', async (req, res) => {
   try {
-    const response = await getUserInfo(req.body.userName)
+    const response = await getUserCredentials(req.body.userName)
     if (response === 404) return res.status(404).json({ err: 'user doesnt exists', status: 404 })
 
     const { user_id, user_name: userName, password: dbPassword } = response

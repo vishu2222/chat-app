@@ -37,7 +37,7 @@ export async function signUp(userName, password) {
   if (res.rowCount < 1) throw Error
 }
 
-export async function getUserInfo(userName) {
+export async function getUserCredentials(userName) {
   const query = `SELECT * FROM users 
                  WHERE user_name=$1`
   const params = [userName]
