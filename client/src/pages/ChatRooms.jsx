@@ -12,6 +12,7 @@ const socket = io('http://localhost:3000', { autoConnect: false, transports: ['w
 export function ChatRooms() {
   const [roomsList, setRoomsList] = useState([])
   const [messages, setMessages] = useState([])
+  const [focusedRoomName, setFocusedRoomName] = useState('general')
   const [displayErr, setDisplayErr] = useState(false)
   const [errMsg, setErrMsg] = useState('')
 
@@ -72,7 +73,7 @@ export function ChatRooms() {
   }, [])
 
   return (
-    <AppContext.Provider value={{ roomsList, setRoomsList, messages, setMessages, socket }}>
+    <AppContext.Provider value={{ roomsList, setRoomsList, messages, setMessages, socket, focusedRoomName, setFocusedRoomName }}>
       <>
         {displayErr && <h3 className='err-msg'>{errMsg}</h3>}
         <div id='div-chat-room'>
