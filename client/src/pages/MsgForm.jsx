@@ -22,7 +22,7 @@ export function MsgForm() {
     <div id='message-type-div'>
       <form id='msg-form' onSubmit={(e) => e.preventDefault()}>
         <input id='msg-input' type='text' placeholder='message' value={newMsgTxt} onChange={(e) => setNewMsgTXT(e.target.value)} />
-        <button id='msg-button' onClick={sendMsg}>
+        <button id='msg-button' className='button' onClick={sendMsg}>
           send
         </button>
       </form>
