@@ -1,21 +1,25 @@
 #rooms-container{
-   background-color:  #E0F2F1;
+   /* background-color:  #E0F2F1; */
+   background-color: #dcdee3;
    width: 15%;
    display: flex;
    flex-direction: column;
    align-items: center;
-   border-radius: 20px;
+   border-radius: 10px;
 }
 
 #rooms-title-div {
     background-color:#0097A7;
+    /* background-color: #dcdee3; */
     width: 100%;
     display: flex;
     justify-content: center;
+    border-radius: 7px;
 }
 
 #rooms-title {
     font-family:sans-serif;
+    color: white;
 }
 
 .room-items {
@@ -38,6 +42,7 @@
     justify-content: flex-start;
     border-bottom:groove;
     margin-top: 0.2rem;
+    border-radius: 10px;
 }
 
 /* need to change the sudo class to room_item */
@@ -45,7 +50,9 @@
     background-color:  #dcdee3;
 }
 
-
+.roomItem:hover {
+    cursor: pointer;
+}
 
 .room-content {
     /* align-items: center;
