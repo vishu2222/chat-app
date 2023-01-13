@@ -86,7 +86,9 @@ export function Register() {
         />
         <br />
         <br />
-        <button onClick={registerUser}>Register</button>
+        <button className='button' onClick={registerUser}>
+          Register
+        </button>
         <h3>
           Already registered? <Link to='/'>Login</Link>
         </h3>
