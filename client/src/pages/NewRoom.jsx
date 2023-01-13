@@ -58,7 +58,9 @@ export function NewRoom() {
           setDisplayErr(false)
         }}
       />
-      <button onClick={joinRoom}>Join</button>
+      <button className='button' onClick={joinRoom}>
+        Join
+      </button>
 
       <label>
         <h4>Create New Room</h4>
@@ -72,7 +74,9 @@ export function NewRoom() {
           setDisplayErr(false)
         }}
       />
-      <button onClick={createRoom}>Create room</button>
+      <button className='button' onClick={createRoom}>
+        Create room
+      </button>
       {displayErr && <h3 className='err-msg'>{errMsg}</h3>}
     </div>
   )
