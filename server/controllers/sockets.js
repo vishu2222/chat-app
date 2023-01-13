@@ -34,7 +34,6 @@ export function setupSockets(httpServer) {
     userCount++
     console.log('User Connected, TotalUsers:', userCount)
 
-    // socket.join(1)
     // new-message
     socket.on('new-message', async (msg) => {
       const newMsg = {
@@ -78,6 +77,10 @@ export function setupSockets(httpServer) {
         roomMsg: true
       }
       socket.to(roomId).emit('user-joined', joinMsg)
+    })
+
+    socket.on('typying', () => {
+      socket.to(socket.roomId).emit('user-typying', '')
     })
 
     // disconnect
