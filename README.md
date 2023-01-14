@@ -1,5 +1,7 @@
 # chat-app
 
+- Review:
+
 1. get new room details from post response, dont make fetch room list
 2. switch to room on join
 3. change to MVC
