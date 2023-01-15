@@ -31,4 +31,5 @@ node server/models/schema.js
 - Front-end: React, Socket io Client HTML,CSS
 - Backend: Express, Socket io, postgress
 
-![chatSnap](https://user-images.githubusercontent.com/90732088/212546070-98f5c3b9-fa37-49f7-8195-70f7f8fe98eb.png)
+
+![chatSnap](https://user-images.githubusercontent.com/90732088/212548606-e6243e48-c37e-4e88-9a65-96f984f46752.png)
