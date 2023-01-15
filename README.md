@@ -1,13 +1,17 @@
-# chat-app
+# Chat-App
 
-- Review:
+- Chat application for sending and recieving messages.
 
-1. get new room details from post response, dont make fetch room list
-2. switch to room on join
-3. change to MVC
-4. relevent parts in the header page
-5. handle different error cases
-6. response should always be an object or arr and consistent structure
-7. create sessions table
-8. return strings from db response inplace of statuscoses
-9. allow msg screen only after socket connection established
+### Features
+
+- Register new user,
+- login, authentication with json web token
+- create new rooms, join existing rooms,
+- send and recieve messages,
+- notification on users joining and leaving rooms,
+- notification on msg-typying.
+
+### Technologies
+
+- Front-end: React, HTML,CSS
+- Backend: Express, Socket io, postgress
