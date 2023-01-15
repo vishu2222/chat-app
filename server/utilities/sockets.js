@@ -17,6 +17,7 @@ export function setupSockets(httpServer) {
   })
 
   io.use(async (socket, next) => {
+    // seperate into a utility function
     try {
       const token = socket.handshake.headers.cookie.split('=')[1]
       const jwtPaylod = await verifyJwt(token, secretKey)
