@@ -48,6 +48,11 @@ export function ChatRooms() {
       setErrMsg(err.message)
     })
 
+    socket.on('connect_error', (err) => {
+      setDisplayErr(true)
+      setErrMsg(err.message)
+    })
+
     socket.on('error', (err) => {
       setDisplayErr(true)
       setErrMsg(err.message)
