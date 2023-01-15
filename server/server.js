@@ -3,14 +3,14 @@ import cookieParser from 'cookie-parser'
 import express from 'express'
 import bcrypt from 'bcrypt'
 import cors from 'cors'
-import { signJwt, verifyJwt } from './controllers/jwt.js'
+import { signJwt, verifyJwt } from './utilities/jwt.js'
 import { isUserNameAvailable, signUp, joinUserToRoom, createNewRoom } from './models/queries.js'
 import { getRoomsList, getGeneralRoomMsgs, getRoomMsgs } from './models/queries.js'
 import { getUserId, getUserCredentials } from './models/queries.js'
 import dotenv from 'dotenv'
-import { setupSockets } from './controllers/sockets.js'
+import { setupSockets } from './utilities/sockets.js'
 
-const app = express()
+const app = express() //
 app.use(cors({ origin: 'http://localhost:3001', credentials: true })) //  res.header('Access-Control-Allow-Credentials', true) //  The Access-Control-Allow-Credentials response header tells browsers whether to expose the response to the frontend JavaScript code when the request's credentials mode (Request.credentials) is include.
 app.use(express.json())
 app.use(cookieParser())
@@ -26,7 +26,7 @@ export async function authenticateToken(req, res, next) {
   if (token === undefined) return res.sendStatus(401)
   try {
     const jwtPaylod = await verifyJwt(token, secretKey)
-    res.userId = jwtPaylod.user_id
+    res.userId = jwtPaylod.user_id // attach to req
     next()
   } catch (err) {
     return res.sendStatus(401)
@@ -62,10 +62,11 @@ app.get('/msgs/:roomId', authenticateToken, async (req, res) => {
 })
 
 app.get('/is-available/:userName', async (req, res) => {
+  // users/:... // make it rest api // return t or f
   try {
     const response = await isUserNameAvailable(req.params.userName)
     if (response === true) {
-      return res.status(409).json({ err: 'user name already taken', status: 409 })
+      return res.status(409).json({ err: 'user name already taken' })
     }
     return res.status(200).json('user name available')
   } catch (err) {
@@ -74,6 +75,7 @@ app.get('/is-available/:userName', async (req, res) => {
 })
 
 app.get('/authenticate-user', authenticateToken, (req, res) => {
+  // /user/me and return user details
   return res.sendStatus(200)
 })
 
@@ -94,7 +96,9 @@ app.post('/sign-up', async (req, res) => {
 app.post('/login', async (req, res) => {
   try {
     const response = await getUserCredentials(req.body.userName)
-    if (response === 404) return res.status(404).json({ err: 'user doesnt exists', status: 404 })
+    if (response === 404) {
+      return res.status(404).json({ err: 'user doesnt exists' })
+    }
 
     const { user_id, user_name: userName, password: dbPassword } = response
 
