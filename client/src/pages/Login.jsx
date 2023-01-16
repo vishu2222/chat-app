@@ -11,7 +11,6 @@ export function Login() {
   const navigate = useNavigate()
 
   async function login() {
-    console.log(userName, password)
     if (userName.trim().length === 0) return
     if (password.length < 4) {
       setDisplayErr(true)
