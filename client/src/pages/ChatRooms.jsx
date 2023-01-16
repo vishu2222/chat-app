@@ -39,7 +39,6 @@ export function ChatRooms() {
 
     socket.on('connect', () => {
       setDisplayErr(false)
-      console.log('socket connection established')
       socket.emit('join', { roomId: 1 })
     })
 
@@ -71,6 +70,7 @@ export function ChatRooms() {
     return () => {
       socket.off('connect')
       socket.off('connect_err')
+      socket.off('connect_error')
       socket.off('broadcastMsg')
       socket.off('disconnect')
       socket.off('error')
