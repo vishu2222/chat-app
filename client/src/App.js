@@ -16,12 +16,6 @@ function App() {
       <div id='appContainer'>
         <BrowserRouter>
           <div id='Nav-div'>
-            <Link to='/register' className='nav-links'>
-              Register
-            </Link>
-            <Link to='/login' className='nav-links'>
-              Login
-            </Link>
             <Link to='/login' className='nav-links' onClick={logout}>
               LogOut
             </Link>
