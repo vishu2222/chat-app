@@ -4,23 +4,12 @@ import { Login } from './pages/Login'
 import { Register } from './pages/Register'
 import { ChatRooms } from './pages/ChatRooms'
 import { Home } from './pages/Home'
-import { signOut } from './requests'
 
 function App() {
-  async function logout() {
-    await signOut()
-  }
-
   return (
     <>
       <div id='appContainer'>
         <BrowserRouter>
-          <div id='Nav-div'>
-            <Link to='/login' className='nav-links' onClick={logout}>
-              LogOut
-            </Link>
-          </div>
-
           <Routes>
             <Route path='/' element={<Home />} />
             <Route path='/login' element={<Login />} />

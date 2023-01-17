@@ -1,5 +1,5 @@
 import { useState, useEffect, createContext } from 'react'
-import { getRooms, getGeneralRoomMsgs } from '../requests.js'
+import { getRooms, getGeneralRoomMsgs, signOut } from '../requests.js'
 import { io } from 'socket.io-client'
 import { RoomsContainer } from './RoomsContainer.jsx'
 import { MessageContainer } from './MessageContainer.jsx'
@@ -15,6 +15,10 @@ export function ChatRooms() {
   const [focusedRoomName, setFocusedRoomName] = useState('general')
   const [displayErr, setDisplayErr] = useState(false)
   const [errMsg, setErrMsg] = useState('')
+
+  async function logout() {
+    await signOut()
+  }
 
   // fetching rooms and messages
   useEffect(() => {
@@ -80,6 +84,11 @@ export function ChatRooms() {
     <AppContext.Provider value={{ roomsList, setRoomsList, messages, setMessages, socket, focusedRoomName, setFocusedRoomName }}>
       <>
         {displayErr && <h3 className='err-msg'>{errMsg}</h3>}
+        <div id='Nav-div'>
+          <a href='/login' onClick={logout}>
+            Logout
+          </a>
+        </div>
         <div id='div-chat-room'>
           <RoomsContainer />
           <MessageContainer />
