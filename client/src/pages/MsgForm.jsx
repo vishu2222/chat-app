@@ -22,7 +22,7 @@ export function MsgForm() {
 
   useEffect(() => {
     socket.on('user-typying', () => {
-      msgPlaceHolder.current.placeholder = '...Typying'
+      msgPlaceHolder.current.placeholder = '...Typing'
     })
     return () => socket.off('user-typying')
   }, [socket])
