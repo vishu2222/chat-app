@@ -1,16 +1,17 @@
+import { setupSockets } from './utilities/sockets.js'
+import { authenticateToken } from './utilities/middlewere.js'
+import { router as roomsRouter } from './routes/roomsRoute.js'
+import { router as msgRouter } from './routes/messagesRoute.js'
+import { router as userRouter } from './routes/userRoute.js'
 import { createServer } from 'http'
 import cookieParser from 'cookie-parser'
 import express from 'express'
-import bcrypt from 'bcrypt'
-import cors from 'cors'
-import { signJwt, verifyJwt } from './utilities/jwt.js'
-import { isUserNameAvailable, signUp, joinUserToRoom, createNewRoom } from './models/queries.js'
-import { getRoomsList, getGeneralRoomMsgs, getRoomMsgs } from './models/queries.js'
-import { getUserId, getUserCredentials } from './models/queries.js'
 import dotenv from 'dotenv'
-import { setupSockets } from './utilities/sockets.js'
+import cors from 'cors'
 
-const app = express() //
+dotenv.config()
+
+const app = express() // move port to env
 app.use(cors({ origin: 'http://localhost:3001', credentials: true })) //  res.header('Access-Control-Allow-Credentials', true) //  The Access-Control-Allow-Credentials response header tells browsers whether to expose the response to the frontend JavaScript code when the request's credentials mode (Request.credentials) is include.
 app.use(express.json())
 app.use(cookieParser())
@@ -18,128 +19,9 @@ app.use(cookieParser())
 const httpServer = createServer(app)
 setupSockets(httpServer)
 
-dotenv.config()
-const secretKey = process.env.SECRET_KEY
-
-export async function authenticateToken(req, res, next) {
-  const token = req.cookies.token
-  if (token === undefined) return res.sendStatus(401)
-  try {
-    const jwtPaylod = await verifyJwt(token, secretKey)
-    res.userId = jwtPaylod.user_id // attach to req
-    next()
-  } catch (err) {
-    return res.sendStatus(401)
-  }
-}
-
-app.get('/rooms-list', authenticateToken, async (req, res) => {
-  try {
-    const roomsList = await getRoomsList(res.userId)
-    res.status(200).json(roomsList)
-  } catch (err) {
-    res.sendStatus(500)
-  }
-})
-
-app.get('/default-room-msgs', authenticateToken, async (req, res) => {
-  try {
-    const msgs = await getGeneralRoomMsgs()
-    res.status(200).json(msgs)
-  } catch (err) {
-    res.sendStatus(500)
-  }
-})
-
-app.get('/msgs/:roomId', authenticateToken, async (req, res) => {
-  try {
-    const room_id = req.params.roomId
-    const msgs = await getRoomMsgs(room_id, res.userId)
-    res.status(200).json(msgs)
-  } catch (err) {
-    res.sendStatus(500)
-  }
-})
-
-app.get('/is-available/:userName', async (req, res) => {
-  // users/:... // make it rest api // return t or f
-  try {
-    const response = await isUserNameAvailable(req.params.userName)
-    if (response === true) {
-      return res.status(409).json({ err: 'user name already taken' })
-    }
-    return res.status(200).json('user name available')
-  } catch (err) {
-    res.sendStatus(500)
-  }
-})
-
-app.get('/authenticate-user', authenticateToken, (req, res) => {
-  // /user/me and return user details
-  return res.sendStatus(200)
-})
-
-app.post('/sign-up', async (req, res) => {
-  try {
-    const salt = await bcrypt.genSalt()
-    const hashedPwd = await bcrypt.hash(req.body.password, salt)
-    await signUp(req.body.userName, hashedPwd)
-
-    const userId = await getUserId(req.body.userName)
-    await joinUserToRoom('general', userId)
-    res.sendStatus(201)
-  } catch (err) {
-    res.sendStatus(500)
-  }
-})
-
-app.post('/login', async (req, res) => {
-  try {
-    const response = await getUserCredentials(req.body.userName)
-    if (response === 404) {
-      return res.status(404).json({ err: 'user doesnt exists' })
-    }
-
-    const { user_id, user_name: userName, password: dbPassword } = response
-
-    if (await bcrypt.compare(req.body.password, dbPassword)) {
-      const claim = { user_id }
-      const token = await signJwt(claim, secretKey)
-      return res.cookie('token', token, { httpOnly: true }).sendStatus(200)
-    }
-
-    return res.status(401).json({ err: 'invalid password', status: 401 })
-  } catch (err) {
-    res.sendStatus(500)
-  }
-})
-
-app.post('/logout', authenticateToken, (req, res) => {
-  res.clearCookie('token')
-  res.sendStatus(200)
-})
-
-app.post('/join-room', authenticateToken, async (req, res) => {
-  try {
-    const response = await joinUserToRoom(req.body.room, res.userId)
-    if (response === 404) return res.status(404).json('room doesnt exist')
-    if (response === 409) return res.status(409).json('you already are member of the room')
-    return res.status(200).json('user added to the room')
-  } catch (err) {
-    return res.sendStatus(500)
-  }
-})
-
-app.post('/create-room', authenticateToken, async (req, res) => {
-  try {
-    const response = await createNewRoom(req.body.room, res.userId)
-    if (response === 403) return res.status(403).json('room name already exists')
-    if (response === 500) return res.status(500).json('internal error')
-    return res.status(200).json('new room created')
-  } catch (err) {
-    return res.status(500).json('internal error')
-  }
-})
+app.use('/rooms', authenticateToken, roomsRouter)
+app.use('/msgs', authenticateToken, msgRouter)
+app.use('/users', authenticateToken, userRouter)
 
 httpServer.listen(3000, () => {
   console.log('listening on localhost:3000')
