@@ -25,8 +25,8 @@ export async function isUserNameAvailable(userName) {
                  WHERE user_name = $1`
   const params = [userName]
   const res = await runQuery(query, params)
-  if (res.rowCount === 1) return true
-  return false
+  if (res.rowCount === 1) return 'not-available'
+  return 'available'
 }
 
 export async function signUp(userName, password) {
@@ -58,7 +58,7 @@ export async function getRoomsList(user_id) {
 }
 
 export async function getGeneralRoomMsgs() {
-  const query = `SELECT msg_id, msg_txt, msg_time, user_name 
+  const query = `SELECT msg_id, msg_txt, msg_time, user_name
                  FROM messages 
                  LEFT JOIN users 
                  ON messages.sender_id = users.user_id 
@@ -110,8 +110,9 @@ export async function getUserId(userName) {
   return res.rows[0].user_id
 }
 
+//  room_msg $5  msg.roomMsg
 export async function addMsg(msg) {
-  const query = `INSERT INTO messages (msg_id, msg_txt, msg_time, sender_id, room_id) 
+  const query = `INSERT INTO messages (msg_id, msg_txt, msg_time, sender_id, room_id)
                  VALUES (nextval('msg_id_seq'), $1, to_timestamp($2/1000.0), $3, $4)`
   const params = [msg.msg_txt, msg.msg_time, msg.user_id, msg.room_id]
   const res = await runQuery(query, params)
