@@ -15,7 +15,7 @@ export function Register() {
   // methods
 
   async function registerUser() {
-    if (userName === '' || userName.trim().length === 0) {
+    if (userName.trim().length === 0) {
       setDisplayErr(true)
       setErrMsg('* enter user name')
       return
@@ -34,7 +34,7 @@ export function Register() {
     }
 
     const nameAvailable = await checkUserNameAvailable(userName)
-    if (nameAvailable === 409) {
+    if (!nameAvailable) {
       setDisplayErr(true)
       setErrMsg('* User name unavailable, choose different userName')
       return
