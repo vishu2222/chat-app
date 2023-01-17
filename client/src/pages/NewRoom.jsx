@@ -14,7 +14,6 @@ export function NewRoom() {
 
   async function joinRoom() {
     const res = await joinUser(room)
-    console.log('res:', res)
     if (res === 404) {
       setErrMsg('* room doesnt exists')
       setDisplayErr(true)
@@ -23,7 +22,6 @@ export function NewRoom() {
       setErrMsg('* you already are a member of the room')
       setDisplayErr(true)
     }
-
     setRoom('')
     const rooms = await getRooms()
     setRoomsList(() => rooms)

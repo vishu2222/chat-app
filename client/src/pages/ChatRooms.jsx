@@ -58,7 +58,6 @@ export function ChatRooms() {
     })
 
     socket.on('disconnect', () => {
-      console.log('disconnected')
       setDisplayErr(true)
       setErrMsg('server disconnected')
     })
