@@ -5,3 +5,9 @@
  height: 100%;
 }
 
+#Nav-div {
+    display: flex;
+    justify-content: space-evenly;
+    background-color: rgb(183, 212, 215);
+    width: 100%;
+}
