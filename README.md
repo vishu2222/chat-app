@@ -1,7 +1,9 @@
 # Chat-App
 
-     Chat Application for sending and recieving messages.
-     Deployed at https://vishus-chat-app.onrender.com
+Chat Application for sending and recieving messages.
+Deployed at https://vishus-chat-app.onrender.com
+
+## Test username and password
      Test userName1 userA Test password1  userA
      Test userName1 userB Test password1  userB
 
