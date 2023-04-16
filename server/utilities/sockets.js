@@ -32,8 +32,8 @@ export function setupSockets(httpServer) {
 
   let userCount = 0
   io.on('connection', (socket) => {
-    userCount++
-    console.log('User Connected, TotalUsers:', userCount)
+    // userCount++
+    // console.log('User Connected, TotalUsers:', userCount)
 
     // new-message
     socket.on('new-message', async (msg) => {
@@ -100,7 +100,7 @@ export function setupSockets(httpServer) {
       socket.to(socket.roomId).emit('user-left', disconnectMsg)
 
       userCount--
-      console.log('User disconnected, Total users:', userCount)
+      // console.log('User disconnected, Total users:', userCount)
     })
     //
   })
