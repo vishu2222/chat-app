@@ -24,7 +24,7 @@ export function RoomsContainer() {
       socket.off('user-joined')
       socket.off('user-left')
     }
-  }, [socket, focusedRoomId])
+  }, [socket, focusedRoomId, setMessages])
 
   async function focusRoom(roomId, roomName) {
     if (focusedRoomId !== roomId) {
@@ -32,6 +32,7 @@ export function RoomsContainer() {
       socket.emit('join-room', roomId)
 
       const roomMsgs = await getRoomMsgs(roomId)
+
       setMessages(() => roomMsgs)
       setFocusedRoomId(() => roomId)
       setFocusedRoomName(() => roomName)
