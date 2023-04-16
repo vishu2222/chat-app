@@ -59,7 +59,7 @@ export async function userLogin(req, res) {
       const claim = { user_id }
       const token = await signJwt(claim, secretKey)
 
-      return res.cookie('token', token, { httpOnly: true }).sendStatus(200)
+      return res.cookie('token', token, { httpOnly: true, sameSite: 'Strict' }).sendStatus(200)
     }
 
     return res.status(401).json({ err: 'invalid password', status: 401 })
