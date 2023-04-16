@@ -8,7 +8,6 @@ import { createServer } from 'http'
 import cookieParser from 'cookie-parser'
 import express from 'express'
 import dotenv from 'dotenv'
-import cors from 'cors'
 
 import { dirname } from 'path'
 import { fileURLToPath } from 'url'
@@ -32,6 +31,6 @@ app.use('/api/rooms', authenticateToken, roomsRouter)
 app.use('/api/msgs', authenticateToken, msgRouter)
 app.use('/api/users', authenticateToken, userRouter)
 
-httpServer.listen(3000, () => {
-  console.log('listening on localhost:3000')
+httpServer.listen(process.env.PORT, () => {
+  console.log('listening for requests')
 })
