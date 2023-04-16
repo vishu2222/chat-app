@@ -37,6 +37,19 @@ export function Login() {
 
   return (
     <div id='login'>
+      <h2>To test the app open two browser windows and login with below credentials</h2>
+      <p>
+        <strong>Test User Name1:</strong> userA , <strong>Test Pasword1:</strong> userA
+      </p>
+
+      <p>
+        <strong>Test User Name2:</strong> userB , <strong>Test Pasword2:</strong> userB
+      </p>
+
+      <br />
+
+      <br />
+
       <form onSubmit={(e) => e.preventDefault()}>
         <h2> Login</h2>
         <label>
