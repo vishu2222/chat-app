@@ -1,11 +1,11 @@
 # Chat-App
 
     - Chat Application for sending and recieving messages.
-    - Deployed at https://vishus-chat-app.onrender.com/
+    - Deployed at https://vishus-chat-app.onrender.com
     - Test userName1 userA Test password1  userA
     - Test userName1 userB Test password1  userB
 
-### Features
+## Features
 
     - Register new user,
     - login, authentication with json web token
@@ -14,18 +14,18 @@
     - notification on users joining and leaving rooms,
     - notification on msg-typying.
 
-### setup
+## setup
 
-#### server
+### server
 
     - npm i jsonwebtoken dotenv bcrypt socket.io express pg cors cookie-parser (or clone the repositoty and npm install)
 
-#### client
+### client
 
     - npx create-react-app client and replace the default scaffold
     - npm i socket.io-client react-router-dom
 
-#### Setup oistgress database schema
+### Setup postgres database schema
 
     node server/models/schema.js
 
