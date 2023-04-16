@@ -1,4 +1,4 @@
-const url = 'http://localhost:3000/'
+const url = 'http://localhost:3000/api/'
 
 export async function checkUserNameAvailable(userName) {
   const res = await fetch(url + 'users/' + userName + '/check')
