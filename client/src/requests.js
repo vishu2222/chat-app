@@ -1,4 +1,6 @@
-const url = 'http://localhost:3000/api/'
+// const url = process.env.REACT_APP_NODE_ENV === 'development' ? 'http://localhost:3000/api/' : 'https://vishus-chat-app.onrender.com/'
+
+const url = 'https://vishus-chat-app.onrender.com/api/'
 
 export async function checkUserNameAvailable(userName) {
   const res = await fetch(url + 'users/' + userName + '/check')
