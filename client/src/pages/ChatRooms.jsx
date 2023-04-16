@@ -7,7 +7,7 @@ import { NewRoom } from './NewRoom.jsx'
 import './../styles/ChatRooms.css'
 
 export const AppContext = createContext()
-const socket = io('http://localhost:3000', { autoConnect: false, transports: ['websocket'] }) // disables the HTTP long-polling transport
+const socket = io('https://vishus-chat-app.onrender.com/', { autoConnect: false, transports: ['websocket'] }) // disables the HTTP long-polling transport
 
 export function ChatRooms() {
   const [roomsList, setRoomsList] = useState([])
